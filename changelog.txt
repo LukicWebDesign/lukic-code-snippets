@@ -1,0 +1,165 @@
+=== Lukic-code-snippets Changelog ===
+
+== 2.7.0 - 2025-11-21 ==
+* New: Added "Disable Comments" snippet to completely remove comment functionality (except for WooCommerce products).
+
+== 2.6.0 - 2025-11-21 ==
+* New: Added "Show Active Plugins First" snippet to reorder the plugins list.
+* Improvement: Active plugins are now listed at the top with a visual separator from inactive plugins.
+
+== 2.5.0 - 2025-11-21 ==
+* New: Added "User Profile Image" snippet to allow users to upload custom avatars from the media library.
+* Improvement: Custom avatars replace Gravatar globally using the standard `get_avatar` filter.
+
+== 2.4.0 - 2025-11-20 ==
+* New: Added "Admin Menu Organizer" snippet to reorder, rename, and hide admin menu items.
+* New: Added "Hide Author Slugs" snippet to improve security by masking author URLs.
+* Improvement: Enhanced UI for Admin Menu Organizer with drag-and-drop and auto-save.
+
+== 2.3.1 - 2025-11-19 ==
+* Fix: Resolved issue where ACF columns were displayed on incorrect post types. Now respects ACF field group location rules.
+
+== 2.3.0 - 2025-10-18 ==
+* New: Centralized snippet registry supplies metadata (names, tags, files) to every UI, ending duplication and simplifying future additions.
+* New: Added Maintenance Mode switch in the settings page so the page can be turned on/off without disabling the snippet.
+* Improvement: Maintenance Mode now respects the new switch on save and only displays when both the snippet and switch are enabled.
+* Improvement: Switched all admin pages to a single text-domain loader and localized every snippet/category label for translation readiness.
+* Improvement: Refined the Asset Manager to register/cache-bust every CSS/JS asset (including DataTables & Magnific Popup) and load them only on relevant screens.
+* Improvement: Security Headers settings UI now uses the shared design system (cards, grids, buttons) with AJAX test results styled to match the rest of the plugin.
+* Improvement: Maintenance Mode settings page and other admin actions now use consistent primary/secondary button styles from the framework.
+* Improvement: Unified DataTables loading for Image Attributes Editor, Meta Tags Editor and DB Tables Manager via the Asset Manager to prevent double-initialisation warnings.
+* Fix: Maintenance Mode toggle state now persists correctly instead of snapping back to “on”.
+* Fix: Image Attributes Editor and Meta Tags Editor no longer throw “Cannot reinitialise DataTable” warnings due to competing asset registrations.
+
+== 2.2.1 - 2025-10-10 ==
+* New: Added Settings page for Content Order snippet with frontend ordering controls
+* New: Frontend ordering can now be enabled/disabled per post type (Posts, Pages, Custom Post Types)
+* New: Custom ordering now applies to Gutenberg Query Loop blocks and Post List blocks when enabled
+* Improvement: Content Order snippet now respects custom ordering on frontend blog pages and archives
+* Improvement: Backend ordering remains always active, frontend ordering is opt-in via settings
+* Improvement: Added comprehensive help text explaining how ordering works in backend and frontend
+* Improvement: Localized all external CDN dependencies for WordPress.org compliance:
+  - Moved DataTables CSS (v1.11.5) from cdn.datatables.net to local assets/css/jquery.dataTables.min.css
+  - Moved Magnific Popup CSS (v1.1.0) from cdnjs.cloudflare.com to local assets/css/magnific-popup.min.css
+  - Moved Magnific Popup JS (v1.1.0) from cdnjs.cloudflare.com to local assets/js/jquery.magnific-popup.min.js
+* Improvement: Updated asset loading in snippet-image-attributes-editor.php to use local files
+* Improvement: Updated asset loading in snippet-meta-tags-editor.php to use local files
+* Improvement: Updated asset loading in snippet-db-tables-manager.php to use local files
+* Security: Enhanced privacy and GDPR compliance by eliminating all external CDN requests
+* Performance: Improved page load times by removing external DNS lookups
+* Fix: Plugin now works correctly in offline and restricted network environments
+* Note: All external dependencies are now hosted locally, meeting WordPress.org plugin repository requirements
+
+== 2.2.0 - 2025-09-23 ==
+* New: Added comprehensive Database Tables Manager with advanced features:
+  - View detailed table structure and data in a modal interface
+  - Real-time pagination for large datasets
+  - Export table data to CSV format
+  - Advanced search functionality across all table columns with highlighting
+  - Direct row editing with form-based interface for tables with primary keys
+  - Smart detection of primary keys and data types
+  - Proper handling of NULL values and required fields
+* New: Table Row Editing System:
+  - Modal-based editing interface with dynamic form generation
+  - Automatic field type detection (text areas for TEXT/BLOB fields)
+  - Primary key protection (read-only fields)
+  - Required field validation and error handling
+  - AJAX-powered updates with success/error feedback
+* New: Advanced Search & Filtering:
+  - Multi-column search across all table fields
+  - Case-insensitive partial matching
+  - Search term highlighting in results
+  - Pagination support for search results
+  - Clear search functionality with visual feedback
+* Improvement: Enhanced UI/UX for Database Tables Manager:
+  - Fixed DataTables dropdown arrow overlap issues
+  - Added proper spacing between search controls and data tables
+  - Consistent button styling across all plugin components
+  - Professional dark blue color scheme for edit buttons
+  - Improved loading states and error handling
+* Fix: Resolved intermittent modal loading issues:
+  - Sequential loading of structure and data to prevent race conditions
+  - Fallback detection and auto-reload for empty tabs
+  - Enhanced timeout handling (15s for structure, 30s for data)
+  - Better error messages and recovery mechanisms
+  - Console logging for debugging purposes
+* Improvement: Better error handling and user feedback:
+  - Specific timeout error messages
+  - Loading indicators for all AJAX operations
+  - Graceful degradation when operations fail
+  - User-friendly error notifications
+
+== 2.1.0 - 2025-09-17 ==
+* New: Added Auto-Save functionality for snippet toggles. Changes are now saved immediately without needing to click the 'Save' button.
+* New: Implemented an intelligent page-refresh system. The page automatically reloads only for snippets that modify the admin UI (e.g., Wider Admin Menu, Word Counter), ensuring changes are visible instantly.
+* New: Added visual feedback for auto-saves, including loading indicators on the toggles and success/error notifications.
+* Improvement: Sped up the auto-refresh delay from 2 seconds to 1 second for a faster user experience.
+* Fix: Corrected internal snippet IDs in the auto-save script to ensure the refresh logic works reliably for all relevant snippets (like 'Word Counter' and 'Admin Bar Site Visibility').
+
+== 2.0.0 - 2025-09-17 ==
+* Major Architectural Overhaul (v2.0.0): A comprehensive restructuring of the plugin for significantly improved performance, maintainability, and developer experience.
+* New: Implemented a centralized CSS Framework with CSS Variables (`variables.css`) for a consistent design system across the entire plugin.
+* New: Created a reusable component-based CSS system (`framework.css`) to standardize UI elements like buttons, cards, and forms.
+* New: Developed a new `Lukic_Asset_Manager` class to handle all CSS and JS loading, ensuring assets are only loaded when needed, improving performance.
+* New: Introduced a reusable `Lukic_display_header()` component to provide a consistent header with dynamic statistics across all plugin pages.
+* New: Created a `Lukic_Helpers` utility class to centralize common functions for sanitization, UI generation, and security.
+* Improvement: Reorganized the entire file structure into `components/`, `utilities/`, and `snippets/` directories for better maintainability.
+* Improvement: Refactored all existing plugin pages to use the new CSS framework and header component, creating a unified and professional UI.
+* Improvement: Removed all inline CSS and redundant code, replacing them with the new framework classes.
+* Fix: Resolved PHP errors related to incorrect file paths after restructuring.
+* Fix: Corrected styling issues on the main settings page and other admin pages where the CSS framework was not loading correctly.
+* New: Added comprehensive documentation (`STRUCTURE_GUIDE.md`, `MIGRATION_GUIDE.md`) and code templates (`snippet-template.php`) to streamline future development.
+
+== 1.6.0 - 2025-05-15 ==
+* Added Security Headers Manager snippet for enhancing website security with HTTP headers
+* Added Limit Revisions snippet to prevent database bloat by controlling post revisions
+* Added Image Sizes Panel snippet to display available image sizes in the media sidebar
+* Added Redirect Manager snippet for managing 301, 302, 307, and 308 redirects
+* Added Custom Database Tables Manager snippet for creating and managing custom tables
+* Fixed tag filtering when using search functionality with "All" tags selected
+* Removed redundant tag dropdown and clear-filters button for a cleaner interface
+* Improved "no results" message with helpful tips when filtering snippets
+* Fixed error in header display related to incorrect metrics count
+
+== 1.5.0 - 2025-03-31 ==
+* Added Bulk Edit functionality to Image Attributes Editor:
+  - Bulk edit titles and alt text for multiple images
+  - Select all/deselect all checkboxes
+  - Bulk edit panel with apply changes and clear selection buttons
+* Added Edit column with blue buttons linking to WordPress media editor
+* Improved table layout and styling
+* Enhanced JavaScript handling for bulk operations
+
+== 1.4.0 - 2025-03-29 ==
+* Added "Disable All Updates" snippet for completely disabling WordPress updates system
+* Increased number of displayed tag buttons from 8 to 10
+* Improved tag button styling and centering
+
+== 1.3.0 - 2025-03-29 ==
+* Added tag filter buttons for easier snippet navigation
+* Increased number of displayed tags from 6 to 8
+* Improved admin interface styling
+* Moved inline styles to main CSS file for better maintainability
+* Enhanced search and filter controls layout
+* Added white card containers for better visual hierarchy
+
+== 1.2.0 ==
+* Added Word Counter feature:
+  - Real-time text analysis for words, characters, sentences, and paragraphs
+  - Clean and intuitive user interface
+  - AJAX-powered instant updates
+  - Support for different text metrics:
+    * Character count (with and without spaces)
+    * Word count
+    * Sentence count
+    * Paragraph count
+
+== 1.1.0 ==
+* Added Custom Login URL feature:
+  - Allows setting a custom URL path for the WordPress login page
+  - Redirects attempts to access wp-login.php to the homepage
+  - Blocks direct access to wp-admin for non-logged-in users
+  - Maintains compatibility with password reset and logout functionality
+
+== 1.0.0 ==
+* Initial release.

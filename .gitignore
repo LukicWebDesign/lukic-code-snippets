@@ -1,0 +1,30 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.dat
+
+# IDE & Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Node / NPM (if you add them later)
+node_modules/
+package-lock.json
+yarn.lock
+
+# WordPress Specific
+wp-config.php
+wp-content/uploads/
+debug.log
+
+# Build directories (if you add a build step)
+dist/
+build/
+
+# Composer (if you add it later)
+vendor/
+composer.lock
