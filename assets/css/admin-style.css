@@ -27,6 +27,28 @@
     margin: 0 0 var(--Lukic-space-4) 0;
 }
 
+
+.lcs-edit-btn {
+    background-color: var(--lukic-blue);
+    color: var(--Lukic-white);
+    border-radius: var(--Lukic-border-radius);
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.lcs-delete-btn {
+    background-color: var(--lukic-red);
+    color: var(--Lukic-white);
+    border-radius: var(--Lukic-border-radius);
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.lcs-edit-btn:hover,
+.lcs-delete-btn:hover {
+    color: var(--Lukic-white);
+}
+
 .wp-core-ui .notice-success {
     background-color: #f0fff9;
     border-left-color: var(--Lukic-primary);

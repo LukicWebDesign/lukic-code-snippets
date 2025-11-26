@@ -101,16 +101,10 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
 
 		// Register and enqueue redirect manager script
-		wp_register_script(
-			'Lukic-redirect-manager-js',
-			plugin_dir_url( __DIR__ ) . 'assets/js/redirect-manager.js',
-			array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-dialog' ),
-			Lukic_SNIPPET_CODES_VERSION,
-			true
-		);
+		// Note: Script is registered in Lukic_Asset_Manager
 
 		wp_localize_script(
-			'Lukic-redirect-manager-js',
+			'Lukic-redirect-manager',
 			'Lukic_redirect_vars',
 			array(
 				'ajax_url'       => admin_url( 'admin-ajax.php' ),
@@ -118,8 +112,6 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 				'confirm_delete' => __( 'Are you sure you want to delete this redirect?', 'lukic-code-snippets' ),
 			)
 		);
-
-		wp_enqueue_script( 'Lukic-redirect-manager-js' );
 
 		// Get all redirects and statistics
 		global $wpdb;
@@ -282,8 +274,8 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 											<td><?php echo esc_html( $redirect->hits ); ?></td>
 											<td><?php echo esc_html( $redirect->last_accessed ? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $redirect->last_accessed ) ) : __( 'Never', 'lukic-code-snippets' ) ); ?></td>
 											<td>
-												<a href="#" class="edit-redirect"><?php esc_html_e( 'Edit', 'lukic-code-snippets' ); ?></a> | 
-												<a href="#" class="delete-redirect"><?php esc_html_e( 'Delete', 'lukic-code-snippets' ); ?></a>
+												<a href="#" class="edit-redirect lcs-edit-btn"><?php esc_html_e( 'Edit', 'lukic-code-snippets' ); ?></a> 
+												<a href="#" class="delete-redirect lcs-delete-btn"><?php esc_html_e( 'Delete', 'lukic-code-snippets' ); ?></a>
 											</td>
 										</tr>
 									<?php endforeach; ?>
@@ -504,17 +496,7 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 				background-color: #00c99d !important;
 				border-color: #00c99d !important;
 			}
-			.edit-redirect, .delete-redirect {
-				color: #00E1AF;
-				text-decoration: none;
-				font-weight: 500;
-			}
-			.delete-redirect {
-				color: #dc3232;
-			}
-			.edit-redirect:hover, .delete-redirect:hover {
-				text-decoration: underline;
-			}
+			
 			.search-input {
 				padding: 6px 10px;
 				min-width: 250px;
@@ -587,6 +569,10 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 				background: #00E1AF;
 				border-color: #00E1AF;
 				color: #fff;
+			}
+			.alignleft.actions.bulkactions {
+				justify-content: center;
+				display: flex;
 			}
 		</style>
 		<?php

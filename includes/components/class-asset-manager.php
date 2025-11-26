@@ -163,7 +163,7 @@ class Lukic_Asset_Manager {
 			),
 			'Lukic-redirect-manager' => array(
 				'src'         => 'assets/js/redirect-manager.js',
-				'deps'        => array( 'jquery' ),
+				'deps'        => array( 'jquery', 'jquery-ui-dialog' ),
 				'in_footer'   => true,
 				'description' => 'Redirect Manager',
 			),
