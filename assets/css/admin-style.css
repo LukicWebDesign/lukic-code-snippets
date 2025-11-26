@@ -554,7 +554,6 @@
 .Lukic-submit-container .button-primary:focus,
 .Lukic-submit-container .button-primary:active {
     background: var(--Lukic-primary-hover);
-    transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 225, 175, 0.3);
     border: none;
 }
@@ -727,6 +726,8 @@ input:checked+.Lukic-slider:before {
     padding: 12px;
     font-size: 14px;
     line-height: 1.5;
+    display: flex;
+    align-content: center;
 }
 
 .Lukic-content-order-instructions:before {
@@ -865,6 +866,13 @@ input:checked+.Lukic-slider:before {
     font-weight: 500;
     margin-right: 10px;
     /* Ensure space for action links */
+}
+
+
+.Lukic-content-order-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
 }
 
 .Lukic-content-order-item .row-actions {

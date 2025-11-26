@@ -153,7 +153,7 @@ class Lukic_Maintenance_Mode {
 	 */
 	public function enqueue_admin_scripts( $hook ) {
 		// Only load on our settings page
-		if ( 'lukic-code-snippets_page_lukic-maintenance-mode' !== $hook ) {
+		if ( ! isset( $_GET['page'] ) || 'lukic-maintenance-mode' !== $_GET['page'] ) {
 			return;
 		}
 
@@ -344,33 +344,35 @@ class Lukic_Maintenance_Mode {
 								<p class="description"><?php esc_html_e( 'e.g. 16px, 1em, 2vw', 'Lukic-code-snippets' ); ?></p>
 							</div>
 							
-							<div class="Lukic-field-row">
-								<label for="Lukic_maintenance_title_color">
-									<?php esc_html_e( 'Title Color', 'Lukic-code-snippets' ); ?>
-								</label>
-								<input type="text" id="Lukic_maintenance_title_color" name="Lukic_maintenance_mode_options[title_color]" value="<?php echo esc_attr( $options['title_color'] ); ?>" class="Lukic-color-picker">
-							</div>
-							
-							<div class="Lukic-field-row">
-								<label for="Lukic_maintenance_subtitle_color">
-									<?php esc_html_e( 'Subtitle Color', 'Lukic-code-snippets' ); ?>
-								</label>
-								<input type="text" id="Lukic_maintenance_subtitle_color" name="Lukic_maintenance_mode_options[subtitle_color]" value="<?php echo esc_attr( $options['subtitle_color'] ); ?>" class="Lukic-color-picker">
-							</div>
-							
-							<div class="Lukic-field-row">
-								<label for="Lukic_maintenance_message_color">
-									<?php esc_html_e( 'Message Color', 'Lukic-code-snippets' ); ?>
-								</label>
-								<input type="text" id="Lukic_maintenance_message_color" name="Lukic_maintenance_mode_options[message_color]" value="<?php echo esc_attr( $options['message_color'] ); ?>" class="Lukic-color-picker">
-							</div>
-							
-							<div class="Lukic-field-row">
-								<label for="Lukic_maintenance_overlay_color">
-									<?php esc_html_e( 'Overlay Color', 'Lukic-code-snippets' ); ?>
-								</label>
-								<input type="text" id="Lukic_maintenance_overlay_color" name="Lukic_maintenance_mode_options[overlay_color]" value="<?php echo esc_attr( $options['overlay_color'] ); ?>" class="Lukic-color-picker">
-								<p class="description"><?php esc_html_e( 'Background overlay color and opacity', 'Lukic-code-snippets' ); ?></p>
+							<div class="Lukic-grid-2-col">
+								<div class="Lukic-field-row">
+									<label for="Lukic_maintenance_title_color">
+										<?php esc_html_e( 'Title Color', 'Lukic-code-snippets' ); ?>
+									</label>
+									<input type="text" id="Lukic_maintenance_title_color" name="Lukic_maintenance_mode_options[title_color]" value="<?php echo esc_attr( $options['title_color'] ); ?>" class="Lukic-color-picker">
+								</div>
+								
+								<div class="Lukic-field-row">
+									<label for="Lukic_maintenance_subtitle_color">
+										<?php esc_html_e( 'Subtitle Color', 'Lukic-code-snippets' ); ?>
+									</label>
+									<input type="text" id="Lukic_maintenance_subtitle_color" name="Lukic_maintenance_mode_options[subtitle_color]" value="<?php echo esc_attr( $options['subtitle_color'] ); ?>" class="Lukic-color-picker">
+								</div>
+								
+								<div class="Lukic-field-row">
+									<label for="Lukic_maintenance_message_color">
+										<?php esc_html_e( 'Message Color', 'Lukic-code-snippets' ); ?>
+									</label>
+									<input type="text" id="Lukic_maintenance_message_color" name="Lukic_maintenance_mode_options[message_color]" value="<?php echo esc_attr( $options['message_color'] ); ?>" class="Lukic-color-picker">
+								</div>
+								
+								<div class="Lukic-field-row">
+									<label for="Lukic_maintenance_overlay_color">
+										<?php esc_html_e( 'Overlay Color', 'Lukic-code-snippets' ); ?>
+									</label>
+									<input type="text" id="Lukic_maintenance_overlay_color" name="Lukic_maintenance_mode_options[overlay_color]" value="<?php echo esc_attr( $options['overlay_color'] ); ?>" class="Lukic-color-picker">
+									<p class="description"><?php esc_html_e( 'Background overlay color and opacity', 'Lukic-code-snippets' ); ?></p>
+								</div>
 							</div>
 						</div>
 						
@@ -404,7 +406,7 @@ class Lukic_Maintenance_Mode {
 					<div class="Lukic-settings-section">
 						<h2><?php esc_html_e( 'Live Preview', 'Lukic-code-snippets' ); ?></h2>
 						<div class="Lukic-maintenance-preview" id="Lukic-maintenance-preview">
-							<div class="Lukic-preview-background">
+							<div class="Lukic-preview-background" style="background-image: url('<?php echo esc_url( $options['background_image'] ); ?>');">
 								<div class="Lukic-preview-overlay"></div>
 								<div class="Lukic-preview-content">
 									<h1 class="Lukic-preview-title"><?php echo esc_html( $options['title'] ); ?></h1>

@@ -4,7 +4,7 @@
 **Tags:** snippets, code, optimization, admin, seo  
 **Requires at least:** 5.8  
 **Tested up to:** 6.6  
-**Stable tag:** 2.4.0  
+**Stable tag:** 2.7.2  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -35,6 +35,20 @@ Lukic Code Snippets provides a centralized way to manage and activate useful cod
 By default, the plugin preserves your settings and data. You can choose to delete all data upon uninstallation in the "Plugin Settings" tab.
 
 ## Changelog
+
+### 2.7.2
+*   Improvement: Enhanced Maintenance Mode settings UI with 2-column layout for color pickers.
+*   Improvement: Added width customization for color picker inputs in Maintenance Mode.
+*   Fix: Resolved issue with Maintenance Mode preview background image not loading on initial page load.
+*   Fix: Fixed color picker script loading issue on Maintenance Mode settings page.
+
+### 2.7.1
+*   Fix: Fixed "Save Settings" button styling on Content Order Settings page.
+
+### 2.7.0
+*   New: Added "Disable File Editing" snippet.
+*   New: Added "Plugin Reordering" snippet.
+*   Improvement: Refined Media Replacement UI.
 
 ### 2.4.0
 *   New: Added "Admin Menu Organizer" snippet to reorder, rename, and hide admin menu items.

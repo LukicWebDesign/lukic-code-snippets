@@ -553,11 +553,12 @@ function Lukic_content_order_settings_page() {
 									</tbody>
 								</table>
 								
-								<p class="submit">
-									<button type="submit" name="Lukic_content_order_save_settings" class="Lukic-btn">
-										<?php esc_html_e( 'Save Settings', 'Lukic-code-snippets' ); ?>
-									</button>
-								</p>
+								<div class="Lukic-submit-container">
+					<button type="submit" name="Lukic_content_order_save_settings" class="button button-primary">
+						<?php esc_html_e( 'Save Settings', 'Lukic-code-snippets' ); ?>
+					</button>
+					<p class="description"><?php esc_html_e( 'Changes will take effect immediately after saving.', 'Lukic-code-snippets' ); ?></p>
+				</div>
 							</form>
 						</div>
 					</div>
