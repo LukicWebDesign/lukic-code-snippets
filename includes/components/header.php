@@ -76,9 +76,5 @@ function Lukic_get_header_stats() {
 			'count' => $total_count,
 			'label' => __( 'Total', 'Lukic-code-snippets' ),
 		),
-		array(
-			'count' => get_current_blog_id(),
-			'label' => __( 'Site ID', 'Lukic-code-snippets' ),
-		),
 	);
 }

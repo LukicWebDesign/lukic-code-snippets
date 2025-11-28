@@ -4,7 +4,7 @@
 **Tags:** snippets, code, optimization, admin, seo  
 **Requires at least:** 5.8  
 **Tested up to:** 6.6  
-**Stable tag:** 2.7.3  
+**Stable tag:** 2.7.4  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -35,6 +35,12 @@ Lukic Code Snippets provides a centralized way to manage and activate useful cod
 By default, the plugin preserves your settings and data. You can choose to delete all data upon uninstallation in the "Plugin Settings" tab.
 
 ## Changelog
+
+### 2.7.4
+*   New: Added comprehensive Documentation page with detailed snippet descriptions.
+*   Improvement: Enhanced documentation page with 2-column responsive layout.
+*   Improvement: Removed unnecessary "Site ID" from header statistics.
+*   Improvement: Improved typography and readability on documentation page.
 
 ### 2.7.3
 *   Fix: Resolved missing success notification when adding redirects.

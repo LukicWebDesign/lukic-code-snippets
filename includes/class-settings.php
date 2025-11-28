@@ -102,6 +102,16 @@ class Lukic_Snippet_Codes_Settings {
 			'lukic-code-snippets-settings',
 			array( $this, 'display_plugin_settings_page' )
 		);
+
+		// Add submenu page for documentation
+		add_submenu_page(
+			'lukic-code-snippets',
+			__( 'Documentation', 'Lukic-code-snippets' ),
+			__( 'Documentation', 'Lukic-code-snippets' ),
+			'manage_options',
+			'lukic-code-snippets-documentation',
+			'Lukic_display_documentation_page'
+		);
 	}
 
 	/**
