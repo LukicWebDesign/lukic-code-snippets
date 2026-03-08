@@ -32,8 +32,8 @@ class Lukic_Fluid_Typography {
 	public function add_submenu_page() {
 		add_submenu_page(
 			'lukic-code-snippets',         // Parent slug
-			__( 'Fluid Typography Calculator', 'Lukic-code-snippets' ), // Page title
-			__( 'Fluid Typography', 'Lukic-code-snippets' ),           // Menu title
+			__( 'Fluid Typography Calculator', 'lukic-code-snippets' ), // Page title
+			__( 'Fluid Typography', 'lukic-code-snippets' ),           // Menu title
 			'manage_options',                // Capability
 			'lukic-fluid-typography',      // Menu slug
 			array( $this, 'render_page' )      // Callback function
@@ -77,26 +77,26 @@ class Lukic_Fluid_Typography {
 
 		?>
 		<div class="wrap Lukic-fluid-typography-wrap">
-			<?php Lukic_display_header( __( 'Fluid Typography Calculator', 'Lukic-code-snippets' ), $stats ); ?>
+			<?php Lukic_display_header( __( 'Fluid Typography Calculator', 'lukic-code-snippets' ), $stats ); ?>
 			
 			<div class="Lukic-settings-intro">
-				<p><?php esc_html_e( 'This calculator helps you create fluid typography using CSS clamp() function. It generates responsive font sizes that scale smoothly between your minimum and maximum viewport widths.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'This calculator helps you create fluid typography using CSS clamp() function. It generates responsive font sizes that scale smoothly between your minimum and maximum viewport widths.', 'lukic-code-snippets' ); ?></p>
 			</div>
 			
 			<div class="Lukic-fluid-calculator">
 				<div class="Lukic-calculator-columns">
 					<div class="Lukic-calculator-column">
-						<h2><?php esc_html_e( 'Min Viewport', 'Lukic-code-snippets' ); ?></h2>
+						<h2><?php esc_html_e( 'Min Viewport', 'lukic-code-snippets' ); ?></h2>
 						<div class="Lukic-input-group">
-							<label for="min-viewport-width"><?php esc_html_e( 'Width (px)', 'Lukic-code-snippets' ); ?></label>
+							<label for="min-viewport-width"><?php esc_html_e( 'Width (px)', 'lukic-code-snippets' ); ?></label>
 							<input type="number" id="min-viewport-width" value="320" min="0" step="1">
 						</div>
 						<div class="Lukic-input-group">
-							<label for="min-font-size"><?php esc_html_e( 'Font Size (px)', 'Lukic-code-snippets' ); ?></label>
+							<label for="min-font-size"><?php esc_html_e( 'Font Size (px)', 'lukic-code-snippets' ); ?></label>
 							<input type="number" id="min-font-size" value="16" min="0" step="0.1">
 						</div>
 						<div class="Lukic-input-group">
-							<label for="min-type-scale"><?php esc_html_e( 'Type Scale', 'Lukic-code-snippets' ); ?></label>
+							<label for="min-type-scale"><?php esc_html_e( 'Type Scale', 'lukic-code-snippets' ); ?></label>
 							<select id="min-type-scale">
 								<option value="1.067">Minor Second (1.067)</option>
 								<option value="1.125">Major Second (1.125)</option>
@@ -113,17 +113,17 @@ class Lukic_Fluid_Typography {
 					</div>
 					
 					<div class="Lukic-calculator-column">
-						<h2><?php esc_html_e( 'Max Viewport', 'Lukic-code-snippets' ); ?></h2>
+						<h2><?php esc_html_e( 'Max Viewport', 'lukic-code-snippets' ); ?></h2>
 						<div class="Lukic-input-group">
-							<label for="max-viewport-width"><?php esc_html_e( 'Width (px)', 'Lukic-code-snippets' ); ?></label>
+							<label for="max-viewport-width"><?php esc_html_e( 'Width (px)', 'lukic-code-snippets' ); ?></label>
 							<input type="number" id="max-viewport-width" value="1240" min="0" step="1">
 						</div>
 						<div class="Lukic-input-group">
-							<label for="max-font-size"><?php esc_html_e( 'Font Size (px)', 'Lukic-code-snippets' ); ?></label>
+							<label for="max-font-size"><?php esc_html_e( 'Font Size (px)', 'lukic-code-snippets' ); ?></label>
 							<input type="number" id="max-font-size" value="20" min="0" step="0.1">
 						</div>
 						<div class="Lukic-input-group">
-							<label for="max-type-scale"><?php esc_html_e( 'Type Scale', 'Lukic-code-snippets' ); ?></label>
+							<label for="max-type-scale"><?php esc_html_e( 'Type Scale', 'lukic-code-snippets' ); ?></label>
 							<select id="max-type-scale">
 								<option value="1.067">Minor Second (1.067)</option>
 								<option value="1.125">Major Second (1.125)</option>
@@ -141,14 +141,14 @@ class Lukic_Fluid_Typography {
 				</div>
 				
 				<div class="Lukic-calculate-btn-container">
-					<button id="calculate-fluid-typography" class="button button-primary"><?php esc_html_e( 'Calculate Fluid Typography', 'Lukic-code-snippets' ); ?></button>
+					<button id="calculate-fluid-typography" class="button button-primary"><?php esc_html_e( 'Calculate Fluid Typography', 'lukic-code-snippets' ); ?></button>
 				</div>
 				
 				<div id="results-container" class="Lukic-results-container">
-					<h2><?php esc_html_e( 'Results', 'Lukic-code-snippets' ); ?></h2>
+					<h2><?php esc_html_e( 'Results', 'lukic-code-snippets' ); ?></h2>
 					
 					<div class="Lukic-preview-container">
-						<h3><?php esc_html_e( 'Preview', 'Lukic-code-snippets' ); ?></h3>
+						<h3><?php esc_html_e( 'Preview', 'lukic-code-snippets' ); ?></h3>
 						<div id="typography-preview" class="Lukic-typography-preview">
 							<p class="fluid-text-step-0">This is text at the base size.</p>
 							<p class="fluid-text-step-1">This is text one step up.</p>
@@ -159,11 +159,11 @@ class Lukic_Fluid_Typography {
 					</div>
 					
 					<div class="Lukic-code-container">
-						<h3><?php esc_html_e( 'CSS Code', 'Lukic-code-snippets' ); ?></h3>
-						<p><?php esc_html_e( 'Copy and paste this code into your CSS file:', 'Lukic-code-snippets' ); ?></p>
+						<h3><?php esc_html_e( 'CSS Code', 'lukic-code-snippets' ); ?></h3>
+						<p><?php esc_html_e( 'Copy and paste this code into your CSS file:', 'lukic-code-snippets' ); ?></p>
 						<div class="code-display-container">
 							<pre id="css-output" class="Lukic-code-display"></pre>
-							<button id="copy-css" class="button"><?php esc_html_e( 'Copy to Clipboard', 'Lukic-code-snippets' ); ?></button>
+							<button id="copy-css" class="button"><?php esc_html_e( 'Copy to Clipboard', 'lukic-code-snippets' ); ?></button>
 						</div>
 					</div>
 				</div>

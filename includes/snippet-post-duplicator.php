@@ -45,18 +45,18 @@ if ( ! function_exists( 'Lukic_duplicate_post_init' ) ) {
 	function Lukic_duplicate_post_as_draft() {
 		// Check if user has permissions
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_die( __( 'You do not have permission to duplicate this content.', 'Lukic-code-snippets' ) );
+			wp_die( __( 'You do not have permission to duplicate this content.', 'lukic-code-snippets' ) );
 		}
 
 		// Verify nonce
 		if ( ! isset( $_GET['duplicate_nonce'] ) || ! wp_verify_nonce( $_GET['duplicate_nonce'], 'Lukic_duplicate_post' ) ) {
-			wp_die( __( 'Security check failed. Please try again.', 'Lukic-code-snippets' ) );
+			wp_die( __( 'Security check failed. Please try again.', 'lukic-code-snippets' ) );
 		}
 
 		// Check for post ID
 		if ( ! ( isset( $_GET['post'] ) || isset( $_POST['post'] ) ||
 			( isset( $_REQUEST['action'] ) && 'Lukic_duplicate_post_as_draft' == $_REQUEST['action'] ) ) ) {
-			wp_die( __( 'No post to duplicate has been provided.', 'Lukic-code-snippets' ) );
+			wp_die( __( 'No post to duplicate has been provided.', 'lukic-code-snippets' ) );
 		}
 
 		// Get the original post ID
@@ -66,7 +66,7 @@ if ( ! function_exists( 'Lukic_duplicate_post_init' ) ) {
 		$post = get_post( $post_id );
 
 		if ( ! $post ) {
-			wp_die( __( 'Post creation failed, could not find original post.', 'Lukic-code-snippets' ) );
+			wp_die( __( 'Post creation failed, could not find original post.', 'lukic-code-snippets' ) );
 		}
 
 		// Get current user as author
@@ -160,8 +160,8 @@ if ( ! function_exists( 'Lukic_duplicate_post_init' ) ) {
 					'Lukic_duplicate_post',
 					'duplicate_nonce'
 				),
-				__( 'Duplicate this item', 'Lukic-code-snippets' ),
-				__( 'Duplicate', 'Lukic-code-snippets' )
+				__( 'Duplicate this item', 'lukic-code-snippets' ),
+				__( 'Duplicate', 'lukic-code-snippets' )
 			);
 		}
 		return $actions;

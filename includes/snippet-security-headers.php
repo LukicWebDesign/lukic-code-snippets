@@ -96,8 +96,8 @@ class Lukic_Security_Headers {
 	public function add_submenu_page() {
 		add_submenu_page(
 			'lukic-code-snippets',
-			__( 'Security Headers', 'Lukic-code-snippets' ),
-			__( 'Security Headers', 'Lukic-code-snippets' ),
+			__( 'Security Headers', 'lukic-code-snippets' ),
+			__( 'Security Headers', 'lukic-code-snippets' ),
 			'manage_options',
 			'lukic-security-headers',
 			array( $this, 'render_settings_page' )
@@ -209,19 +209,19 @@ class Lukic_Security_Headers {
 		$stats          = array(
 			array(
 				'count' => $active_headers,
-				'label' => __( 'Active Headers', 'Lukic-code-snippets' ),
+				'label' => __( 'Active Headers', 'lukic-code-snippets' ),
 			),
 			array(
 				'count' => $total_headers,
-				'label' => __( 'Total Headers', 'Lukic-code-snippets' ),
+				'label' => __( 'Total Headers', 'lukic-code-snippets' ),
 			),
 		);
 		?>
 		<div class="wrap Lukic-wrap Lukic-security-headers">
-			<?php Lukic_display_header( __( 'Security Headers Manager', 'Lukic-code-snippets' ), $stats ); ?>
+			<?php Lukic_display_header( __( 'Security Headers Manager', 'lukic-code-snippets' ), $stats ); ?>
 
 			<div class="Lukic-settings-intro">
-				<p><?php esc_html_e( 'Security headers help protect your site against common web vulnerabilities. Enable the headers you need and customize their values to match your security policy.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'Security headers help protect your site against common web vulnerabilities. Enable the headers you need and customize their values to match your security policy.', 'lukic-code-snippets' ); ?></p>
 			</div>
 
 			<div class="Lukic-settings-container">
@@ -248,7 +248,7 @@ class Lukic_Security_Headers {
 								</div>
 
 								<div class="Lukic-field-control">
-									<label><?php esc_html_e( 'Header Value', 'Lukic-code-snippets' ); ?></label>
+									<label><?php esc_html_e( 'Header Value', 'lukic-code-snippets' ); ?></label>
 									<input type="text"
 										class="Lukic-input"
 										name="<?php echo esc_attr( $this->option_name ); ?>[<?php echo esc_attr( $header ); ?>][value]"
@@ -259,16 +259,16 @@ class Lukic_Security_Headers {
 					</div>
 
 					<div class="Lukic-actions">
-						<?php submit_button( __( 'Save Changes', 'Lukic-code-snippets' ), 'Lukic-btn Lukic-btn--primary', 'submit', false ); ?>
+						<?php submit_button( __( 'Save Changes', 'lukic-code-snippets' ), 'Lukic-btn Lukic-btn--primary', 'submit', false ); ?>
 						<button type="button" class="Lukic-btn Lukic-btn--secondary" id="test-headers">
-							<?php esc_html_e( 'Test Headers', 'Lukic-code-snippets' ); ?>
+							<?php esc_html_e( 'Test Headers', 'lukic-code-snippets' ); ?>
 						</button>
 					</div>
 				</form>
 			</div>
 
 			<div id="test-results" class="Lukic-card Lukic-test-results" style="display: none;">
-				<h2><?php esc_html_e( 'Test Results', 'Lukic-code-snippets' ); ?></h2>
+				<h2><?php esc_html_e( 'Test Results', 'lukic-code-snippets' ); ?></h2>
 				<div class="test-results-content"></div>
 			</div>
 		</div>
@@ -279,8 +279,8 @@ class Lukic_Security_Headers {
 				var $button = $(this);
 				var $results = $('#test-results');
 				var $content = $('.test-results-content');
-				var testingMessage = '<?php echo esc_js( __( 'Testing headers...', 'Lukic-code-snippets' ) ); ?>';
-				var errorMessage = '<?php echo esc_js( __( 'Error testing headers', 'Lukic-code-snippets' ) ); ?>';
+				var testingMessage = '<?php echo esc_js( __( 'Testing headers...', 'lukic-code-snippets' ) ); ?>';
+				var errorMessage = '<?php echo esc_js( __( 'Error testing headers', 'lukic-code-snippets' ) ); ?>';
 
 				$button.prop('disabled', true);
 				$button.addClass('is-loading');
@@ -301,10 +301,10 @@ class Lukic_Security_Headers {
 								var status = result.present && result.value === result.expected ? 'success' : 'error';
 								html += '<div class="header-test-result ' + status + '">';
 								html += '<div class="header-test-result__title">' + header.toUpperCase() + '</div>';
-								html += '<div class="header-test-result__status">' + (result.present ? '✔ <?php echo esc_js( __( 'Present', 'Lukic-code-snippets' ) ); ?>' : '✖ <?php echo esc_js( __( 'Missing', 'Lukic-code-snippets' ) ); ?>') + '</div>';
+								html += '<div class="header-test-result__status">' + (result.present ? '✔ <?php echo esc_js( __( 'Present', 'lukic-code-snippets' ) ); ?>' : '✖ <?php echo esc_js( __( 'Missing', 'lukic-code-snippets' ) ); ?>') + '</div>';
 								if (result.present) {
-									html += '<div class="header-test-result__value"><strong><?php echo esc_js( __( 'Current', 'Lukic-code-snippets' ) ); ?>:</strong> ' + result.value + '</div>';
-									html += '<div class="header-test-result__value"><strong><?php echo esc_js( __( 'Expected', 'Lukic-code-snippets' ) ); ?>:</strong> ' + result.expected + '</div>';
+									html += '<div class="header-test-result__value"><strong><?php echo esc_js( __( 'Current', 'lukic-code-snippets' ) ); ?>:</strong> ' + result.value + '</div>';
+									html += '<div class="header-test-result__value"><strong><?php echo esc_js( __( 'Expected', 'lukic-code-snippets' ) ); ?>:</strong> ' + result.expected + '</div>';
 								}
 								html += '</div>';
 							});

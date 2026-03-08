@@ -70,7 +70,7 @@ if ( ! function_exists( 'Lukic_hide_admin_bar_init' ) ) {
 		echo '<p>';
 		/* translators: %s: URL to the plugin settings page */
 		printf(
-			__( 'The Admin Bar is currently hidden on the frontend of your site. <a href="%s">Manage this setting</a> in Lukic Snippet Codes.', 'Lukic-code-snippets' ),
+			__( 'The Admin Bar is currently hidden on the frontend of your site. <a href="%s">Manage this setting</a> in Lukic Snippet Codes.', 'lukic-code-snippets' ),
 			esc_url( $settings_url )
 		);
 		echo '</p>';

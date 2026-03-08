@@ -30,8 +30,8 @@ class Lukic_Word_Counter {
 	public function add_submenu_page() {
 		add_submenu_page(
 			'lukic-code-snippets',
-			__( 'Word Counter', 'Lukic-code-snippets' ),
-			__( 'Word Counter', 'Lukic-code-snippets' ),
+			__( 'Word Counter', 'lukic-code-snippets' ),
+			__( 'Word Counter', 'lukic-code-snippets' ),
 			'manage_options',
 			'lukic-word-counter',
 			array( $this, 'display_settings_page' )
@@ -59,42 +59,42 @@ class Lukic_Word_Counter {
 
 		?>
 		<div class="wrap Lukic-settings-wrap">
-			<?php Lukic_display_header( __( 'Word Counter', 'Lukic-code-snippets' ), $stats ); ?>
+			<?php Lukic_display_header( __( 'Word Counter', 'lukic-code-snippets' ), $stats ); ?>
 			
 			<div class="Lukic-settings-intro">
-				<p><?php esc_html_e( 'Analyze your text for word count, character count, sentences, and paragraphs.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'Analyze your text for word count, character count, sentences, and paragraphs.', 'lukic-code-snippets' ); ?></p>
 			</div>
 			
 			<div class="Lukic-word-counter-container">
 				<div class="Lukic-stats-container">
 					<div class="Lukic-stat-box blue">
 						<span class="stat-value" id="char-no-spaces">0</span>
-						<span class="stat-label"><?php echo esc_html__( 'characters (no spaces)', 'Lukic-code-snippets' ); ?></span>
+						<span class="stat-label"><?php echo esc_html__( 'characters (no spaces)', 'lukic-code-snippets' ); ?></span>
 					</div>
 					
 					<div class="Lukic-stat-box light-blue">
 						<span class="stat-value" id="char-with-spaces">0</span>
-						<span class="stat-label"><?php echo esc_html__( 'characters (with spaces)', 'Lukic-code-snippets' ); ?></span>
+						<span class="stat-label"><?php echo esc_html__( 'characters (with spaces)', 'lukic-code-snippets' ); ?></span>
 					</div>
 					
 					<div class="Lukic-stat-box green">
 						<span class="stat-value" id="word-count">0</span>
-						<span class="stat-label"><?php echo esc_html__( 'words', 'Lukic-code-snippets' ); ?></span>
+						<span class="stat-label"><?php echo esc_html__( 'words', 'lukic-code-snippets' ); ?></span>
 					</div>
 					
 					<div class="Lukic-stat-box pink">
 						<span class="stat-value" id="sentence-count">0</span>
-						<span class="stat-label"><?php echo esc_html__( 'sentences', 'Lukic-code-snippets' ); ?></span>
+						<span class="stat-label"><?php echo esc_html__( 'sentences', 'lukic-code-snippets' ); ?></span>
 					</div>
 					
 					<div class="Lukic-stat-box yellow">
 						<span class="stat-value" id="paragraph-count">0</span>
-						<span class="stat-label"><?php echo esc_html__( 'paragraphs', 'Lukic-code-snippets' ); ?></span>
+						<span class="stat-label"><?php echo esc_html__( 'paragraphs', 'lukic-code-snippets' ); ?></span>
 					</div>
 				</div>
 				
 				<div class="Lukic-textarea-container">
-					<textarea id="Lukic-text-input" placeholder="<?php echo esc_attr__( 'Type or paste your text here...', 'Lukic-code-snippets' ); ?>"></textarea>
+					<textarea id="Lukic-text-input" placeholder="<?php echo esc_attr__( 'Type or paste your text here...', 'lukic-code-snippets' ); ?>"></textarea>
 				</div>
 			</div>
 			

@@ -66,8 +66,8 @@ class Lukic_Limit_Revisions {
 	public function add_submenu_page() {
 		add_submenu_page(
 			'lukic-code-snippets',
-			__( 'Limit Revisions', 'Lukic-code-snippets' ),
-			__( 'Limit Revisions', 'Lukic-code-snippets' ),
+			__( 'Limit Revisions', 'lukic-code-snippets' ),
+			__( 'Limit Revisions', 'lukic-code-snippets' ),
 			'manage_options',
 			'lukic-limit-revisions',
 			array( $this, 'display_settings_page' )
@@ -154,10 +154,10 @@ class Lukic_Limit_Revisions {
 
 		?>
 		<div class="wrap Lukic-settings-wrap">
-			<?php Lukic_display_header( __( 'Limit Revisions', 'Lukic-code-snippets' ), $stats ); ?>
+			<?php Lukic_display_header( __( 'Limit Revisions', 'lukic-code-snippets' ), $stats ); ?>
 			
 			<div class="Lukic-settings-intro">
-				<p><?php esc_html_e( 'Prevent database bloat by limiting the number of revisions to keep for post types supporting revisions.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'Prevent database bloat by limiting the number of revisions to keep for post types supporting revisions.', 'lukic-code-snippets' ); ?></p>
 			</div>
 			
 			<div class="Lukic-settings-container">
@@ -165,26 +165,26 @@ class Lukic_Limit_Revisions {
 					<?php settings_fields( 'Lukic_limit_revisions' ); ?>
 					
 					<div class="Lukic-settings-section">
-						<h3><?php esc_html_e( 'Default Revision Limit', 'Lukic-code-snippets' ); ?></h3>
-						<p><?php esc_html_e( 'Set the default number of revisions to keep for all post types. This will apply to any post type that does not have a specific limit set below.', 'Lukic-code-snippets' ); ?></p>
+						<h3><?php esc_html_e( 'Default Revision Limit', 'lukic-code-snippets' ); ?></h3>
+						<p><?php esc_html_e( 'Set the default number of revisions to keep for all post types. This will apply to any post type that does not have a specific limit set below.', 'lukic-code-snippets' ); ?></p>
 						
 						<div class="Lukic-settings-field">
-							<label for="default-limit"><?php esc_html_e( 'Default Limit:', 'Lukic-code-snippets' ); ?></label>
+							<label for="default-limit"><?php esc_html_e( 'Default Limit:', 'lukic-code-snippets' ); ?></label>
 							<input type="number" id="default-limit" name="Lukic_limit_revisions_options[default_limit]" value="<?php echo esc_attr( $this->default_limit ); ?>" min="1" step="1" />
-							<p class="description"><?php esc_html_e( 'Enter the number of revisions to keep by default (minimum: 1).', 'Lukic-code-snippets' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Enter the number of revisions to keep by default (minimum: 1).', 'lukic-code-snippets' ); ?></p>
 						</div>
 					</div>
 					
 					<div class="Lukic-settings-section">
-						<h3><?php esc_html_e( 'Post Type Specific Limits', 'Lukic-code-snippets' ); ?></h3>
-						<p><?php esc_html_e( 'Set specific revision limits for each post type. Enter -1 to use the default limit.', 'Lukic-code-snippets' ); ?></p>
+						<h3><?php esc_html_e( 'Post Type Specific Limits', 'lukic-code-snippets' ); ?></h3>
+						<p><?php esc_html_e( 'Set specific revision limits for each post type. Enter -1 to use the default limit.', 'lukic-code-snippets' ); ?></p>
 						
 						<?php if ( ! empty( $revision_post_types ) ) : ?>
 							<table class="form-table Lukic-limit-revisions-table">
 								<thead>
 									<tr>
-										<th><?php esc_html_e( 'Post Type', 'Lukic-code-snippets' ); ?></th>
-										<th><?php esc_html_e( 'Revision Limit', 'Lukic-code-snippets' ); ?></th>
+										<th><?php esc_html_e( 'Post Type', 'lukic-code-snippets' ); ?></th>
+										<th><?php esc_html_e( 'Revision Limit', 'lukic-code-snippets' ); ?></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -202,7 +202,7 @@ class Lukic_Limit_Revisions {
 													<?php if ( $limit == -1 ) : ?>
 														<?php
 														/* translators: %d: The default revision limit number */
-														printf( __( 'Using default (%d)', 'Lukic-code-snippets' ), $this->default_limit );
+														printf( __( 'Using default (%d)', 'lukic-code-snippets' ), $this->default_limit );
 														?>
 													<?php endif; ?>
 												</span>
@@ -212,19 +212,19 @@ class Lukic_Limit_Revisions {
 								</tbody>
 							</table>
 						<?php else : ?>
-							<p><?php esc_html_e( 'No post types with revision support found.', 'Lukic-code-snippets' ); ?></p>
+							<p><?php esc_html_e( 'No post types with revision support found.', 'lukic-code-snippets' ); ?></p>
 						<?php endif; ?>
 					</div>
 					
 					<div class="Lukic-settings-section">
-						<h3><?php esc_html_e( 'Important Notes', 'Lukic-code-snippets' ); ?></h3>
+						<h3><?php esc_html_e( 'Important Notes', 'lukic-code-snippets' ); ?></h3>
 						<div class="Lukic-notice">
-							<p><?php esc_html_e( 'This snippet only affects new revisions going forward. It does not automatically delete existing revisions.', 'Lukic-code-snippets' ); ?></p>
-							<p><?php esc_html_e( 'To clean up existing revisions, you can use a database optimization plugin or run a SQL query to remove old revisions.', 'Lukic-code-snippets' ); ?></p>
+							<p><?php esc_html_e( 'This snippet only affects new revisions going forward. It does not automatically delete existing revisions.', 'lukic-code-snippets' ); ?></p>
+							<p><?php esc_html_e( 'To clean up existing revisions, you can use a database optimization plugin or run a SQL query to remove old revisions.', 'lukic-code-snippets' ); ?></p>
 						</div>
 					</div>
 					
-					<?php submit_button( __( 'Save Settings', 'Lukic-code-snippets' ), 'primary', 'submit', true, array( 'style' => 'background-color: #00E1AF; border-color: #00E1AF;' ) ); ?>
+					<?php submit_button( __( 'Save Settings', 'lukic-code-snippets' ), 'primary', 'submit', true, array( 'style' => 'background-color: #00E1AF; border-color: #00E1AF;' ) ); ?>
 				</form>
 			</div>
 			
@@ -334,13 +334,13 @@ class Lukic_Limit_Revisions {
 				<?php
 				/* translators: %1$s: Post type name (e.g., Post, Page), %2$d: Revision limit number */
 				printf(
-					__( 'Revisions for this %1$s are limited to %2$d. Older revisions will be automatically deleted.', 'Lukic-code-snippets' ),
+					__( 'Revisions for this %1$s are limited to %2$d. Older revisions will be automatically deleted.', 'lukic-code-snippets' ),
 					esc_html( $post_type_label ),
 					intval( $limit )
 				);
 				?>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lukic-limit-revisions' ) ); ?>">
-					<?php esc_html_e( 'Configure revision limits', 'Lukic-code-snippets' ); ?>
+					<?php esc_html_e( 'Configure revision limits', 'lukic-code-snippets' ); ?>
 				</a>
 			</p>
 		</div>

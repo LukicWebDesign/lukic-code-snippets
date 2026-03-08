@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 function Lukic_image_attributes_editor_menu() {
 	add_submenu_page(
 		'lukic-code-snippets',
-		__( 'Image Attributes Editor', 'Lukic-code-snippets' ),
-		__( 'Image Attributes Editor', 'Lukic-code-snippets' ),
+		__( 'Image Attributes Editor', 'lukic-code-snippets' ),
+		__( 'Image Attributes Editor', 'lukic-code-snippets' ),
 		'manage_options',
 		'lukic-image-attributes-editor',
 		'Lukic_image_attributes_editor_page'
@@ -74,43 +74,43 @@ function Lukic_image_attributes_editor_page() {
 	
 		
 		<div class="Lukic-container">
-		<?php Lukic_display_header( __( 'Image Attributes Editor', 'Lukic-code-snippets' ), $stats ); ?>
+		<?php Lukic_display_header( __( 'Image Attributes Editor', 'lukic-code-snippets' ), $stats ); ?>
 			<div class="Lukic-content-wrapper">
 				<div class="Lukic-content">
 					<div class="Lukic-card">
 						<div class="Lukic-card-header">
-							<p class="Lukic-description"><?php echo esc_html__( 'Edit image attributes such as title, alt text, caption, and filename. Changes are saved automatically when you click outside of the edited field.', 'Lukic-code-snippets' ); ?></p>
+							<p class="Lukic-description"><?php echo esc_html__( 'Edit image attributes such as title, alt text, caption, and filename. Changes are saved automatically when you click outside of the edited field.', 'lukic-code-snippets' ); ?></p>
 						</div>
 						
 						<div class="Lukic-card-body">
 							<?php
 							// Bulk Edit Panel (initially hidden)
 							echo '<div id="Lukic-bulk-edit-panel" class="Lukic-bulk-edit-panel" style="display: none;">';
-							echo '<h3>' . esc_html__( 'Bulk Edit', 'Lukic-code-snippets' ) . ' <span id="selected-count">(0)</span> ' . esc_html__( 'items selected', 'Lukic-code-snippets' ) . '</h3>';
+							echo '<h3>' . esc_html__( 'Bulk Edit', 'lukic-code-snippets' ) . ' <span id="selected-count">(0)</span> ' . esc_html__( 'items selected', 'lukic-code-snippets' ) . '</h3>';
 							echo '<div class="bulk-edit-options">';
 
 							// Alt Text
 							echo '<div class="bulk-edit-field">';
-							echo '<label for="bulk-alt-text">' . esc_html__( 'Alt Text', 'Lukic-code-snippets' ) . '</label>';
-							echo '<input type="text" id="bulk-alt-text" placeholder="' . esc_attr__( 'New alt text for selected images', 'Lukic-code-snippets' ) . '">';
+							echo '<label for="bulk-alt-text">' . esc_html__( 'Alt Text', 'lukic-code-snippets' ) . '</label>';
+							echo '<input type="text" id="bulk-alt-text" placeholder="' . esc_attr__( 'New alt text for selected images', 'lukic-code-snippets' ) . '">';
 							echo '</div>';
 
 							// Title
 							echo '<div class="bulk-edit-field">';
-							echo '<label for="bulk-title">' . esc_html__( 'Title', 'Lukic-code-snippets' ) . '</label>';
-							echo '<input type="text" id="bulk-title" placeholder="' . esc_attr__( 'New title for selected images', 'Lukic-code-snippets' ) . '">';
+							echo '<label for="bulk-title">' . esc_html__( 'Title', 'lukic-code-snippets' ) . '</label>';
+							echo '<input type="text" id="bulk-title" placeholder="' . esc_attr__( 'New title for selected images', 'lukic-code-snippets' ) . '">';
 							echo '</div>';
 
 							// Caption
 							echo '<div class="bulk-edit-field">';
-							echo '<label for="bulk-caption">' . esc_html__( 'Caption', 'Lukic-code-snippets' ) . '</label>';
-							echo '<input type="text" id="bulk-caption" placeholder="' . esc_attr__( 'New caption for selected images', 'Lukic-code-snippets' ) . '">';
+							echo '<label for="bulk-caption">' . esc_html__( 'Caption', 'lukic-code-snippets' ) . '</label>';
+							echo '<input type="text" id="bulk-caption" placeholder="' . esc_attr__( 'New caption for selected images', 'lukic-code-snippets' ) . '">';
 							echo '</div>';
 
 							// Actions
 							echo '<div class="bulk-actions">';
-							echo '<button id="apply-bulk-edit" class="Lukic-btn">' . esc_html__( 'Apply Changes', 'Lukic-code-snippets' ) . '</button>';
-							echo '<button id="clear-selection" class="Lukic-btn Lukic-btn-secondary">' . esc_html__( 'Clear Selection', 'Lukic-code-snippets' ) . '</button>';
+							echo '<button id="apply-bulk-edit" class="Lukic-btn">' . esc_html__( 'Apply Changes', 'lukic-code-snippets' ) . '</button>';
+							echo '<button id="clear-selection" class="Lukic-btn Lukic-btn-secondary">' . esc_html__( 'Clear Selection', 'lukic-code-snippets' ) . '</button>';
 							echo '</div>';
 
 							echo '</div>'; // .bulk-edit-options
@@ -129,14 +129,14 @@ function Lukic_image_attributes_editor_page() {
 								echo '<thead>';
 								echo '<tr>';
 								echo '<th data-orderable="false" class="select-checkbox-column"><input type="checkbox" id="select-all-images"></th>';
-								echo '<th data-orderable="false">' . esc_html__( 'Thumbnail', 'Lukic-code-snippets' ) . '</th>';
-								echo '<th data-orderable="true">' . esc_html__( 'Title', 'Lukic-code-snippets' ) . '</th>';
-								echo '<th data-orderable="true">' . esc_html__( 'Alt', 'Lukic-code-snippets' ) . '</th>';
-								echo '<th data-orderable="true">' . esc_html__( 'Caption', 'Lukic-code-snippets' ) . '</th>';
-								echo '<th data-orderable="true">' . esc_html__( 'File Name', 'Lukic-code-snippets' ) . '</th>';
-								echo '<th data-orderable="true">' . esc_html__( 'File Size', 'Lukic-code-snippets' ) . '</th>';
-								echo '<th>' . esc_html__( 'Edit', 'Lukic-code-snippets' ) . '</th>';
-								echo '<th>' . esc_html__( 'Delete', 'Lukic-code-snippets' ) . '</th>';
+								echo '<th data-orderable="false">' . esc_html__( 'Thumbnail', 'lukic-code-snippets' ) . '</th>';
+								echo '<th data-orderable="true">' . esc_html__( 'Title', 'lukic-code-snippets' ) . '</th>';
+								echo '<th data-orderable="true">' . esc_html__( 'Alt', 'lukic-code-snippets' ) . '</th>';
+								echo '<th data-orderable="true">' . esc_html__( 'Caption', 'lukic-code-snippets' ) . '</th>';
+								echo '<th data-orderable="true">' . esc_html__( 'File Name', 'lukic-code-snippets' ) . '</th>';
+								echo '<th data-orderable="true">' . esc_html__( 'File Size', 'lukic-code-snippets' ) . '</th>';
+								echo '<th>' . esc_html__( 'Edit', 'lukic-code-snippets' ) . '</th>';
+								echo '<th>' . esc_html__( 'Delete', 'lukic-code-snippets' ) . '</th>';
 								echo '</tr>';
 								echo '</thead>';
 								echo '<tbody>';
@@ -171,10 +171,10 @@ function Lukic_image_attributes_editor_page() {
 								echo '</table>';
 
 								echo '<div class="Lukic-export-options">';
-								echo '<a href="#" id="download-csv" class="Lukic-btn">' . esc_html__( 'Download CSV', 'Lukic-code-snippets' ) . '</a>';
+								echo '<a href="#" id="download-csv" class="Lukic-btn">' . esc_html__( 'Download CSV', 'lukic-code-snippets' ) . '</a>';
 								echo '</div>';
 							} else {
-								echo '<p>' . esc_html__( 'No images found.', 'Lukic-code-snippets' ) . '</p>';
+								echo '<p>' . esc_html__( 'No images found.', 'lukic-code-snippets' ) . '</p>';
 							}
 
 							echo '</div>'; // .Lukic-content
@@ -397,7 +397,7 @@ function Lukic_bulk_update_images() {
 	/* translators: %d: Number of images that were updated */
 	wp_send_json_success(
 		array(
-			'message' => sprintf( __( '%d images updated successfully', 'Lukic-code-snippets' ), count( $updated ) ),
+			'message' => sprintf( __( '%d images updated successfully', 'lukic-code-snippets' ), count( $updated ) ),
 			'updated' => $updated,
 			'errors'  => $errors,
 		)

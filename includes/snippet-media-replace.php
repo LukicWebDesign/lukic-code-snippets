@@ -34,7 +34,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 	function Lukic_media_replace_row_action( $actions, $post ) {
 		if ( current_user_can( 'edit_post', $post->ID ) ) {
 			$url                              = admin_url( 'upload.php?page=lukic-replace-media&attachment_id=' . $post->ID );
-			$actions['Lukic_replace_media'] = '<a href="' . esc_url( $url ) . '">' . __( 'Replace Media', 'Lukic-code-snippets' ) . '</a>';
+			$actions['Lukic_replace_media'] = '<a href="' . esc_url( $url ) . '">' . __( 'Replace Media', 'lukic-code-snippets' ) . '</a>';
 		}
 		return $actions;
 	}
@@ -53,7 +53,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 				'label' => '',
 				'input' => 'html',
 				'html'  => '<a href="' . esc_url( $link ) . '" class="button-secondary">' .
-							__( 'Replace Media File', 'Lukic-code-snippets' ) . '</a>',
+							__( 'Replace Media File', 'lukic-code-snippets' ) . '</a>',
 			);
 		}
 		return $form_fields;
@@ -65,8 +65,8 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 	function Lukic_media_replace_add_submenu() {
 		add_submenu_page(
 			'upload.php',                            // Parent slug
-			__( 'Replace Media', 'Lukic-code-snippets' ),  // Page title
-			__( 'Replace Media', 'Lukic-code-snippets' ),  // Menu title
+			__( 'Replace Media', 'lukic-code-snippets' ),  // Page title
+			__( 'Replace Media', 'lukic-code-snippets' ),  // Menu title
 			'upload_files',                          // Capability
 			'lukic-replace-media',                 // Menu slug
 			'Lukic_media_replace_page'             // Callback function
@@ -253,7 +253,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 		</style>
 		<div class="wrap Lukic-settings-wrap">
 			<?php
-			Lukic_display_header( __( 'Replace Media File', 'Lukic-code-snippets' ), array() );
+			Lukic_display_header( __( 'Replace Media File', 'lukic-code-snippets' ), array() );
 			?>
 			
 
@@ -267,22 +267,22 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 						<div class="content">
 							<div class="Lukic-no-media-header">
 								<span class="dashicons dashicons-info"></span>
-								<h2><?php esc_html_e( 'No Media Selected', 'Lukic-code-snippets' ); ?></h2>
+								<h2><?php esc_html_e( 'No Media Selected', 'lukic-code-snippets' ); ?></h2>
                                
 						
 							</div>
 
-							<p><?php esc_html_e( 'You need to select a media file to replace. Here\'s how:', 'Lukic-code-snippets' ); ?></p>
+							<p><?php esc_html_e( 'You need to select a media file to replace. Here\'s how:', 'lukic-code-snippets' ); ?></p>
 								<ol>
-									<li><?php _e( 'Go to the <a href="upload.php">Media Library</a>', 'Lukic-code-snippets' ); ?></li>
-									<li><?php esc_html_e( 'Find the file you want to replace', 'Lukic-code-snippets' ); ?></li>
-									<li><?php esc_html_e( 'Hover over the file and click "Replace Media"', 'Lukic-code-snippets' ); ?></li>
+									<li><?php _e( 'Go to the <a href="upload.php">Media Library</a>', 'lukic-code-snippets' ); ?></li>
+									<li><?php esc_html_e( 'Find the file you want to replace', 'lukic-code-snippets' ); ?></li>
+									<li><?php esc_html_e( 'Hover over the file and click "Replace Media"', 'lukic-code-snippets' ); ?></li>
 								</ol>
-								<p><?php esc_html_e( 'Alternatively, you can click on the file to view its attachment details, then click the "Replace Media" button.', 'Lukic-code-snippets' ); ?></p>
+								<p><?php esc_html_e( 'Alternatively, you can click on the file to view its attachment details, then click the "Replace Media" button.', 'lukic-code-snippets' ); ?></p>
 								<p>
 									<a href="<?php echo esc_url( admin_url( 'upload.php' ) ); ?>" class="button button-primary">
 										<span class="dashicons dashicons-format-gallery" style="margin-top: 3px; margin-right: 5px;"></span>
-										<?php esc_html_e( 'Go to Media Library', 'Lukic-code-snippets' ); ?>
+										<?php esc_html_e( 'Go to Media Library', 'lukic-code-snippets' ); ?>
 									</a>
 								</p>
 							
@@ -295,13 +295,13 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 
 			// Check permissions
 			if ( ! current_user_can( 'edit_post', $attachment_id ) ) {
-				wp_die( __( 'You do not have permission to edit this attachment.', 'Lukic-code-snippets' ) );
+				wp_die( __( 'You do not have permission to edit this attachment.', 'lukic-code-snippets' ) );
 			}
 
 			// Get attachment data
 			$attachment = get_post( $attachment_id );
 			if ( ! $attachment ) {
-				wp_die( __( 'Media file not found.', 'Lukic-code-snippets' ) );
+				wp_die( __( 'Media file not found.', 'lukic-code-snippets' ) );
 			}
 
 			// Get file details
@@ -309,7 +309,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 			$filename       = basename( $filepath );
 			$filetype       = wp_check_filetype( $filename );
 			$attachment_url = wp_get_attachment_url( $attachment_id );
-			$filesize       = file_exists( $filepath ) ? size_format( filesize( $filepath ), 2 ) : __( 'File not found', 'Lukic-code-snippets' );
+			$filesize       = file_exists( $filepath ) ? size_format( filesize( $filepath ), 2 ) : __( 'File not found', 'lukic-code-snippets' );
 
 			// Generate nonce for form
 			$nonce = wp_create_nonce( 'Lukic-replace-media-' . $attachment_id );
@@ -317,14 +317,14 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 			// Output form HTML
 			?>
 			<div class="Lukic-settings-intro">
-				<p><?php esc_html_e( 'Replace your media file while maintaining the same ID, filename, and upload date.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'Replace your media file while maintaining the same ID, filename, and upload date.', 'lukic-code-snippets' ); ?></p>
 			</div>
 			
 			<div class="Lukic-settings-container">
 				<div class="media-replace-container">
 					<div class="current-file-info">
 						<div class="media-item">
-							<h2><?php esc_html_e( 'Current File', 'Lukic-code-snippets' ); ?></h2>
+							<h2><?php esc_html_e( 'Current File', 'lukic-code-snippets' ); ?></h2>
 							
 							<div class="thumbnail-container">
 								<?php if ( wp_attachment_is_image( $attachment_id ) ) : ?>
@@ -334,34 +334,34 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 								<?php endif; ?>
 								
 								<div class="file-info">
-									<p><strong><?php esc_html_e( 'Filename:', 'Lukic-code-snippets' ); ?></strong> <?php echo esc_html( $filename ); ?></p>
-									<p><strong><?php esc_html_e( 'File type:', 'Lukic-code-snippets' ); ?></strong> <?php echo esc_html( $filetype['type'] ); ?></p>
-									<p><strong><?php esc_html_e( 'File size:', 'Lukic-code-snippets' ); ?></strong> <?php echo esc_html( $filesize ); ?></p>
-									<p><strong><?php esc_html_e( 'Dimensions:', 'Lukic-code-snippets' ); ?></strong> 
+									<p><strong><?php esc_html_e( 'Filename:', 'lukic-code-snippets' ); ?></strong> <?php echo esc_html( $filename ); ?></p>
+									<p><strong><?php esc_html_e( 'File type:', 'lukic-code-snippets' ); ?></strong> <?php echo esc_html( $filetype['type'] ); ?></p>
+									<p><strong><?php esc_html_e( 'File size:', 'lukic-code-snippets' ); ?></strong> <?php echo esc_html( $filesize ); ?></p>
+									<p><strong><?php esc_html_e( 'Dimensions:', 'lukic-code-snippets' ); ?></strong> 
 										<?php
 										if ( wp_attachment_is_image( $attachment_id ) ) {
 											$metadata = wp_get_attachment_metadata( $attachment_id );
 											if ( isset( $metadata['width'] ) && isset( $metadata['height'] ) ) {
 												echo esc_html( $metadata['width'] . ' × ' . $metadata['height'] . ' pixels' );
 											} else {
-												esc_html_e( 'Unknown', 'Lukic-code-snippets' );
+												esc_html_e( 'Unknown', 'lukic-code-snippets' );
 											}
 										} else {
-											esc_html_e( 'N/A', 'Lukic-code-snippets' );
+											esc_html_e( 'N/A', 'lukic-code-snippets' );
 										}
 										?>
 									</p>
-									<p><strong><?php esc_html_e( 'Uploaded on:', 'Lukic-code-snippets' ); ?></strong> <?php echo esc_html( get_the_date( '', $attachment_id ) ); ?></p>
+									<p><strong><?php esc_html_e( 'Uploaded on:', 'lukic-code-snippets' ); ?></strong> <?php echo esc_html( get_the_date( '', $attachment_id ) ); ?></p>
 								</div>
 							</div>
 						</div>
 					</div>
 					
 					<div class="replace-form">
-						<h2><?php esc_html_e( 'Upload Replacement', 'Lukic-code-snippets' ); ?></h2>
+						<h2><?php esc_html_e( 'Upload Replacement', 'lukic-code-snippets' ); ?></h2>
 						
 						<p class="description">
-							<?php esc_html_e( 'Choose a new file to replace the current one. The new file will inherit the current file\'s ID, filename, and upload date.', 'Lukic-code-snippets' ); ?>
+							<?php esc_html_e( 'Choose a new file to replace the current one. The new file will inherit the current file\'s ID, filename, and upload date.', 'lukic-code-snippets' ); ?>
 						</p>
 						
 						<form method="post" enctype="multipart/form-data">
@@ -371,7 +371,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 							
 							<p>
 								<label for="replacement_file">
-									<strong><?php esc_html_e( 'Select New File', 'Lukic-code-snippets' ); ?></strong>
+									<strong><?php esc_html_e( 'Select New File', 'lukic-code-snippets' ); ?></strong>
 								</label>
 								<input type="file" name="replacement_file" id="replacement_file" required />
 							</p>
@@ -379,18 +379,18 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 							<p>
 								<label class="Lukic-switch-label">
 									<input type="checkbox" name="preserve_filename" value="1" checked="checked" />
-									<span class="Lukic-checkbox-text"><?php esc_html_e( 'Preserve Original Filename', 'Lukic-code-snippets' ); ?></span>
+									<span class="Lukic-checkbox-text"><?php esc_html_e( 'Preserve Original Filename', 'lukic-code-snippets' ); ?></span>
 								</label>
 							</p>
 							
 							<div class="Lukic-submit-container">
-								<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php esc_html_e( 'Replace File', 'Lukic-code-snippets' ); ?>" />
-								<a href="<?php echo esc_url( admin_url( 'upload.php' ) ); ?>" class="button button-secondary"><?php esc_html_e( 'Cancel', 'Lukic-code-snippets' ); ?></a>
+								<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php esc_html_e( 'Replace File', 'lukic-code-snippets' ); ?>" />
+								<a href="<?php echo esc_url( admin_url( 'upload.php' ) ); ?>" class="button button-secondary"><?php esc_html_e( 'Cancel', 'lukic-code-snippets' ); ?></a>
 							</div>
 						</form>
 						
 						<div class="notice notice-warning">
-							<p><?php esc_html_e( '<strong>Warning:</strong> This operation cannot be undone. Make sure to backup your files before proceeding.', 'Lukic-code-snippets' ); ?></p>
+							<p><?php esc_html_e( '<strong>Warning:</strong> This operation cannot be undone. Make sure to backup your files before proceeding.', 'lukic-code-snippets' ); ?></p>
 						</div>
 					</div>
 				</div>
@@ -401,7 +401,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 				<?php
 				printf(
 					/* translators: %s: Plugin version */
-					__( 'Thank you for creating with WordPress | Lukic Snippet Codes v%s', 'Lukic-code-snippets' ),
+					__( 'Thank you for creating with WordPress | Lukic Snippet Codes v%s', 'lukic-code-snippets' ),
 					esc_html( Lukic_SNIPPET_CODES_VERSION )
 				);
 				?>
@@ -424,7 +424,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 		// Get attachment ID
 		$attachment_id = isset( $_POST['attachment_id'] ) ? intval( $_POST['attachment_id'] ) : 0;
 		if ( ! $attachment_id ) {
-			wp_die( __( 'No attachment ID specified.', 'Lukic-code-snippets' ) );
+			wp_die( __( 'No attachment ID specified.', 'lukic-code-snippets' ) );
 		}
 
 		// Verify nonce
@@ -432,12 +432,12 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 
 		// Check permissions
 		if ( ! current_user_can( 'edit_post', $attachment_id ) ) {
-			wp_die( __( 'You do not have permission to edit this attachment.', 'Lukic-code-snippets' ) );
+			wp_die( __( 'You do not have permission to edit this attachment.', 'lukic-code-snippets' ) );
 		}
 
 		// Check file upload
 		if ( ! isset( $_FILES['replacement_file'] ) || empty( $_FILES['replacement_file']['name'] ) ) {
-			Lukic_media_replace_set_error( __( 'No file was uploaded.', 'Lukic-code-snippets' ) );
+			Lukic_media_replace_set_error( __( 'No file was uploaded.', 'lukic-code-snippets' ) );
 			wp_redirect( admin_url( 'upload.php?page=lukic-replace-media&attachment_id=' . $attachment_id ) );
 			exit;
 		}
@@ -465,7 +465,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 				Lukic_media_replace_set_error(
 					/* translators: %1$s: New file extension, %2$s: Original file extension */
 					sprintf(
-						__( 'The new file extension (%1$s) does not match the original extension (%2$s). This could break existing links.', 'Lukic-code-snippets' ),
+						__( 'The new file extension (%1$s) does not match the original extension (%2$s). This could break existing links.', 'lukic-code-snippets' ),
 						$uploaded_extension,
 						$original_extension
 					)
@@ -490,7 +490,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 		$move_result = @move_uploaded_file( $uploaded_file['tmp_name'], $new_file_path );
 
 		if ( ! $move_result ) {
-			Lukic_media_replace_set_error( __( 'Failed to move uploaded file. Check folder permissions.', 'Lukic-code-snippets' ) );
+			Lukic_media_replace_set_error( __( 'Failed to move uploaded file. Check folder permissions.', 'lukic-code-snippets' ) );
 			wp_redirect( admin_url( 'upload.php?page=lukic-replace-media&attachment_id=' . $attachment_id ) );
 			exit;
 		}
@@ -509,7 +509,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 		clean_attachment_cache( $attachment_id );
 
 		// Set success message
-		Lukic_media_replace_set_success( __( 'Media file successfully replaced!', 'Lukic-code-snippets' ) );
+		Lukic_media_replace_set_success( __( 'Media file successfully replaced!', 'lukic-code-snippets' ) );
 
 		// Redirect to media library
 		wp_redirect( admin_url( 'post.php?post=' . $attachment_id . '&action=edit' ) );

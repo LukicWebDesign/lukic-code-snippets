@@ -95,8 +95,8 @@ class Lukic_Upload_Limits {
 	public function add_submenu_page() {
 		add_submenu_page(
 			'lukic-code-snippets',
-			__( 'Control Upload Limits', 'Lukic-code-snippets' ),
-			__( 'Upload Limits', 'Lukic-code-snippets' ),
+			__( 'Control Upload Limits', 'lukic-code-snippets' ),
+			__( 'Upload Limits', 'lukic-code-snippets' ),
 			'manage_options',
 			'lukic-upload-limits',
 			array( $this, 'render_settings_page' )
@@ -265,7 +265,7 @@ class Lukic_Upload_Limits {
 		if ( ! isset( $_FILES['test_file'] ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'No file was uploaded.', 'Lukic-code-snippets' ),
+					'message' => __( 'No file was uploaded.', 'lukic-code-snippets' ),
 				)
 			);
 		}
@@ -288,7 +288,7 @@ class Lukic_Upload_Limits {
 		// File uploaded successfully
 		wp_send_json_success(
 			array(
-				'message'   => __( 'File uploaded successfully! Your upload limits are working correctly.', 'Lukic-code-snippets' ),
+				'message'   => __( 'File uploaded successfully! Your upload limits are working correctly.', 'lukic-code-snippets' ),
 				'file_name' => sanitize_text_field( $file['name'] ),
 				'file_size' => size_format( $file['size'] ),
 				'status'    => 'success',
@@ -302,21 +302,21 @@ class Lukic_Upload_Limits {
 	private function get_upload_error_message( $error_code ) {
 		switch ( $error_code ) {
 			case UPLOAD_ERR_INI_SIZE:
-				return __( 'The uploaded file exceeds the upload_max_filesize directive in php.ini.', 'Lukic-code-snippets' );
+				return __( 'The uploaded file exceeds the upload_max_filesize directive in php.ini.', 'lukic-code-snippets' );
 			case UPLOAD_ERR_FORM_SIZE:
-				return __( 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.', 'Lukic-code-snippets' );
+				return __( 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.', 'lukic-code-snippets' );
 			case UPLOAD_ERR_PARTIAL:
-				return __( 'The uploaded file was only partially uploaded.', 'Lukic-code-snippets' );
+				return __( 'The uploaded file was only partially uploaded.', 'lukic-code-snippets' );
 			case UPLOAD_ERR_NO_FILE:
-				return __( 'No file was uploaded.', 'Lukic-code-snippets' );
+				return __( 'No file was uploaded.', 'lukic-code-snippets' );
 			case UPLOAD_ERR_NO_TMP_DIR:
-				return __( 'Missing a temporary folder.', 'Lukic-code-snippets' );
+				return __( 'Missing a temporary folder.', 'lukic-code-snippets' );
 			case UPLOAD_ERR_CANT_WRITE:
-				return __( 'Failed to write file to disk.', 'Lukic-code-snippets' );
+				return __( 'Failed to write file to disk.', 'lukic-code-snippets' );
 			case UPLOAD_ERR_EXTENSION:
-				return __( 'A PHP extension stopped the file upload.', 'Lukic-code-snippets' );
+				return __( 'A PHP extension stopped the file upload.', 'lukic-code-snippets' );
 			default:
-				return __( 'Unknown upload error.', 'Lukic-code-snippets' );
+				return __( 'Unknown upload error.', 'lukic-code-snippets' );
 		}
 	}
 
@@ -341,11 +341,11 @@ class Lukic_Upload_Limits {
 		$stats = array(
 			array(
 				'count' => $current_php_settings['upload_max_filesize'],
-				'label' => __( 'Upload Limit', 'Lukic-code-snippets' ),
+				'label' => __( 'Upload Limit', 'lukic-code-snippets' ),
 			),
 			array(
 				'count' => $current_php_settings['memory_limit'],
-				'label' => __( 'Memory Limit', 'Lukic-code-snippets' ),
+				'label' => __( 'Memory Limit', 'lukic-code-snippets' ),
 			),
 		);
 
@@ -365,7 +365,7 @@ class Lukic_Upload_Limits {
 			array(
 				'ajax_url'   => admin_url( 'admin-ajax.php' ),
 				'nonce'      => wp_create_nonce( 'Lukic_upload_test_nonce' ),
-				'refreshing' => __( 'Refreshing...', 'Lukic-code-snippets' ),
+				'refreshing' => __( 'Refreshing...', 'lukic-code-snippets' ),
 			)
 		);
 
@@ -376,22 +376,22 @@ class Lukic_Upload_Limits {
 			<?php
 			// Include header
 			// Header component is already loaded in main plugin file
-			Lukic_display_header( __( 'Control Upload Limits', 'Lukic-code-snippets' ), $stats );
+			Lukic_display_header( __( 'Control Upload Limits', 'lukic-code-snippets' ), $stats );
 			?>
 			
 			<?php if ( $settings_saved ) : ?>
 				<div class="notice notice-success is-dismissible">
-					<p><?php esc_html_e( 'Settings saved. Note that some hosting environments may restrict changing these values.', 'Lukic-code-snippets' ); ?></p>
+					<p><?php esc_html_e( 'Settings saved. Note that some hosting environments may restrict changing these values.', 'lukic-code-snippets' ); ?></p>
 				</div>
 			<?php endif; ?>
 			
 			<?php if ( $this->is_apache_server() ) : ?>
 				<div class="notice notice-success">
-					<p><strong><?php esc_html_e( 'Apache Server Detected:', 'Lukic-code-snippets' ); ?></strong> <?php esc_html_e( 'This snippet can modify your .htaccess file to set PHP limits. After saving, you may need to reload your site for changes to take effect.', 'Lukic-code-snippets' ); ?></p>
+					<p><strong><?php esc_html_e( 'Apache Server Detected:', 'lukic-code-snippets' ); ?></strong> <?php esc_html_e( 'This snippet can modify your .htaccess file to set PHP limits. After saving, you may need to reload your site for changes to take effect.', 'lukic-code-snippets' ); ?></p>
 				</div>
 			<?php else : ?>
 				<div class="notice notice-warning">
-					<p><strong><?php esc_html_e( 'Non-Apache Server Detected:', 'Lukic-code-snippets' ); ?></strong> <?php esc_html_e( 'Your server configuration may not allow changing these values via .htaccess. You may need to contact your hosting provider to change these limits.', 'Lukic-code-snippets' ); ?></p>
+					<p><strong><?php esc_html_e( 'Non-Apache Server Detected:', 'lukic-code-snippets' ); ?></strong> <?php esc_html_e( 'Your server configuration may not allow changing these values via .htaccess. You may need to contact your hosting provider to change these limits.', 'lukic-code-snippets' ); ?></p>
 				</div>
 			<?php endif; ?>
 			
@@ -403,75 +403,75 @@ class Lukic_Upload_Limits {
 			if ( $this->is_apache_server() && ! $htaccess_writable ) :
 				?>
 				<div class="notice notice-error">
-					<p><strong><?php esc_html_e( 'Warning:', 'Lukic-code-snippets' ); ?></strong> <?php esc_html_e( 'Your .htaccess file is not writable. The plugin cannot automatically update your PHP limits.', 'Lukic-code-snippets' ); ?></p>
+					<p><strong><?php esc_html_e( 'Warning:', 'lukic-code-snippets' ); ?></strong> <?php esc_html_e( 'Your .htaccess file is not writable. The plugin cannot automatically update your PHP limits.', 'lukic-code-snippets' ); ?></p>
 				</div>
 			<?php endif; ?>
 			
 			<div class="Lukic-settings-container">
 				<div class="Lukic-settings-section">
-					<h2><?php esc_html_e( 'Current PHP Settings', 'Lukic-code-snippets' ); ?></h2>
-					<p><?php esc_html_e( 'These are the actual values currently in use by PHP on your server.', 'Lukic-code-snippets' ); ?></p>
+					<h2><?php esc_html_e( 'Current PHP Settings', 'lukic-code-snippets' ); ?></h2>
+					<p><?php esc_html_e( 'These are the actual values currently in use by PHP on your server.', 'lukic-code-snippets' ); ?></p>
 					<table class="widefat" id="current-php-settings-table">
 						<thead>
 							<tr>
-								<th><?php esc_html_e( 'Setting', 'Lukic-code-snippets' ); ?></th>
-								<th><?php esc_html_e( 'Current Value', 'Lukic-code-snippets' ); ?></th>
+								<th><?php esc_html_e( 'Setting', 'lukic-code-snippets' ); ?></th>
+								<th><?php esc_html_e( 'Current Value', 'lukic-code-snippets' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td><?php esc_html_e( 'Upload Max Filesize', 'Lukic-code-snippets' ); ?></td>
+								<td><?php esc_html_e( 'Upload Max Filesize', 'lukic-code-snippets' ); ?></td>
 								<td><code id="current-upload-max-filesize"><?php echo esc_html( $current_php_settings['upload_max_filesize'] ); ?></code></td>
 							</tr>
 							<tr>
-								<td><?php esc_html_e( 'Post Max Size', 'Lukic-code-snippets' ); ?></td>
+								<td><?php esc_html_e( 'Post Max Size', 'lukic-code-snippets' ); ?></td>
 								<td><code id="current-post-max-size"><?php echo esc_html( $current_php_settings['post_max_size'] ); ?></code></td>
 							</tr>
 							<tr>
-								<td><?php esc_html_e( 'Max Execution Time', 'Lukic-code-snippets' ); ?></td>
-								<td><code id="current-max-execution-time"><?php echo esc_html( $current_php_settings['max_execution_time'] ); ?> <?php esc_html_e( 'seconds', 'Lukic-code-snippets' ); ?></code></td>
+								<td><?php esc_html_e( 'Max Execution Time', 'lukic-code-snippets' ); ?></td>
+								<td><code id="current-max-execution-time"><?php echo esc_html( $current_php_settings['max_execution_time'] ); ?> <?php esc_html_e( 'seconds', 'lukic-code-snippets' ); ?></code></td>
 							</tr>
 							<tr>
-								<td><?php esc_html_e( 'Memory Limit', 'Lukic-code-snippets' ); ?></td>
+								<td><?php esc_html_e( 'Memory Limit', 'lukic-code-snippets' ); ?></td>
 								<td><code id="current-memory-limit"><?php echo esc_html( $current_php_settings['memory_limit'] ); ?></code></td>
 							</tr>
 						</tbody>
 					</table>
-					<p class="description"><?php esc_html_e( 'Last updated: ', 'Lukic-code-snippets' ); ?><span id="last-updated-time"><?php echo date( 'Y-m-d H:i:s' ); ?></span></p>
+					<p class="description"><?php esc_html_e( 'Last updated: ', 'lukic-code-snippets' ); ?><span id="last-updated-time"><?php echo date( 'Y-m-d H:i:s' ); ?></span></p>
 					<p>
 						<button type="button" id="refresh-php-settings" class="button button-secondary">
 							<span class="dashicons dashicons-update" style="margin-top: 3px;"></span> 
-							<?php esc_html_e( 'Refresh Values', 'Lukic-code-snippets' ); ?>
+							<?php esc_html_e( 'Refresh Values', 'lukic-code-snippets' ); ?>
 						</button>
 					</p>
 				</div>
 				
 				<div class="Lukic-settings-section">
-					<h2><?php esc_html_e( 'Test Upload Limits', 'Lukic-code-snippets' ); ?></h2>
-					<p><?php esc_html_e( 'Use this tool to test if your upload limits are working correctly.', 'Lukic-code-snippets' ); ?></p>
+					<h2><?php esc_html_e( 'Test Upload Limits', 'lukic-code-snippets' ); ?></h2>
+					<p><?php esc_html_e( 'Use this tool to test if your upload limits are working correctly.', 'lukic-code-snippets' ); ?></p>
 					
 					<div id="upload-test-container">
 						<div class="upload-test-form">
 							<input type="file" id="test-upload-file" class="test-upload-input" />
 							<button type="button" id="test-upload-button" class="button button-primary Lukic-button">
-								<?php esc_html_e( 'Test Upload', 'Lukic-code-snippets' ); ?>
+								<?php esc_html_e( 'Test Upload', 'lukic-code-snippets' ); ?>
 							</button>
 						</div>
 						
 						<div id="upload-test-results" style="display: none;">
-							<h3><?php esc_html_e( 'Test Results', 'Lukic-code-snippets' ); ?></h3>
+							<h3><?php esc_html_e( 'Test Results', 'lukic-code-snippets' ); ?></h3>
 							<div class="upload-test-message"></div>
 							<table class="widefat">
 								<tr>
-									<th><?php esc_html_e( 'File Name', 'Lukic-code-snippets' ); ?></th>
+									<th><?php esc_html_e( 'File Name', 'lukic-code-snippets' ); ?></th>
 									<td class="test-file-name"></td>
 								</tr>
 								<tr>
-									<th><?php esc_html_e( 'File Size', 'Lukic-code-snippets' ); ?></th>
+									<th><?php esc_html_e( 'File Size', 'lukic-code-snippets' ); ?></th>
 									<td class="test-file-size"></td>
 								</tr>
 								<tr>
-									<th><?php esc_html_e( 'Status', 'Lukic-code-snippets' ); ?></th>
+									<th><?php esc_html_e( 'Status', 'lukic-code-snippets' ); ?></th>
 									<td class="test-status"></td>
 								</tr>
 							</table>
@@ -480,7 +480,7 @@ class Lukic_Upload_Limits {
 				</div>
 				
 				<div class="Lukic-settings-section">
-					<h2><?php esc_html_e( 'Adjust PHP Limits', 'Lukic-code-snippets' ); ?></h2>
+					<h2><?php esc_html_e( 'Adjust PHP Limits', 'lukic-code-snippets' ); ?></h2>
 					<form method="post" action="options.php" id="upload-limits-form">
 						<?php
 						settings_fields( 'Lukic_upload_limits_group' );
@@ -489,7 +489,7 @@ class Lukic_Upload_Limits {
 						<table class="form-table">
 							<tr>
 								<th scope="row">
-									<label for="upload_max_filesize"><?php esc_html_e( 'Upload Max Filesize', 'Lukic-code-snippets' ); ?></label>
+									<label for="upload_max_filesize"><?php esc_html_e( 'Upload Max Filesize', 'lukic-code-snippets' ); ?></label>
 								</th>
 								<td>
 									<select name="<?php echo esc_attr( $this->option_name ); ?>[upload_max_filesize]" id="upload_max_filesize" class="regular-text">
@@ -499,21 +499,21 @@ class Lukic_Upload_Limits {
 											</option>
 										<?php endforeach; ?>
 									</select>
-									<p class="description"><?php esc_html_e( 'Maximum allowed size for uploaded files.', 'Lukic-code-snippets' ); ?></p>
+									<p class="description"><?php esc_html_e( 'Maximum allowed size for uploaded files.', 'lukic-code-snippets' ); ?></p>
 								</td>
 							</tr>
 							<tr>
 								<th scope="row">
-									<label for="max_execution_time"><?php esc_html_e( 'Max Execution Time', 'Lukic-code-snippets' ); ?></label>
+									<label for="max_execution_time"><?php esc_html_e( 'Max Execution Time', 'lukic-code-snippets' ); ?></label>
 								</th>
 								<td>
 									<input type="number" name="<?php echo esc_attr( $this->option_name ); ?>[max_execution_time]" id="max_execution_time" class="regular-text" value="<?php echo esc_attr( $settings['max_execution_time'] ); ?>" min="30" max="3600" step="30">
-									<p class="description"><?php esc_html_e( 'Maximum time in seconds a script is allowed to run before it is terminated.', 'Lukic-code-snippets' ); ?></p>
+									<p class="description"><?php esc_html_e( 'Maximum time in seconds a script is allowed to run before it is terminated.', 'lukic-code-snippets' ); ?></p>
 								</td>
 							</tr>
 							<tr>
 								<th scope="row">
-									<label for="memory_limit"><?php esc_html_e( 'Memory Limit', 'Lukic-code-snippets' ); ?></label>
+									<label for="memory_limit"><?php esc_html_e( 'Memory Limit', 'lukic-code-snippets' ); ?></label>
 								</th>
 								<td>
 									<select name="<?php echo esc_attr( $this->option_name ); ?>[memory_limit]" id="memory_limit" class="regular-text">
@@ -523,38 +523,38 @@ class Lukic_Upload_Limits {
 											</option>
 										<?php endforeach; ?>
 									</select>
-									<p class="description"><?php esc_html_e( 'Maximum amount of memory a script may consume.', 'Lukic-code-snippets' ); ?></p>
+									<p class="description"><?php esc_html_e( 'Maximum amount of memory a script may consume.', 'lukic-code-snippets' ); ?></p>
 								</td>
 							</tr>
 						</table>
 						
 						<div id="save-settings-container">
-							<?php submit_button( __( 'Save Changes', 'Lukic-code-snippets' ), 'primary', 'submit', true, array( 'id' => 'save-settings-button' ) ); ?>
+							<?php submit_button( __( 'Save Changes', 'lukic-code-snippets' ), 'primary', 'submit', true, array( 'id' => 'save-settings-button' ) ); ?>
 							<span id="settings-saving-indicator" style="display:none; margin-left: 10px;">
 								<span class="spinner is-active" style="float:none; margin-top:0;"></span> 
-								<?php esc_html_e( 'Saving and applying changes...', 'Lukic-code-snippets' ); ?>
+								<?php esc_html_e( 'Saving and applying changes...', 'lukic-code-snippets' ); ?>
 							</span>
 							<span id="settings-saved-indicator" style="display:none; margin-left: 10px; color: green;">
 								<span class="dashicons dashicons-yes-alt"></span> 
-								<?php esc_html_e( 'Changes saved and applied!', 'Lukic-code-snippets' ); ?>
+								<?php esc_html_e( 'Changes saved and applied!', 'lukic-code-snippets' ); ?>
 							</span>
 						</div>
 					</form>
 				</div>
 				
 				<div class="Lukic-settings-section">
-					<h2><?php esc_html_e( 'Important Notes', 'Lukic-code-snippets' ); ?></h2>
+					<h2><?php esc_html_e( 'Important Notes', 'lukic-code-snippets' ); ?></h2>
 					<ul class="ul-disc">
 						<?php if ( $this->is_apache_server() ) : ?>
-							<li><?php esc_html_e( '<strong>How This Works:</strong> On Apache servers, this snippet modifies your .htaccess file to set PHP limits. This is more reliable than using ini_set().', 'Lukic-code-snippets' ); ?></li>
-							<li><?php esc_html_e( '<strong>After Saving:</strong> You may need to reload your site or wait a few minutes for the changes to take effect.', 'Lukic-code-snippets' ); ?></li>
-							<li><?php esc_html_e( '<strong>If Not Working:</strong> Your server might be using PHP-FPM or another configuration that ignores .htaccess PHP settings.', 'Lukic-code-snippets' ); ?></li>
+							<li><?php esc_html_e( '<strong>How This Works:</strong> On Apache servers, this snippet modifies your .htaccess file to set PHP limits. This is more reliable than using ini_set().', 'lukic-code-snippets' ); ?></li>
+							<li><?php esc_html_e( '<strong>After Saving:</strong> You may need to reload your site or wait a few minutes for the changes to take effect.', 'lukic-code-snippets' ); ?></li>
+							<li><?php esc_html_e( '<strong>If Not Working:</strong> Your server might be using PHP-FPM or another configuration that ignores .htaccess PHP settings.', 'lukic-code-snippets' ); ?></li>
 						<?php else : ?>
-							<li><?php esc_html_e( '<strong>Server Limitation:</strong> Your server type (Nginx, IIS, etc.) does not support changing PHP settings via .htaccess.', 'Lukic-code-snippets' ); ?></li>
-							<li><?php esc_html_e( '<strong>Alternative Solution:</strong> Contact your hosting provider to increase these limits or modify the server configuration files.', 'Lukic-code-snippets' ); ?></li>
+							<li><?php esc_html_e( '<strong>Server Limitation:</strong> Your server type (Nginx, IIS, etc.) does not support changing PHP settings via .htaccess.', 'lukic-code-snippets' ); ?></li>
+							<li><?php esc_html_e( '<strong>Alternative Solution:</strong> Contact your hosting provider to increase these limits or modify the server configuration files.', 'lukic-code-snippets' ); ?></li>
 						<?php endif; ?>
-						<li><?php esc_html_e( '<strong>Memory & Execution Time:</strong> These settings can sometimes be changed at runtime and may work regardless of server type.', 'Lukic-code-snippets' ); ?></li>
-						<li><?php esc_html_e( '<strong>Current Values:</strong> The "Current PHP Settings" table shows the actual values in use by PHP. After saving, refresh the page to see if your changes took effect.', 'Lukic-code-snippets' ); ?></li>
+						<li><?php esc_html_e( '<strong>Memory & Execution Time:</strong> These settings can sometimes be changed at runtime and may work regardless of server type.', 'lukic-code-snippets' ); ?></li>
+						<li><?php esc_html_e( '<strong>Current Values:</strong> The "Current PHP Settings" table shows the actual values in use by PHP. After saving, refresh the page to see if your changes took effect.', 'lukic-code-snippets' ); ?></li>
 					</ul>
 				</div>
 			</div>

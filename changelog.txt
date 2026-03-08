@@ -1,5 +1,12 @@
 === Lukic-code-snippets Changelog ===
 
+== 2.7.5 - 2026-03-08 ==
+* Performance: Fixed "Doing it wrong" translation loading warning in Query Monitor
+* Performance: Added caching to snippet registry to avoid redundant localization overhead
+* Performance: Optimized activated snippet fetching logic to bypass unnecessary parsing
+* Performance: Reordered plugin initialization hooks and deferred admin class instantiation
+* Fix: Standardized text domain globally to correct case mismatches
+
 == 2.7.0 - 2025-11-21 ==
 * New: Added "Disable Comments" snippet to completely remove comment functionality (except for WooCommerce products).
 

@@ -787,19 +787,19 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 	function Lukic_redirect_manager_delete_redirect() {
 		// Check nonce
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_redirect_nonce' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Security check failed', 'Lukic-code-snippets' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 		}
 
 		// Check permissions
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to perform this action', 'Lukic-code-snippets' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to perform this action', 'lukic-code-snippets' ) ) );
 		}
 
 		// Get redirect ID
 		$redirect_id = isset( $_POST['redirect_id'] ) ? intval( $_POST['redirect_id'] ) : 0;
 
 		if ( $redirect_id <= 0 ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid redirect ID', 'Lukic-code-snippets' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid redirect ID', 'lukic-code-snippets' ) ) );
 		}
 
 		// Delete redirect
@@ -813,10 +813,10 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 		);
 
 		if ( $result === false ) {
-			wp_send_json_error( array( 'message' => __( 'Error deleting redirect', 'Lukic-code-snippets' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Error deleting redirect', 'lukic-code-snippets' ) ) );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Redirect deleted successfully', 'Lukic-code-snippets' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Redirect deleted successfully', 'lukic-code-snippets' ) ) );
 	}
 
 	/**
@@ -825,12 +825,12 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 	function Lukic_redirect_manager_save_settings() {
 		// Check nonce
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_redirect_settings_nonce' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Security check failed', 'Lukic-code-snippets' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 		}
 
 		// Check permissions
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to perform this action', 'Lukic-code-snippets' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to perform this action', 'lukic-code-snippets' ) ) );
 		}
 
 		// Save settings
@@ -840,6 +840,6 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 		update_option( 'Lukic_redirect_track_hits', $track_hits );
 		update_option( 'Lukic_redirect_log_last_access', $log_last_access );
 
-		wp_send_json_success( array( 'message' => __( 'Settings saved successfully', 'Lukic-code-snippets' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Settings saved successfully', 'lukic-code-snippets' ) ) );
 	}
 }

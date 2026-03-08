@@ -70,11 +70,11 @@ function Lukic_get_header_stats() {
 	return array(
 		array(
 			'count' => $active_count,
-			'label' => __( 'Active', 'Lukic-code-snippets' ),
+			'label' => __( 'Active', 'lukic-code-snippets' ),
 		),
 		array(
 			'count' => $total_count,
-			'label' => __( 'Total', 'Lukic-code-snippets' ),
+			'label' => __( 'Total', 'lukic-code-snippets' ),
 		),
 	);
 }

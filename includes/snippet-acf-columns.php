@@ -170,10 +170,10 @@ function Lukic_acf_columns_page() {
 
 	?>
 	<div class="wrap Lukic-settings-wrap">
-		<?php Lukic_display_header( __( 'ACF Columns Configuration', 'Lukic-code-snippets' ), $stats ); ?>
+		<?php Lukic_display_header( __( 'ACF Columns Configuration', 'lukic-code-snippets' ), $stats ); ?>
 		
 		<div class="Lukic-settings-intro">
-			<p><?php esc_html_e( 'Configure which ACF fields should display as columns in your WordPress admin tables.', 'Lukic-code-snippets' ); ?></p>
+			<p><?php esc_html_e( 'Configure which ACF fields should display as columns in your WordPress admin tables.', 'lukic-code-snippets' ); ?></p>
 		</div>
 		
 		<?php if ( ! $acf_active ) : ?>

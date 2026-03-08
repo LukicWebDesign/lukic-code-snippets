@@ -51,7 +51,7 @@ class Lukic_Last_Login {
 	 * @return array Modified columns
 	 */
 	public function add_last_login_column( $columns ) {
-		$columns['last_login'] = __( 'Last login', 'Lukic-code-snippets' );
+		$columns['last_login'] = __( 'Last login', 'lukic-code-snippets' );
 		return $columns;
 	}
 
@@ -75,9 +75,9 @@ class Lukic_Last_Login {
 				// Add a title with the relative time (e.g., "3 days ago")
 				$time_diff = human_time_diff( $last_login, current_time( 'timestamp' ) );
 				/* translators: %s: Time difference (e.g., "3 days", "2 hours") */
-				$output = '<span title="' . sprintf( __( '%s ago', 'Lukic-code-snippets' ), $time_diff ) . '">' . $output . '</span>';
+				$output = '<span title="' . sprintf( __( '%s ago', 'lukic-code-snippets' ), $time_diff ) . '">' . $output . '</span>';
 			} else {
-				$output = '<span class="Lukic-no-login-data">' . __( 'No data', 'Lukic-code-snippets' ) . '</span>';
+				$output = '<span class="Lukic-no-login-data">' . __( 'No data', 'lukic-code-snippets' ) . '</span>';
 			}
 		}
 

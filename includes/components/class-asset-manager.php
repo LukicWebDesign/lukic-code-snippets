@@ -314,9 +314,9 @@ class Lukic_Asset_Manager {
 							'Lukic_auto_save',
 							array(
 								'nonce'        => wp_create_nonce( 'Lukic_auto_save_nonce' ),
-								'activated'    => __( 'Activated', 'Lukic-code-snippets' ),
-								'deactivated'  => __( 'Deactivated', 'Lukic-code-snippets' ),
-								'error_saving' => __( 'Error saving settings', 'Lukic-code-snippets' ),
+								'activated'    => __( 'Activated', 'lukic-code-snippets' ),
+								'deactivated'  => __( 'Deactivated', 'lukic-code-snippets' ),
+								'error_saving' => __( 'Error saving settings', 'lukic-code-snippets' ),
 							)
 						);
 					}

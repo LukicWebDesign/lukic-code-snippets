@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 function Lukic_meta_tags_editor_menu() {
 	add_submenu_page(
 		'lukic-code-snippets',
-		__( 'Meta Tags Editor', 'Lukic-code-snippets' ),
-		__( 'Meta Tags Editor', 'Lukic-code-snippets' ),
+		__( 'Meta Tags Editor', 'lukic-code-snippets' ),
+		__( 'Meta Tags Editor', 'lukic-code-snippets' ),
 		'manage_options',
 		'lukic-meta-tags-editor',
 		'Lukic_meta_tags_editor_page'
@@ -242,38 +242,38 @@ function Lukic_meta_tags_editor_page() {
 
 	?>
 	<div class="wrap Lukic-admin-page">
-	<?php Lukic_display_header( __( 'Meta Tags Editor', 'Lukic-code-snippets' ), $stats ); ?>
+	<?php Lukic_display_header( __( 'Meta Tags Editor', 'lukic-code-snippets' ), $stats ); ?>
 		<div class="Lukic-container">
 			<div class="Lukic-content-wrapper">
 				<div class="Lukic-content">
 					<div class="Lukic-card">
 						<div class="Lukic-card-header">
-							<h2><?php echo esc_html__( 'Meta Tags Editor', 'Lukic-code-snippets' ); ?></h2>
-							<p class="Lukic-description"><?php echo esc_html__( 'Edit meta tags for all pages, posts, and taxonomies on your website. Changes are saved automatically when you click outside of the edited field.', 'Lukic-code-snippets' ); ?></p>
+							<h2><?php echo esc_html__( 'Meta Tags Editor', 'lukic-code-snippets' ); ?></h2>
+							<p class="Lukic-description"><?php echo esc_html__( 'Edit meta tags for all pages, posts, and taxonomies on your website. Changes are saved automatically when you click outside of the edited field.', 'lukic-code-snippets' ); ?></p>
 							
 							<?php if ( $yoast_active ) : ?>
 								<div class="Lukic-notice Lukic-notice-info">
-									<p><?php echo esc_html__( 'Yoast SEO detected. Meta tags will be edited using Yoast SEO data.', 'Lukic-code-snippets' ); ?></p>
+									<p><?php echo esc_html__( 'Yoast SEO detected. Meta tags will be edited using Yoast SEO data.', 'lukic-code-snippets' ); ?></p>
 								</div>
 							<?php elseif ( $rank_math_active ) : ?>
 								<div class="Lukic-notice Lukic-notice-info">
-									<p><?php echo esc_html__( 'Rank Math detected. Meta tags will be edited using Rank Math data.', 'Lukic-code-snippets' ); ?></p>
+									<p><?php echo esc_html__( 'Rank Math detected. Meta tags will be edited using Rank Math data.', 'lukic-code-snippets' ); ?></p>
 								</div>
 							<?php endif; ?>
 							
 							<div class="Lukic-actions-bar">
 								<button id="export-meta-tags" class="Lukic-btn">
-									<span class="dashicons dashicons-download"></span> <?php echo esc_html__( 'Export CSV', 'Lukic-code-snippets' ); ?>
+									<span class="dashicons dashicons-download"></span> <?php echo esc_html__( 'Export CSV', 'lukic-code-snippets' ); ?>
 								</button>
 								
 								<div class="Lukic-import-container">
 									<button id="import-meta-tags-btn" class="Lukic-btn Lukic-btn-secondary">
-										<span class="dashicons dashicons-upload"></span> <?php echo esc_html__( 'Import CSV', 'Lukic-code-snippets' ); ?>
+										<span class="dashicons dashicons-upload"></span> <?php echo esc_html__( 'Import CSV', 'lukic-code-snippets' ); ?>
 									</button>
 									<form id="import-meta-tags-form" style="display: none;">
 										<input type="file" id="import-meta-tags-file" accept=".csv">
 										<button type="submit" class="Lukic-btn">
-											<?php echo esc_html__( 'Upload & Process', 'Lukic-code-snippets' ); ?>
+											<?php echo esc_html__( 'Upload & Process', 'lukic-code-snippets' ); ?>
 										</button>
 									</form>
 								</div>
@@ -285,11 +285,11 @@ function Lukic_meta_tags_editor_page() {
 								<table id="Lukic-meta-tags-table" class="Lukic-table display" width="100%">
 									<thead>
 										<tr>
-											<th data-orderable="true"><?php echo esc_html__( 'Post/Term ID', 'Lukic-code-snippets' ); ?></th>
-											<th data-orderable="true"><?php echo esc_html__( 'URL', 'Lukic-code-snippets' ); ?></th>
-											<th data-orderable="true"><?php echo esc_html__( 'Meta Title', 'Lukic-code-snippets' ); ?></th>
-											<th data-orderable="true"><?php echo esc_html__( 'Meta Description', 'Lukic-code-snippets' ); ?></th>
-											<th data-orderable="false"><?php echo esc_html__( 'Actions', 'Lukic-code-snippets' ); ?></th>
+											<th data-orderable="true"><?php echo esc_html__( 'Post/Term ID', 'lukic-code-snippets' ); ?></th>
+											<th data-orderable="true"><?php echo esc_html__( 'URL', 'lukic-code-snippets' ); ?></th>
+											<th data-orderable="true"><?php echo esc_html__( 'Meta Title', 'lukic-code-snippets' ); ?></th>
+											<th data-orderable="true"><?php echo esc_html__( 'Meta Description', 'lukic-code-snippets' ); ?></th>
+											<th data-orderable="false"><?php echo esc_html__( 'Actions', 'lukic-code-snippets' ); ?></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -316,7 +316,7 @@ function Lukic_meta_tags_editor_page() {
 												</td>
 												<td>
 													<button class="Lukic-btn Lukic-btn-small Lukic-edit-btn" data-id="<?php echo esc_attr( $item['id'] ); ?>" data-type="<?php echo esc_attr( $item['type'] ); ?>">
-														<span class="dashicons dashicons-edit-large"></span> <?php echo esc_html__( 'Edit', 'Lukic-code-snippets' ); ?>
+														<span class="dashicons dashicons-edit-large"></span> <?php echo esc_html__( 'Edit', 'lukic-code-snippets' ); ?>
 													</button>
 												</td>
 											</tr>
@@ -339,12 +339,12 @@ function Lukic_meta_tags_editor_page() {
 function Lukic_update_meta_tag() {
 	// Check nonce for security
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_meta_tags_editor_nonce' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Security check failed', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 	}
 
 	// Check if required data is set
 	if ( ! isset( $_POST['id'] ) || ! isset( $_POST['field'] ) || ! isset( $_POST['value'] ) ) {
-		wp_send_json_error( array( 'message' => __( 'Missing required data', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Missing required data', 'lukic-code-snippets' ) ) );
 	}
 
 	$id    = sanitize_text_field( $_POST['id'] );
@@ -422,10 +422,10 @@ function Lukic_update_meta_tag() {
 	}
 
 	if ( $success ) {
-		$message = __( 'Meta tag updated successfully', 'Lukic-code-snippets' );
+		$message = __( 'Meta tag updated successfully', 'lukic-code-snippets' );
 		wp_send_json_success( array( 'message' => $message ) );
 	} else {
-		$message = __( 'Failed to update meta tag', 'Lukic-code-snippets' );
+		$message = __( 'Failed to update meta tag', 'lukic-code-snippets' );
 		wp_send_json_error( array( 'message' => $message ) );
 	}
 }
@@ -437,7 +437,7 @@ add_action( 'wp_ajax_Lukic_update_meta_tag', 'Lukic_update_meta_tag' );
 function Lukic_export_meta_tags_csv() {
 	// Check nonce for security
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_meta_tags_editor_nonce' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Security check failed', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 	}
 
 	// Get all URLs
@@ -485,18 +485,18 @@ add_action( 'wp_ajax_Lukic_export_meta_tags_csv', 'Lukic_export_meta_tags_csv' )
 function Lukic_import_meta_tags_csv() {
 	// Check nonce for security
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_meta_tags_editor_nonce' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Security check failed', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 	}
 
 	// Check if file was uploaded
 	if ( ! isset( $_FILES['file'] ) || $_FILES['file']['error'] !== UPLOAD_ERR_OK ) {
-		wp_send_json_error( array( 'message' => __( 'No file uploaded or upload error', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'No file uploaded or upload error', 'lukic-code-snippets' ) ) );
 	}
 
 	// Get file content
 	$file_content = file_get_contents( $_FILES['file']['tmp_name'] );
 	if ( ! $file_content ) {
-		wp_send_json_error( array( 'message' => __( 'Could not read file content', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Could not read file content', 'lukic-code-snippets' ) ) );
 	}
 
 	// Parse CSV
@@ -511,7 +511,7 @@ function Lukic_import_meta_tags_csv() {
 		! in_array( 'Type', $header ) ||
 		! in_array( 'Meta Title', $header ) ||
 		! in_array( 'Meta Description', $header ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid CSV format. Please use the exported format as a template.', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Invalid CSV format. Please use the exported format as a template.', 'lukic-code-snippets' ) ) );
 	}
 
 	// Find column indexes
@@ -547,7 +547,7 @@ function Lukic_import_meta_tags_csv() {
 				++$updated_count;
 			} else {
 				/* translators: %s: Post/Page ID */
-				$errors[] = sprintf( __( 'Failed to update title for ID: %s', 'Lukic-code-snippets' ), $id );
+				$errors[] = sprintf( __( 'Failed to update title for ID: %s', 'lukic-code-snippets' ), $id );
 			}
 		}
 
@@ -558,7 +558,7 @@ function Lukic_import_meta_tags_csv() {
 				++$updated_count;
 			} else {
 				/* translators: %s: Post/Page ID */
-				$errors[] = sprintf( __( 'Failed to update description for ID: %s', 'Lukic-code-snippets' ), $id );
+				$errors[] = sprintf( __( 'Failed to update description for ID: %s', 'lukic-code-snippets' ), $id );
 			}
 		}
 	}
@@ -566,10 +566,10 @@ function Lukic_import_meta_tags_csv() {
 	// Send response
 	if ( $updated_count > 0 ) {
 		/* translators: %d: Number of meta values updated */
-		$message = sprintf( __( '%d meta values updated successfully.', 'Lukic-code-snippets' ), $updated_count );
+		$message = sprintf( __( '%d meta values updated successfully.', 'lukic-code-snippets' ), $updated_count );
 		if ( ! empty( $errors ) ) {
 			/* translators: %d: Number of errors that occurred */
-			$message .= ' ' . sprintf( __( '%d errors occurred.', 'Lukic-code-snippets' ), count( $errors ) );
+			$message .= ' ' . sprintf( __( '%d errors occurred.', 'lukic-code-snippets' ), count( $errors ) );
 		}
 		wp_send_json_success(
 			array(
@@ -580,7 +580,7 @@ function Lukic_import_meta_tags_csv() {
 	} else {
 		wp_send_json_error(
 			array(
-				'message' => __( 'No meta values were updated.', 'Lukic-code-snippets' ),
+				'message' => __( 'No meta values were updated.', 'lukic-code-snippets' ),
 				'errors'  => $errors,
 			)
 		);

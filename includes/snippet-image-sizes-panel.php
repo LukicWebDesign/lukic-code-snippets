@@ -28,7 +28,7 @@ add_action( 'current_screen', 'Lukic_add_image_sizes_panel' );
 function Lukic_add_image_sizes_metabox() {
 	add_meta_box(
 		'Lukic-image-sizes-metabox',
-		__( 'Image Sizes', 'Lukic-code-snippets' ),
+		__( 'Image Sizes', 'lukic-code-snippets' ),
 		'Lukic_display_image_sizes_metabox',
 		'attachment',
 		'side',
@@ -44,7 +44,7 @@ function Lukic_add_image_sizes_metabox() {
 function Lukic_display_image_sizes_metabox( $post ) {
 	// Only run for image attachments
 	if ( ! wp_attachment_is_image( $post->ID ) ) {
-		echo '<p>' . __( 'This is not an image attachment.', 'Lukic-code-snippets' ) . '</p>';
+		echo '<p>' . __( 'This is not an image attachment.', 'lukic-code-snippets' ) . '</p>';
 		return;
 	}
 
@@ -65,7 +65,7 @@ function Lukic_display_image_sizes_metabox( $post ) {
 			$width      = isset( $metadata['width'] ) ? $metadata['width'] : 0;
 			$height     = isset( $metadata['height'] ) ? $metadata['height'] : 0;
 			$dimensions = $width . ' × ' . $height;
-			$label      = __( 'full', 'Lukic-code-snippets' );
+			$label      = __( 'full', 'lukic-code-snippets' );
 			$image_url  = wp_get_attachment_url( $post->ID );
 		} else {
 			// Get dimensions for the intermediate size

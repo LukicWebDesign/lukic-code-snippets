@@ -61,7 +61,7 @@ if ( ! function_exists( 'Lukic_show_featured_images_init' ) ) {
 
 			// Add our column after the ID column if it exists
 			if ( $key === 'Lukic_id' ) {
-				$new_columns['Lukic_featured_image'] = __( 'Image', 'Lukic-code-snippets' );
+				$new_columns['Lukic_featured_image'] = __( 'Image', 'lukic-code-snippets' );
 			}
 		}
 
@@ -75,11 +75,11 @@ if ( ! function_exists( 'Lukic_show_featured_images_init' ) ) {
 				// Rebuild columns with our column after checkbox
 				$new_columns = array(
 					'cb'                     => $cb,
-					'Lukic_featured_image' => __( 'Image', 'Lukic-code-snippets' ),
+					'Lukic_featured_image' => __( 'Image', 'lukic-code-snippets' ),
 				) + $new_columns;
 			} else {
 				// If no checkbox either, add to beginning
-				$new_columns = array( 'Lukic_featured_image' => __( 'Image', 'Lukic-code-snippets' ) ) + $new_columns;
+				$new_columns = array( 'Lukic_featured_image' => __( 'Image', 'lukic-code-snippets' ) ) + $new_columns;
 			}
 		}
 

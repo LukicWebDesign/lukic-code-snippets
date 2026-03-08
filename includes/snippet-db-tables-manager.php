@@ -35,8 +35,8 @@ class Lukic_DB_Tables_Manager {
 	public function add_submenu_page() {
 		add_submenu_page(
 			'lukic-code-snippets', // Parent slug
-			__( 'DB Tables Manager', 'Lukic-code-snippets' ),
-			__( 'DB Tables Manager', 'Lukic-code-snippets' ),
+			__( 'DB Tables Manager', 'lukic-code-snippets' ),
+			__( 'DB Tables Manager', 'lukic-code-snippets' ),
 			'manage_options',
 			'lukic-db-tables-manager',
 			array( $this, 'display_admin_page' )
@@ -60,10 +60,10 @@ class Lukic_DB_Tables_Manager {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'Lukic_db_tables_nonce' ),
 				'strings' => array(
-					'loading'       => __( 'Loading...', 'Lukic-code-snippets' ),
-					'error'         => __( 'Error occurred', 'Lukic-code-snippets' ),
-					'exportSuccess' => __( 'Export successful!', 'Lukic-code-snippets' ),
-					'noData'        => __( 'No data found', 'Lukic-code-snippets' ),
+					'loading'       => __( 'Loading...', 'lukic-code-snippets' ),
+					'error'         => __( 'Error occurred', 'lukic-code-snippets' ),
+					'exportSuccess' => __( 'Export successful!', 'lukic-code-snippets' ),
+					'noData'        => __( 'No data found', 'lukic-code-snippets' ),
 				),
 			)
 		);
@@ -83,29 +83,29 @@ class Lukic_DB_Tables_Manager {
 		$stats = array(
 			array(
 				'count' => count( $tables_info['custom'] ),
-				'label' => __( 'Custom Tables', 'Lukic-code-snippets' ),
+				'label' => __( 'Custom Tables', 'lukic-code-snippets' ),
 			),
 			array(
 				'count' => count( $tables_info['wordpress'] ),
-				'label' => __( 'WP Core Tables', 'Lukic-code-snippets' ),
+				'label' => __( 'WP Core Tables', 'lukic-code-snippets' ),
 			),
 		);
 
 		?>
 		<div class="wrap Lukic-settings-wrap">
-			<?php Lukic_display_header( __( 'Database Tables Manager', 'Lukic-code-snippets' ), $stats ); ?>
+			<?php Lukic_display_header( __( 'Database Tables Manager', 'lukic-code-snippets' ), $stats ); ?>
 			
 			<div class="Lukic-settings-intro">
-				<p><?php esc_html_e( 'View and manage custom database tables created by plugins and themes.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'View and manage custom database tables created by plugins and themes.', 'lukic-code-snippets' ); ?></p>
 			</div>
 			
 			<div class="Lukic-settings-container">
 				<div class="Lukic-settings-main">
 					<div class="Lukic-tab-container">
 						<div class="Lukic-tab-nav">
-							<button class="Lukic-tab-button active" data-tab="custom-tables"><?php esc_html_e( 'Custom Tables', 'Lukic-code-snippets' ); ?></button>
-							<button class="Lukic-tab-button" data-tab="wp-tables"><?php esc_html_e( 'WordPress Tables', 'Lukic-code-snippets' ); ?></button>
-							<button class="Lukic-tab-button" data-tab="all-tables"><?php esc_html_e( 'All Tables', 'Lukic-code-snippets' ); ?></button>
+							<button class="Lukic-tab-button active" data-tab="custom-tables"><?php esc_html_e( 'Custom Tables', 'lukic-code-snippets' ); ?></button>
+							<button class="Lukic-tab-button" data-tab="wp-tables"><?php esc_html_e( 'WordPress Tables', 'lukic-code-snippets' ); ?></button>
+							<button class="Lukic-tab-button" data-tab="all-tables"><?php esc_html_e( 'All Tables', 'lukic-code-snippets' ); ?></button>
 						</div>
 						
 						<div class="Lukic-tab-content active" id="custom-tables">
@@ -131,32 +131,32 @@ class Lukic_DB_Tables_Manager {
 					
 					<div class="Lukic-tab-container">
 						<div class="Lukic-tab-nav">
-							<button class="Lukic-tab-button active" data-tab="structure"><?php esc_html_e( 'Structure', 'Lukic-code-snippets' ); ?></button>
-							<button class="Lukic-tab-button" data-tab="data"><?php esc_html_e( 'Data', 'Lukic-code-snippets' ); ?></button>
+							<button class="Lukic-tab-button active" data-tab="structure"><?php esc_html_e( 'Structure', 'lukic-code-snippets' ); ?></button>
+							<button class="Lukic-tab-button" data-tab="data"><?php esc_html_e( 'Data', 'lukic-code-snippets' ); ?></button>
 						</div>
 						
 						<div class="Lukic-tab-content active" id="structure">
 							<div id="structure-content">
-								<div class="Lukic-loading"><?php esc_html_e( 'Loading structure...', 'Lukic-code-snippets' ); ?></div>
+								<div class="Lukic-loading"><?php esc_html_e( 'Loading structure...', 'lukic-code-snippets' ); ?></div>
 							</div>
 						</div>
 						
 						<div class="Lukic-tab-content" id="data">
 							<div class="Lukic-data-controls">
 								<div class="Lukic-search-controls">
-									<input type="text" id="table-search" placeholder="<?php esc_attr_e( 'Search in table...', 'Lukic-code-snippets' ); ?>" />
-									<button class="button search-table"><?php esc_html_e( 'Search', 'Lukic-code-snippets' ); ?></button>
-									<button class="button clear-search" style="display: none;"><?php esc_html_e( 'Clear', 'Lukic-code-snippets' ); ?></button>
+									<input type="text" id="table-search" placeholder="<?php esc_attr_e( 'Search in table...', 'lukic-code-snippets' ); ?>" />
+									<button class="button search-table"><?php esc_html_e( 'Search', 'lukic-code-snippets' ); ?></button>
+									<button class="button clear-search" style="display: none;"><?php esc_html_e( 'Clear', 'lukic-code-snippets' ); ?></button>
 								</div>
 								<div class="Lukic-data-pagination">
-									<button class="button prev-page" disabled><?php esc_html_e( 'Previous', 'Lukic-code-snippets' ); ?></button>
+									<button class="button prev-page" disabled><?php esc_html_e( 'Previous', 'lukic-code-snippets' ); ?></button>
 									<span class="pagination-info"></span>
-									<button class="button next-page"><?php esc_html_e( 'Next', 'Lukic-code-snippets' ); ?></button>
+									<button class="button next-page"><?php esc_html_e( 'Next', 'lukic-code-snippets' ); ?></button>
 								</div>
-								<button class="button export-table"><?php esc_html_e( 'Export to CSV', 'Lukic-code-snippets' ); ?></button>
+								<button class="button export-table"><?php esc_html_e( 'Export to CSV', 'lukic-code-snippets' ); ?></button>
 							</div>
 							<div id="data-content">
-								<div class="Lukic-loading"><?php esc_html_e( 'Loading data...', 'Lukic-code-snippets' ); ?></div>
+								<div class="Lukic-loading"><?php esc_html_e( 'Loading data...', 'lukic-code-snippets' ); ?></div>
 							</div>
 						</div>
 					</div>
@@ -167,14 +167,14 @@ class Lukic_DB_Tables_Manager {
 			<div id="Lukic-edit-modal" class="Lukic-modal">
 				<div class="Lukic-modal-content">
 					<span class="Lukic-modal-close Lukic-edit-close">&times;</span>
-					<h2><?php esc_html_e( 'Edit Row', 'Lukic-code-snippets' ); ?></h2>
+					<h2><?php esc_html_e( 'Edit Row', 'lukic-code-snippets' ); ?></h2>
 					<form id="Lukic-edit-form">
 						<div id="edit-form-fields">
 							<!-- Form fields will be populated dynamically -->
 						</div>
 						<div class="Lukic-edit-actions">
-							<button type="submit" class="button button-primary"><?php esc_html_e( 'Update Row', 'Lukic-code-snippets' ); ?></button>
-							<button type="button" class="button Lukic-edit-cancel"><?php esc_html_e( 'Cancel', 'Lukic-code-snippets' ); ?></button>
+							<button type="submit" class="button button-primary"><?php esc_html_e( 'Update Row', 'lukic-code-snippets' ); ?></button>
+							<button type="button" class="button Lukic-edit-cancel"><?php esc_html_e( 'Cancel', 'lukic-code-snippets' ); ?></button>
 						</div>
 					</form>
 				</div>
@@ -514,7 +514,7 @@ class Lukic_DB_Tables_Manager {
 	 */
 	private function render_tables_list( $tables ) {
 		if ( empty( $tables ) ) {
-			echo '<p>' . __( 'No tables found.', 'Lukic-code-snippets' ) . '</p>';
+			echo '<p>' . __( 'No tables found.', 'lukic-code-snippets' ) . '</p>';
 			return;
 		}
 
@@ -522,11 +522,11 @@ class Lukic_DB_Tables_Manager {
 		<table class="wp-list-table widefat fixed striped Lukic-tables-list">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Table Name', 'Lukic-code-snippets' ); ?></th>
-					<th><?php esc_html_e( 'Engine', 'Lukic-code-snippets' ); ?></th>
-					<th><?php esc_html_e( 'Rows', 'Lukic-code-snippets' ); ?></th>
-					<th><?php esc_html_e( 'Size', 'Lukic-code-snippets' ); ?></th>
-					<th><?php esc_html_e( 'Actions', 'Lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Table Name', 'lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Engine', 'lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Rows', 'lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Size', 'lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Actions', 'lukic-code-snippets' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -538,7 +538,7 @@ class Lukic_DB_Tables_Manager {
 					<td><?php echo esc_html( $table['size'] ); ?></td>
 					<td>
 						<button class="button view-table" data-table="<?php echo esc_attr( $table['name'] ); ?>">
-							<?php esc_html_e( 'View Details', 'Lukic-code-snippets' ); ?>
+							<?php esc_html_e( 'View Details', 'lukic-code-snippets' ); ?>
 						</button>
 					</td>
 				</tr>
@@ -647,21 +647,21 @@ class Lukic_DB_Tables_Manager {
 		check_ajax_referer( 'Lukic_db_tables_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'You do not have sufficient permissions.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
 		$table = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
-			wp_send_json_error( __( 'Invalid table specified.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Invalid table specified.', 'lukic-code-snippets' ) );
 		}
 
 		// Get table structure
 		$columns = $wpdb->get_results( "DESCRIBE `{$table}`" );
 
 		if ( empty( $columns ) ) {
-			wp_send_json_error( __( 'Could not retrieve table structure.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Could not retrieve table structure.', 'lukic-code-snippets' ) );
 		}
 
 		ob_start();
@@ -669,12 +669,12 @@ class Lukic_DB_Tables_Manager {
 		<table class="wp-list-table widefat fixed striped">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Field', 'Lukic-code-snippets' ); ?></th>
-					<th><?php esc_html_e( 'Type', 'Lukic-code-snippets' ); ?></th>
-					<th><?php esc_html_e( 'Null', 'Lukic-code-snippets' ); ?></th>
-					<th><?php esc_html_e( 'Key', 'Lukic-code-snippets' ); ?></th>
-					<th><?php esc_html_e( 'Default', 'Lukic-code-snippets' ); ?></th>
-					<th><?php esc_html_e( 'Extra', 'Lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Field', 'lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Type', 'lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Null', 'lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Key', 'lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Default', 'lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Extra', 'lukic-code-snippets' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -708,7 +708,7 @@ class Lukic_DB_Tables_Manager {
 		check_ajax_referer( 'Lukic_db_tables_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'You do not have sufficient permissions.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
 		$table    = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
@@ -717,7 +717,7 @@ class Lukic_DB_Tables_Manager {
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
-			wp_send_json_error( __( 'Invalid table specified.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Invalid table specified.', 'lukic-code-snippets' ) );
 		}
 
 		// Get total rows count
@@ -730,14 +730,14 @@ class Lukic_DB_Tables_Manager {
 		$rows = $wpdb->get_results( "SELECT * FROM `{$table}` LIMIT {$offset}, {$per_page}", ARRAY_A );
 
 		if ( $rows === null ) {
-			wp_send_json_error( __( 'Error retrieving data from table.', 'Lukic-code-snippets' ) . ' ' . $wpdb->last_error );
+			wp_send_json_error( __( 'Error retrieving data from table.', 'lukic-code-snippets' ) . ' ' . $wpdb->last_error );
 		}
 
 		if ( empty( $rows ) ) {
 			ob_start();
 			?>
 			<div class="notice notice-info">
-				<p><?php esc_html_e( 'This table does not contain any data.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'This table does not contain any data.', 'lukic-code-snippets' ); ?></p>
 			</div>
 			<?php
 			$html = ob_get_clean();
@@ -773,7 +773,7 @@ class Lukic_DB_Tables_Manager {
 					<?php foreach ( array_keys( $rows[0] ) as $column ) : ?>
 					<th><?php echo esc_html( $column ); ?></th>
 					<?php endforeach; ?>
-					<th><?php esc_html_e( 'Actions', 'Lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Actions', 'lukic-code-snippets' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -788,10 +788,10 @@ class Lukic_DB_Tables_Manager {
 								data-table="<?php echo esc_attr( $table ); ?>" 
 								data-pk="<?php echo esc_attr( $primary_key ); ?>" 
 								data-pk-value="<?php echo esc_attr( $row[ $primary_key ] ); ?>">
-							<?php esc_html_e( 'Edit', 'Lukic-code-snippets' ); ?>
+							<?php esc_html_e( 'Edit', 'lukic-code-snippets' ); ?>
 						</button>
 						<?php else : ?>
-						<em><?php esc_html_e( 'No PK', 'Lukic-code-snippets' ); ?></em>
+						<em><?php esc_html_e( 'No PK', 'lukic-code-snippets' ); ?></em>
 						<?php endif; ?>
 					</td>
 				</tr>
@@ -819,21 +819,21 @@ class Lukic_DB_Tables_Manager {
 		check_ajax_referer( 'Lukic_db_tables_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'You do not have sufficient permissions.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
 		$table = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
-			wp_send_json_error( __( 'Invalid table specified.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Invalid table specified.', 'lukic-code-snippets' ) );
 		}
 
 		// Get all data from the table
 		$rows = $wpdb->get_results( "SELECT * FROM `{$table}`", ARRAY_A );
 
 		if ( empty( $rows ) ) {
-			wp_send_json_error( __( 'No data to export.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'No data to export.', 'lukic-code-snippets' ) );
 		}
 
 		// Generate CSV content
@@ -870,7 +870,7 @@ class Lukic_DB_Tables_Manager {
 		check_ajax_referer( 'Lukic_db_tables_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'You do not have sufficient permissions.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
 		$table         = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
@@ -879,23 +879,23 @@ class Lukic_DB_Tables_Manager {
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
-			wp_send_json_error( __( 'Invalid table specified.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Invalid table specified.', 'lukic-code-snippets' ) );
 		}
 
 		$primary_key = $this->validate_column_name( $primary_key );
 		if ( ! $primary_key ) {
-			wp_send_json_error( __( 'Invalid primary key.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Invalid primary key.', 'lukic-code-snippets' ) );
 		}
 
 		if ( empty( $primary_value ) ) {
-			wp_send_json_error( __( 'Missing required parameters.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Missing required parameters.', 'lukic-code-snippets' ) );
 		}
 
 		// Get table structure
 		$columns      = $wpdb->get_results( "DESCRIBE `{$table}`" );
 		$column_names = wp_list_pluck( $columns, 'Field' );
 		if ( ! in_array( $primary_key, $column_names, true ) ) {
-			wp_send_json_error( __( 'Invalid primary key.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Invalid primary key.', 'lukic-code-snippets' ) );
 		}
 
 		// Get the specific row
@@ -908,7 +908,7 @@ class Lukic_DB_Tables_Manager {
 		);
 
 		if ( ! $row ) {
-			wp_send_json_error( __( 'Row not found.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Row not found.', 'lukic-code-snippets' ) );
 		}
 
 		wp_send_json_success(
@@ -928,7 +928,7 @@ class Lukic_DB_Tables_Manager {
 		check_ajax_referer( 'Lukic_db_tables_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'You do not have sufficient permissions.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
 		$table         = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
@@ -938,12 +938,12 @@ class Lukic_DB_Tables_Manager {
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
-			wp_send_json_error( __( 'Invalid table specified.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Invalid table specified.', 'lukic-code-snippets' ) );
 		}
 
 		$primary_key = $this->validate_column_name( $primary_key );
 		if ( ! $primary_key || empty( $primary_value ) || empty( $row_data ) ) {
-			wp_send_json_error( __( 'Missing required parameters.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Missing required parameters.', 'lukic-code-snippets' ) );
 		}
 
 		$columns      = $wpdb->get_results( "DESCRIBE `{$table}`" );
@@ -971,7 +971,7 @@ class Lukic_DB_Tables_Manager {
 		unset( $update_data[ $primary_key ] );
 
 		if ( empty( $update_data ) ) {
-			wp_send_json_error( __( 'No data to update.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'No data to update.', 'lukic-code-snippets' ) );
 		}
 
 		// Update the row
@@ -984,10 +984,10 @@ class Lukic_DB_Tables_Manager {
 		);
 
 		if ( $result === false ) {
-			wp_send_json_error( __( 'Failed to update row.', 'Lukic-code-snippets' ) . ' ' . $wpdb->last_error );
+			wp_send_json_error( __( 'Failed to update row.', 'lukic-code-snippets' ) . ' ' . $wpdb->last_error );
 		}
 
-		wp_send_json_success( __( 'Row updated successfully.', 'Lukic-code-snippets' ) );
+		wp_send_json_success( __( 'Row updated successfully.', 'lukic-code-snippets' ) );
 	}
 
 	/**
@@ -999,7 +999,7 @@ class Lukic_DB_Tables_Manager {
 		check_ajax_referer( 'Lukic_db_tables_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'You do not have sufficient permissions.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
 		$table       = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
@@ -1009,14 +1009,14 @@ class Lukic_DB_Tables_Manager {
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
-			wp_send_json_error( __( 'Invalid table specified.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Invalid table specified.', 'lukic-code-snippets' ) );
 		}
 
 		// Get table structure to build search query
 		$columns = $wpdb->get_results( "DESCRIBE `{$table}`" );
 
 		if ( empty( $columns ) ) {
-			wp_send_json_error( __( 'Could not retrieve table structure.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Could not retrieve table structure.', 'lukic-code-snippets' ) );
 		}
 
 		// Build WHERE clause for search
@@ -1058,7 +1058,7 @@ class Lukic_DB_Tables_Manager {
 		}
 
 		if ( $rows === null ) {
-			wp_send_json_error( __( 'Error retrieving data from table.', 'Lukic-code-snippets' ) . ' ' . $wpdb->last_error );
+			wp_send_json_error( __( 'Error retrieving data from table.', 'lukic-code-snippets' ) . ' ' . $wpdb->last_error );
 		}
 
 		if ( empty( $rows ) ) {
@@ -1069,9 +1069,9 @@ class Lukic_DB_Tables_Manager {
 				<?php
 				if ( ! empty( $search_term ) ) {
 					/* translators: %s: The search term entered by the user */
-					printf( __( 'No results found for "%s".', 'Lukic-code-snippets' ), esc_html( $search_term ) );
+					printf( __( 'No results found for "%s".', 'lukic-code-snippets' ), esc_html( $search_term ) );
 				} else {
-					esc_html_e( 'This table does not contain any data.', 'Lukic-code-snippets' );
+					esc_html_e( 'This table does not contain any data.', 'lukic-code-snippets' );
 				}
 				?>
 				</p>
@@ -1110,7 +1110,7 @@ class Lukic_DB_Tables_Manager {
 					<?php foreach ( array_keys( $rows[0] ) as $column ) : ?>
 					<th><?php echo esc_html( $column ); ?></th>
 					<?php endforeach; ?>
-					<th><?php esc_html_e( 'Actions', 'Lukic-code-snippets' ); ?></th>
+					<th><?php esc_html_e( 'Actions', 'lukic-code-snippets' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -1140,10 +1140,10 @@ class Lukic_DB_Tables_Manager {
 								data-table="<?php echo esc_attr( $table ); ?>" 
 								data-pk="<?php echo esc_attr( $primary_key ); ?>" 
 								data-pk-value="<?php echo esc_attr( $row[ $primary_key ] ); ?>">
-							<?php esc_html_e( 'Edit', 'Lukic-code-snippets' ); ?>
+							<?php esc_html_e( 'Edit', 'lukic-code-snippets' ); ?>
 						</button>
 						<?php else : ?>
-						<em><?php esc_html_e( 'No PK', 'Lukic-code-snippets' ); ?></em>
+						<em><?php esc_html_e( 'No PK', 'lukic-code-snippets' ); ?></em>
 						<?php endif; ?>
 					</td>
 				</tr>

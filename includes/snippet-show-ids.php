@@ -64,13 +64,13 @@ if ( ! function_exists( 'Lukic_show_ids_in_admin_tables_init' ) ) {
 
 			// After the checkbox column, add our ID column
 			if ( $key === 'cb' ) {
-				$new_columns['Lukic_id'] = __( 'ID', 'Lukic-code-snippets' );
+				$new_columns['Lukic_id'] = __( 'ID', 'lukic-code-snippets' );
 			}
 		}
 
 		// If there's no checkbox column, add the ID column at the beginning
 		if ( ! isset( $columns['cb'] ) ) {
-			$new_columns = array( 'Lukic_id' => __( 'ID', 'Lukic-code-snippets' ) ) + $new_columns;
+			$new_columns = array( 'Lukic_id' => __( 'ID', 'lukic-code-snippets' ) ) + $new_columns;
 		}
 
 		return $new_columns;

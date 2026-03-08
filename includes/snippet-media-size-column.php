@@ -18,7 +18,7 @@ function Lukic_media_size_column( $columns ) {
 		$new_columns[ $key ] = $value;
 
 		if ( $key === 'author' ) {
-			$new_columns['Lukic_file_size'] = __( 'Size', 'Lukic-code-snippets' );
+			$new_columns['Lukic_file_size'] = __( 'Size', 'lukic-code-snippets' );
 		}
 	}
 

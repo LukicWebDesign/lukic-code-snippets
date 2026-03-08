@@ -10,6 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Lukic_Snippet_Registry {
 	/**
+	 * Cache for localized snippets.
+	 *
+	 * @var array|null
+	 */
+	private static $localized_cache = null;
+
+	/**
 	 * Category metadata keyed by slug.
 	 *
 	 * @var array
@@ -402,13 +409,33 @@ class Lukic_Snippet_Registry {
 	 * @return array
 	 */
 	public static function get_snippets() {
+		if ( null !== self::$localized_cache ) {
+			return self::$localized_cache;
+		}
+
 		$localized = array();
 
 		foreach ( self::$snippets as $snippet_id => $snippet ) {
 			$localized[ $snippet_id ] = self::localize_snippet( $snippet );
 		}
 
-		return $localized;
+		self::$localized_cache = $localized;
+		return self::$localized_cache;
+	}
+
+	/**
+	 * Get just the snippet file definitions to avoid unnecessary localization.
+	 *
+	 * @return array
+	 */
+	public static function get_snippet_files() {
+		$files = array();
+
+		foreach ( self::$snippets as $snippet_id => $snippet ) {
+			$files[ $snippet_id ] = $snippet['file'];
+		}
+
+		return $files;
 	}
 
 	/**
@@ -435,7 +462,7 @@ class Lukic_Snippet_Registry {
 
 		foreach ( self::$categories as $category_id => $category ) {
 			$categories[ $category_id ] = array(
-				'name' => __( $category['name'], 'Lukic-code-snippets' ),
+				'name' => __( $category['name'], 'lukic-code-snippets' ),
 				'icon' => $category['icon'],
 			);
 		}
@@ -500,14 +527,14 @@ class Lukic_Snippet_Registry {
 	 * @return array
 	 */
 	private static function localize_snippet( $snippet ) {
-		$snippet['name'] = __( $snippet['name'], 'Lukic-code-snippets' );
+		$snippet['name'] = __( $snippet['name'], 'lukic-code-snippets' );
 
 		if ( isset( $snippet['description'] ) ) {
-			$snippet['description'] = __( $snippet['description'], 'Lukic-code-snippets' );
+			$snippet['description'] = __( $snippet['description'], 'lukic-code-snippets' );
 		}
 
 		if ( isset( $snippet['long_description'] ) ) {
-			$snippet['long_description'] = __( $snippet['long_description'], 'Lukic-code-snippets' );
+			$snippet['long_description'] = __( $snippet['long_description'], 'lukic-code-snippets' );
 		}
 
 		if ( isset( $snippet['tags'] ) && is_array( $snippet['tags'] ) ) {

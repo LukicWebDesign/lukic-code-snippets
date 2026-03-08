@@ -54,7 +54,7 @@ function Lukic_add_taxonomy_filters() {
 		// Display filter dropdown
 		echo '<select name="' . esc_attr( $taxonomy->name ) . '" id="' . esc_attr( $taxonomy->name ) . '" class="postform">';
 		/* translators: %s: Taxonomy label (e.g., Categories, Tags) */
-		echo '<option value="">' . sprintf( esc_html__( 'All %s', 'Lukic-code-snippets' ), esc_html( $taxonomy->label ) ) . '</option>';
+		echo '<option value="">' . sprintf( esc_html__( 'All %s', 'lukic-code-snippets' ), esc_html( $taxonomy->label ) ) . '</option>';
 
 		Lukic_display_taxonomy_terms( $terms, $taxonomy );
 

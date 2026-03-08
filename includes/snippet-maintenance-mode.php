@@ -64,8 +64,8 @@ class Lukic_Maintenance_Mode {
 	public function add_submenu_page() {
 		add_submenu_page(
 			'lukic-code-snippets', // Parent slug
-			__( 'Maintenance Mode', 'Lukic-code-snippets' ),
-			__( 'Maintenance Mode', 'Lukic-code-snippets' ),
+			__( 'Maintenance Mode', 'lukic-code-snippets' ),
+			__( 'Maintenance Mode', 'lukic-code-snippets' ),
 			'manage_options',
 			'lukic-maintenance-mode',
 			array( $this, 'display_settings_page' )
@@ -234,19 +234,19 @@ class Lukic_Maintenance_Mode {
 		// Header component is already loaded in main plugin file
 
 		// Prepare stats for header
-		$status = $this->is_maintenance_mode_active() ? __( 'Active', 'Lukic-code-snippets' ) : __( 'Inactive', 'Lukic-code-snippets' );
+		$status = $this->is_maintenance_mode_active() ? __( 'Active', 'lukic-code-snippets' ) : __( 'Inactive', 'lukic-code-snippets' );
 		$stats  = array(
 			array(
 				'count' => $status,
-				'label' => __( 'Status', 'Lukic-code-snippets' ),
+				'label' => __( 'Status', 'lukic-code-snippets' ),
 			),
 		);
 		?>
 		<div class="wrap Lukic-settings-wrap">
-			<?php Lukic_display_header( __( 'Maintenance Mode Settings', 'Lukic-code-snippets' ), $stats ); ?>
+			<?php Lukic_display_header( __( 'Maintenance Mode Settings', 'lukic-code-snippets' ), $stats ); ?>
 			
 			<div class="Lukic-settings-intro">
-				<p><?php esc_html_e( 'Customize how your maintenance mode page will look. Maintenance Mode will display when this snippet is enabled and the switch below is turned on.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'Customize how your maintenance mode page will look. Maintenance Mode will display when this snippet is enabled and the switch below is turned on.', 'lukic-code-snippets' ); ?></p>
 			</div>
 			
 			<div class="Lukic-settings-container">
@@ -255,14 +255,14 @@ class Lukic_Maintenance_Mode {
 						<?php settings_fields( 'Lukic_maintenance_mode' ); ?>
 						
 						<div class="Lukic-settings-section">
-							<h2><?php esc_html_e( 'Maintenance Mode Status', 'Lukic-code-snippets' ); ?></h2>
+							<h2><?php esc_html_e( 'Maintenance Mode Status', 'lukic-code-snippets' ); ?></h2>
 							<div class="Lukic-field-row Lukic-field-row--inline">
 								<div class="Lukic-field-text">
-									<p><?php esc_html_e( 'Toggle maintenance mode on or off. Visitors will see your maintenance page only when this switch is enabled and the snippet is active.', 'Lukic-code-snippets' ); ?></p>
+									<p><?php esc_html_e( 'Toggle maintenance mode on or off. Visitors will see your maintenance page only when this switch is enabled and the snippet is active.', 'lukic-code-snippets' ); ?></p>
 									<?php
 									if ( ! $this->is_snippet_enabled() ) :
 										?>
-										<p class="description"><?php esc_html_e( 'Note: The Maintenance Mode snippet must be enabled on the main Snippets page.', 'Lukic-code-snippets' ); ?></p>
+										<p class="description"><?php esc_html_e( 'Note: The Maintenance Mode snippet must be enabled on the main Snippets page.', 'lukic-code-snippets' ); ?></p>
 									<?php endif; ?>
 								</div>
 								<label class="Lukic-switch">
@@ -273,138 +273,138 @@ class Lukic_Maintenance_Mode {
 						</div>
 						
 						<div class="Lukic-settings-section">
-							<h2><?php esc_html_e( 'Content Settings', 'Lukic-code-snippets' ); ?></h2>
+							<h2><?php esc_html_e( 'Content Settings', 'lukic-code-snippets' ); ?></h2>
 							
 							<div class="Lukic-field-row">
 								<label for="Lukic_maintenance_title">
-									<?php esc_html_e( 'Title', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Title', 'lukic-code-snippets' ); ?>
 								</label>
 								<input type="text" id="Lukic_maintenance_title" name="Lukic_maintenance_mode_options[title]" value="<?php echo esc_attr( $options['title'] ); ?>" class="regular-text">
 							</div>
 							
 							<div class="Lukic-field-row">
 								<label for="Lukic_maintenance_subtitle">
-									<?php esc_html_e( 'Subtitle', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Subtitle', 'lukic-code-snippets' ); ?>
 								</label>
 								<input type="text" id="Lukic_maintenance_subtitle" name="Lukic_maintenance_mode_options[subtitle]" value="<?php echo esc_attr( $options['subtitle'] ); ?>" class="regular-text">
 							</div>
 							
 							<div class="Lukic-field-row">
 								<label for="Lukic_maintenance_message">
-									<?php esc_html_e( 'Message', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Message', 'lukic-code-snippets' ); ?>
 								</label>
 								<textarea id="Lukic_maintenance_message" name="Lukic_maintenance_mode_options[message]" rows="5" class="large-text"><?php echo esc_textarea( $options['message'] ); ?></textarea>
 							</div>
 						</div>
 						
 						<div class="Lukic-settings-section">
-							<h2><?php esc_html_e( 'Background Image', 'Lukic-code-snippets' ); ?></h2>
+							<h2><?php esc_html_e( 'Background Image', 'lukic-code-snippets' ); ?></h2>
 							
 							<div class="Lukic-field-row">
 								<label for="Lukic_maintenance_bg_image">
-									<?php esc_html_e( 'Background Image', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Background Image', 'lukic-code-snippets' ); ?>
 								</label>
 								<div class="Lukic-media-field">
 									<input type="hidden" id="Lukic_maintenance_bg_image" name="Lukic_maintenance_mode_options[background_image]" value="<?php echo esc_attr( $options['background_image'] ); ?>">
 									<div class="Lukic-media-preview">
-										<img src="<?php echo esc_url( $options['background_image'] ); ?>" alt="<?php esc_html_e( 'Background Image Preview', 'Lukic-code-snippets' ); ?>">
+										<img src="<?php echo esc_url( $options['background_image'] ); ?>" alt="<?php esc_html_e( 'Background Image Preview', 'lukic-code-snippets' ); ?>">
 									</div>
 									<div class="Lukic-media-buttons">
-										<button type="button" class="button Lukic-upload-image"><?php esc_html_e( 'Upload Image', 'Lukic-code-snippets' ); ?></button>
-										<button type="button" class="button Lukic-reset-image" data-default="<?php echo esc_attr( $default_bg ); ?>"><?php esc_html_e( 'Reset to Default', 'Lukic-code-snippets' ); ?></button>
+										<button type="button" class="button Lukic-upload-image"><?php esc_html_e( 'Upload Image', 'lukic-code-snippets' ); ?></button>
+										<button type="button" class="button Lukic-reset-image" data-default="<?php echo esc_attr( $default_bg ); ?>"><?php esc_html_e( 'Reset to Default', 'lukic-code-snippets' ); ?></button>
 									</div>
 								</div>
 							</div>
 						</div>
 						
 						<div class="Lukic-settings-section">
-							<h2><?php esc_html_e( 'Styling Options', 'Lukic-code-snippets' ); ?></h2>
+							<h2><?php esc_html_e( 'Styling Options', 'lukic-code-snippets' ); ?></h2>
 							
 							<div class="Lukic-field-row">
 								<label for="Lukic_maintenance_title_font_size">
-									<?php esc_html_e( 'Title Font Size', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Title Font Size', 'lukic-code-snippets' ); ?>
 								</label>
 								<input type="text" id="Lukic_maintenance_title_font_size" name="Lukic_maintenance_mode_options[title_font_size]" value="<?php echo esc_attr( $options['title_font_size'] ); ?>" class="small-text">
-								<p class="description"><?php esc_html_e( 'e.g. 36px, 2.5em, 5vw', 'Lukic-code-snippets' ); ?></p>
+								<p class="description"><?php esc_html_e( 'e.g. 36px, 2.5em, 5vw', 'lukic-code-snippets' ); ?></p>
 							</div>
 							
 							<div class="Lukic-field-row">
 								<label for="Lukic_maintenance_subtitle_font_size">
-									<?php esc_html_e( 'Subtitle Font Size', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Subtitle Font Size', 'lukic-code-snippets' ); ?>
 								</label>
 								<input type="text" id="Lukic_maintenance_subtitle_font_size" name="Lukic_maintenance_mode_options[subtitle_font_size]" value="<?php echo esc_attr( $options['subtitle_font_size'] ); ?>" class="small-text">
-								<p class="description"><?php esc_html_e( 'e.g. 24px, 1.5em, 3vw', 'Lukic-code-snippets' ); ?></p>
+								<p class="description"><?php esc_html_e( 'e.g. 24px, 1.5em, 3vw', 'lukic-code-snippets' ); ?></p>
 							</div>
 							
 							<div class="Lukic-field-row">
 								<label for="Lukic_maintenance_message_font_size">
-									<?php esc_html_e( 'Message Font Size', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Message Font Size', 'lukic-code-snippets' ); ?>
 								</label>
 								<input type="text" id="Lukic_maintenance_message_font_size" name="Lukic_maintenance_mode_options[message_font_size]" value="<?php echo esc_attr( $options['message_font_size'] ); ?>" class="small-text">
-								<p class="description"><?php esc_html_e( 'e.g. 16px, 1em, 2vw', 'Lukic-code-snippets' ); ?></p>
+								<p class="description"><?php esc_html_e( 'e.g. 16px, 1em, 2vw', 'lukic-code-snippets' ); ?></p>
 							</div>
 							
 							<div class="Lukic-grid-2-col">
 								<div class="Lukic-field-row">
 									<label for="Lukic_maintenance_title_color">
-										<?php esc_html_e( 'Title Color', 'Lukic-code-snippets' ); ?>
+										<?php esc_html_e( 'Title Color', 'lukic-code-snippets' ); ?>
 									</label>
 									<input type="text" id="Lukic_maintenance_title_color" name="Lukic_maintenance_mode_options[title_color]" value="<?php echo esc_attr( $options['title_color'] ); ?>" class="Lukic-color-picker">
 								</div>
 								
 								<div class="Lukic-field-row">
 									<label for="Lukic_maintenance_subtitle_color">
-										<?php esc_html_e( 'Subtitle Color', 'Lukic-code-snippets' ); ?>
+										<?php esc_html_e( 'Subtitle Color', 'lukic-code-snippets' ); ?>
 									</label>
 									<input type="text" id="Lukic_maintenance_subtitle_color" name="Lukic_maintenance_mode_options[subtitle_color]" value="<?php echo esc_attr( $options['subtitle_color'] ); ?>" class="Lukic-color-picker">
 								</div>
 								
 								<div class="Lukic-field-row">
 									<label for="Lukic_maintenance_message_color">
-										<?php esc_html_e( 'Message Color', 'Lukic-code-snippets' ); ?>
+										<?php esc_html_e( 'Message Color', 'lukic-code-snippets' ); ?>
 									</label>
 									<input type="text" id="Lukic_maintenance_message_color" name="Lukic_maintenance_mode_options[message_color]" value="<?php echo esc_attr( $options['message_color'] ); ?>" class="Lukic-color-picker">
 								</div>
 								
 								<div class="Lukic-field-row">
 									<label for="Lukic_maintenance_overlay_color">
-										<?php esc_html_e( 'Overlay Color', 'Lukic-code-snippets' ); ?>
+										<?php esc_html_e( 'Overlay Color', 'lukic-code-snippets' ); ?>
 									</label>
 									<input type="text" id="Lukic_maintenance_overlay_color" name="Lukic_maintenance_mode_options[overlay_color]" value="<?php echo esc_attr( $options['overlay_color'] ); ?>" class="Lukic-color-picker">
-									<p class="description"><?php esc_html_e( 'Background overlay color and opacity', 'Lukic-code-snippets' ); ?></p>
+									<p class="description"><?php esc_html_e( 'Background overlay color and opacity', 'lukic-code-snippets' ); ?></p>
 								</div>
 							</div>
 						</div>
 						
 						<div class="Lukic-settings-section">
-							<h2><?php esc_html_e( 'Advanced Settings', 'Lukic-code-snippets' ); ?></h2>
+							<h2><?php esc_html_e( 'Advanced Settings', 'lukic-code-snippets' ); ?></h2>
 							
 							<div class="Lukic-field-row">
 								<label for="Lukic_maintenance_exclude_ips">
-									<?php esc_html_e( 'Excluded IP Addresses', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Excluded IP Addresses', 'lukic-code-snippets' ); ?>
 								</label>
 								<textarea id="Lukic_maintenance_exclude_ips" name="Lukic_maintenance_mode_options[exclude_ips]" rows="3" class="large-text"><?php echo esc_textarea( $options['exclude_ips'] ); ?></textarea>
-								<p class="description"><?php esc_html_e( 'Enter IP addresses to exclude from maintenance mode, one per line. Your current IP is: ', 'Lukic-code-snippets' ); ?><code><?php echo esc_html( $_SERVER['REMOTE_ADDR'] ); ?></code></p>
+								<p class="description"><?php esc_html_e( 'Enter IP addresses to exclude from maintenance mode, one per line. Your current IP is: ', 'lukic-code-snippets' ); ?><code><?php echo esc_html( $_SERVER['REMOTE_ADDR'] ); ?></code></p>
 							</div>
 							
 							<div class="Lukic-field-row">
 								<label for="Lukic_maintenance_exclude_paths">
-									<?php esc_html_e( 'Excluded Paths', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Excluded Paths', 'lukic-code-snippets' ); ?>
 								</label>
 								<textarea id="Lukic_maintenance_exclude_paths" name="Lukic_maintenance_mode_options[exclude_paths]" rows="3" class="large-text"><?php echo esc_textarea( $options['exclude_paths'] ); ?></textarea>
-								<p class="description"><?php esc_html_e( 'Enter URL paths to exclude from maintenance mode, one per line or comma-separated (e.g., /wp-admin/, /wp-login.php)', 'Lukic-code-snippets' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Enter URL paths to exclude from maintenance mode, one per line or comma-separated (e.g., /wp-admin/, /wp-login.php)', 'lukic-code-snippets' ); ?></p>
 							</div>
 						</div>
 						
 						<div class="Lukic-submit-container">
-							<?php submit_button( __( 'Save Changes', 'Lukic-code-snippets' ), 'primary Lukic-btn Lukic-btn--primary', 'submit', false ); ?>
+							<?php submit_button( __( 'Save Changes', 'lukic-code-snippets' ), 'primary Lukic-btn Lukic-btn--primary', 'submit', false ); ?>
 						</div>
 					</form>
 				</div>
 				
 				<div class="Lukic-settings-preview">
 					<div class="Lukic-settings-section">
-						<h2><?php esc_html_e( 'Live Preview', 'Lukic-code-snippets' ); ?></h2>
+						<h2><?php esc_html_e( 'Live Preview', 'lukic-code-snippets' ); ?></h2>
 						<div class="Lukic-maintenance-preview" id="Lukic-maintenance-preview">
 							<div class="Lukic-preview-background" style="background-image: url('<?php echo esc_url( $options['background_image'] ); ?>');">
 								<div class="Lukic-preview-overlay"></div>
@@ -415,7 +415,7 @@ class Lukic_Maintenance_Mode {
 								</div>
 							</div>
 						</div>
-						<p class="description"><?php esc_html_e( 'Live preview of your maintenance mode page. The preview updates as you change settings.', 'Lukic-code-snippets' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Live preview of your maintenance mode page. The preview updates as you change settings.', 'lukic-code-snippets' ); ?></p>
 					</div>
 				</div>
 			</div>

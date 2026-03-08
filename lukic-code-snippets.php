@@ -3,7 +3,7 @@
  * Plugin Name: Lukic Code Snippets
  * Plugin URI: #
  * Description: A collection of useful code snippets for WordPress
- * Version: 2.7.4
+ * Version: 2.7.5
  * Author: Milos Lukic
  * Author URI: #
  * License: GPL-2.0+
@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'Lukic_SNIPPET_CODES_VERSION', '2.7.4' );
+define( 'Lukic_SNIPPET_CODES_VERSION', '2.7.5' );
 define( 'Lukic_SNIPPET_CODES_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'Lukic_SNIPPET_CODES_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 /**
@@ -32,14 +32,16 @@ class Lukic_Snippet_Codes {
 		// Load dependencies.
 		$this->load_dependencies();
 
-		// Initialize core components.
-		$settings      = new Lukic_Snippet_Codes_Settings();
-		$asset_manager = new Lukic_Asset_Manager();
+		// Initialize core components for admin only.
+		if ( is_admin() ) {
+			$settings      = new Lukic_Snippet_Codes_Settings();
+			$asset_manager = new Lukic_Asset_Manager();
+		}
 
 		// Localization.
-		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+		add_action( 'init', array( $this, 'load_textdomain' ), 0 );
 		// Load activated snippets.
-		add_action( 'plugins_loaded', array( $this, 'load_snippets' ) );
+		add_action( 'init', array( $this, 'load_snippets' ), 1 );
 	}
 
 	/**
@@ -102,12 +104,12 @@ class Lukic_Snippet_Codes {
 		$options = get_option( 'Lukic_snippet_codes_options', array() );
 
 		// Get available snippets.
-		$snippets = self::get_available_snippets();
+		$snippets = Lukic_Snippet_Registry::get_snippet_files();
 
 		// Loop through snippets and load activated ones.
-		foreach ( $snippets as $snippet_id => $snippet_data ) {
+		foreach ( $snippets as $snippet_id => $file ) {
 			if ( isset( $options[ $snippet_id ] ) && 1 === (int) $options[ $snippet_id ] ) {
-				$snippet_file = Lukic_SNIPPET_CODES_PLUGIN_DIR . 'includes/' . $snippet_data['file'];
+				$snippet_file = Lukic_SNIPPET_CODES_PLUGIN_DIR . 'includes/' . $file;
 				if ( file_exists( $snippet_file ) ) {
 					require_once $snippet_file;
 				}

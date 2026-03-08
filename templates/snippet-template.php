@@ -21,9 +21,9 @@ define('Lukic_SNIPPET_NAME_OPTION', 'Lukic_snippet_name_settings');
  */
 function Lukic_snippet_name_menu() {
     add_submenu_page(
-        'Lukic-code-snippets',
-        __('Snippet Name Settings', 'Lukic-code-snippets'),
-        __('Snippet Name', 'Lukic-code-snippets'),
+        'lukic-code-snippets',
+        __('Snippet Name Settings', 'lukic-code-snippets'),
+        __('Snippet Name', 'lukic-code-snippets'),
         'manage_options',
         'Lukic-snippet-name',
         'Lukic_snippet_name_page'
@@ -68,7 +68,7 @@ function Lukic_snippet_name_page() {
         
         // Display success notice
         echo wp_kses_post(Lukic_Helpers::generate_admin_notice(
-            __('Settings saved successfully!', 'Lukic-code-snippets'),
+            __('Settings saved successfully!', 'lukic-code-snippets'),
             'success'
         ));
     }
@@ -86,11 +86,11 @@ function Lukic_snippet_name_page() {
     ?>
     
     <div class="wrap Lukic-container">
-        <?php Lukic_display_header(__('Snippet Name Settings', 'Lukic-code-snippets'), $stats); ?>
+        <?php Lukic_display_header(__('Snippet Name Settings', 'lukic-code-snippets'), $stats); ?>
         
         <div class="Lukic-card">
             <div class="Lukic-card__header">
-                <h3 class="Lukic-card__title"><?php esc_html_e('Configuration', 'Lukic-code-snippets'); ?></h3>
+                <h3 class="Lukic-card__title"><?php esc_html_e('Configuration', 'lukic-code-snippets'); ?></h3>
             </div>
             <div class="Lukic-card__body">
                 <form method="post" action="">
@@ -101,38 +101,38 @@ function Lukic_snippet_name_page() {
                         <label style="display: flex; align-items: center; gap: var(--Lukic-space-2); cursor: pointer;">
                             <input type="checkbox" name="enable_feature" value="1" <?php checked($enable_feature, 1); ?>>
                             <span style="font-weight: var(--Lukic-font-medium);">
-                                <?php esc_html_e('Enable This Feature', 'Lukic-code-snippets'); ?>
+                                <?php esc_html_e('Enable This Feature', 'lukic-code-snippets'); ?>
                             </span>
                             <?php echo wp_kses_post(Lukic_Helpers::get_status_badge($enable_feature)); ?>
                         </label>
                         <p style="margin-top: var(--Lukic-space-2); color: var(--Lukic-gray-600); font-size: var(--Lukic-text-sm);">
-                            <?php esc_html_e('Check this to enable the snippet functionality.', 'Lukic-code-snippets'); ?>
+                            <?php esc_html_e('Check this to enable the snippet functionality.', 'lukic-code-snippets'); ?>
                         </p>
                     </div>
                     
                     <!-- Custom Setting Input -->
                     <div style="margin-bottom: var(--Lukic-space-6);">
                         <label for="custom_setting" style="display: block; margin-bottom: var(--Lukic-space-2); font-weight: var(--Lukic-font-medium);">
-                            <?php esc_html_e('Custom Setting', 'Lukic-code-snippets'); ?>
+                            <?php esc_html_e('Custom Setting', 'lukic-code-snippets'); ?>
                         </label>
                         <input type="text" 
                                id="custom_setting" 
                                name="custom_setting" 
                                class="Lukic-input"
                                value="<?php echo esc_attr($custom_setting); ?>"
-                               placeholder="<?php esc_attr_e('Enter custom value...', 'Lukic-code-snippets'); ?>">
+                               placeholder="<?php esc_attr_e('Enter custom value...', 'lukic-code-snippets'); ?>">
                         <p style="margin-top: var(--Lukic-space-2); color: var(--Lukic-gray-600); font-size: var(--Lukic-text-sm);">
-                            <?php esc_html_e('Configure your custom setting here.', 'Lukic-code-snippets'); ?>
+                            <?php esc_html_e('Configure your custom setting here.', 'lukic-code-snippets'); ?>
                         </p>
                     </div>
                     
                     <!-- Action Buttons -->
                     <div class="Lukic-flex Lukic-gap-4">
                         <button type="submit" name="submit" class="Lukic-btn Lukic-btn--primary">
-                            <?php esc_html_e('Save Settings', 'Lukic-code-snippets'); ?>
+                            <?php esc_html_e('Save Settings', 'lukic-code-snippets'); ?>
                         </button>
                         <button type="button" class="Lukic-btn Lukic-btn--secondary" onclick="location.reload();">
-                            <?php esc_html_e('Reset Form', 'Lukic-code-snippets'); ?>
+                            <?php esc_html_e('Reset Form', 'lukic-code-snippets'); ?>
                         </button>
                     </div>
                 </form>
@@ -142,14 +142,14 @@ function Lukic_snippet_name_page() {
         <!-- Information Card -->
         <div class="Lukic-card" style="margin-top: var(--Lukic-space-6);">
             <div class="Lukic-card__header">
-                <h3 class="Lukic-card__title"><?php esc_html_e('About This Feature', 'Lukic-code-snippets'); ?></h3>
+                <h3 class="Lukic-card__title"><?php esc_html_e('About This Feature', 'lukic-code-snippets'); ?></h3>
             </div>
             <div class="Lukic-card__body">
-                <p><?php esc_html_e('This snippet provides [describe functionality here]. When enabled, it will [explain what happens].', 'Lukic-code-snippets'); ?></p>
+                <p><?php esc_html_e('This snippet provides [describe functionality here]. When enabled, it will [explain what happens].', 'lukic-code-snippets'); ?></p>
                 
                 <div class="Lukic-notification Lukic-notification--info" style="margin-top: var(--Lukic-space-4);">
-                    <strong><?php esc_html_e('Note:', 'Lukic-code-snippets'); ?></strong>
-                    <?php esc_html_e('Add any important notes or warnings about this feature here.', 'Lukic-code-snippets'); ?>
+                    <strong><?php esc_html_e('Note:', 'lukic-code-snippets'); ?></strong>
+                    <?php esc_html_e('Add any important notes or warnings about this feature here.', 'lukic-code-snippets'); ?>
                 </div>
             </div>
         </div>

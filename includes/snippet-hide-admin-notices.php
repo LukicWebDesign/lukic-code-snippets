@@ -218,7 +218,7 @@ function Lukic_add_notices_button( $admin_bar ) {
 			'title' => sprintf( 'Notices <span class="Lukic-notice-count zero">0</span>' ),
 			'href'  => '#',
 			'meta'  => array(
-				'title' => __( 'View Hidden Notices', 'Lukic-code-snippets' ),
+				'title' => __( 'View Hidden Notices', 'lukic-code-snippets' ),
 				'class' => 'Lukic-toggle-notices',
 			),
 		)
@@ -232,7 +232,7 @@ function Lukic_add_notices_panel() {
 	?>
 	<div id="Lukic-notices-panel">
 		<div class="Lukic-notices-header">
-			<h2><?php esc_html_e( 'Admin Notices', 'Lukic-code-snippets' ); ?></h2>
+			<h2><?php esc_html_e( 'Admin Notices', 'lukic-code-snippets' ); ?></h2>
 			<button type="button" class="Lukic-close-notices">
 				<span class="dashicons dashicons-no-alt"></span>
 			</button>
@@ -241,7 +241,7 @@ function Lukic_add_notices_panel() {
 			<!-- Notices will be moved here via JS -->
 			<div class="Lukic-no-notices" style="display: none;">
 				<span class="dashicons dashicons-yes-alt"></span>
-				<p><?php esc_html_e( 'No notices found.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'No notices found.', 'lukic-code-snippets' ); ?></p>
 			</div>
 		</div>
 	</div>

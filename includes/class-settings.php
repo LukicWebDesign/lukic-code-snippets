@@ -54,8 +54,8 @@ class Lukic_Snippet_Codes_Settings {
 		$icon_url = plugin_dir_url( __DIR__ ) . 'assets/icons/plugin-icon.svg';
 		// Use add_menu_page instead of add_options_page to create a top-level menu
 		add_menu_page(
-			__( 'Lukic Code Snippets', 'Lukic-code-snippets' ),
-			__( 'Code Snippets', 'Lukic-code-snippets' ),
+			__( 'Lukic Code Snippets', 'lukic-code-snippets' ),
+			__( 'Code Snippets', 'lukic-code-snippets' ),
 			'manage_options',
 			'lukic-code-snippets',
 			array( $this, 'display_snippets_page' ),
@@ -96,8 +96,8 @@ class Lukic_Snippet_Codes_Settings {
 		// Add submenu page for plugin settings
 		add_submenu_page(
 			'lukic-code-snippets',
-			__( 'Plugin Settings', 'Lukic-code-snippets' ),
-			__( 'Settings', 'Lukic-code-snippets' ),
+			__( 'Plugin Settings', 'lukic-code-snippets' ),
+			__( 'Settings', 'lukic-code-snippets' ),
 			'manage_options',
 			'lukic-code-snippets-settings',
 			array( $this, 'display_plugin_settings_page' )
@@ -106,8 +106,8 @@ class Lukic_Snippet_Codes_Settings {
 		// Add submenu page for documentation
 		add_submenu_page(
 			'lukic-code-snippets',
-			__( 'Documentation', 'Lukic-code-snippets' ),
-			__( 'Documentation', 'Lukic-code-snippets' ),
+			__( 'Documentation', 'lukic-code-snippets' ),
+			__( 'Documentation', 'lukic-code-snippets' ),
 			'manage_options',
 			'lukic-code-snippets-documentation',
 			'Lukic_display_documentation_page'
@@ -217,11 +217,11 @@ class Lukic_Snippet_Codes_Settings {
 		$stats = array(
 			array(
 				'count' => $active_snippets,
-				'label' => __( 'Active Snippets', 'Lukic-code-snippets' ),
+				'label' => __( 'Active Snippets', 'lukic-code-snippets' ),
 			),
 			array(
 				'count' => $total_snippets,
-				'label' => __( 'Total Snippets', 'Lukic-code-snippets' ),
+				'label' => __( 'Total Snippets', 'lukic-code-snippets' ),
 			),
 		);
 
@@ -230,12 +230,12 @@ class Lukic_Snippet_Codes_Settings {
 		<div class="wrap Lukic-container Lukic-wrap">
 			<?php
 			// Display header using the loaded component
-			Lukic_display_header( __( 'List of all Snippets', 'Lukic-code-snippets' ), $stats );
+			Lukic_display_header( __( 'List of all Snippets', 'lukic-code-snippets' ), $stats );
 			?>
 			
 			<?php if ( $settings_saved ) : ?>
 				<div class="notice notice-success is-dismissible">
-					<p><?php esc_html_e( 'Settings saved.', 'Lukic-code-snippets' ); ?></p>
+					<p><?php esc_html_e( 'Settings saved.', 'lukic-code-snippets' ); ?></p>
 				</div>
 			<?php endif; ?>
 			
@@ -247,14 +247,14 @@ class Lukic_Snippet_Codes_Settings {
 							
 							<div class="Lukic-filter-controls">
 								<div class="Lukic-search-bar">
-									<input type="text" id="snippet-search" placeholder="<?php esc_attr_e( 'Search...', 'Lukic-code-snippets' ); ?>">
+									<input type="text" id="snippet-search" placeholder="<?php esc_attr_e( 'Search...', 'lukic-code-snippets' ); ?>">
 									<span class="dashicons dashicons-search Lukic-search-icon"></span>
 								</div>
 							</div>
 							
 							<div class="Lukic-tag-buttons">
-								<span class="Lukic-tag-button active" data-tag=""><?php esc_html_e( 'All', 'Lukic-code-snippets' ); ?></span>
-								<span class="Lukic-tag-button" data-tag="active" data-filter-type="status"><?php esc_html_e( 'Active', 'Lukic-code-snippets' ); ?></span>
+								<span class="Lukic-tag-button active" data-tag=""><?php esc_html_e( 'All', 'lukic-code-snippets' ); ?></span>
+								<span class="Lukic-tag-button" data-tag="active" data-filter-type="status"><?php esc_html_e( 'Active', 'lukic-code-snippets' ); ?></span>
 								<?php foreach ( $top_tags as $tag => $count ) : ?>
 									<span class="Lukic-tag-button" data-tag="<?php echo esc_attr( $tag ); ?>"><?php echo esc_html( ucfirst( $tag ) ); ?></span>
 								<?php endforeach; ?>
@@ -307,12 +307,12 @@ class Lukic_Snippet_Codes_Settings {
 							<div style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 6px; border-left: 4px solid #00E1AF;">
 								<p style="margin: 0 0 10px 0; font-weight: 600; color: #333;">
 									<span class="dashicons dashicons-info" style="color: #00E1AF; margin-right: 5px;"></span>
-									<?php esc_html_e( 'Auto-Save Enabled', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Auto-Save Enabled', 'lukic-code-snippets' ); ?>
 								</p>
 								<p style="margin: 0 0 15px 0; color: #666; font-size: 14px;">
-									<?php esc_html_e( 'Snippet settings are automatically saved when you toggle switches. The button below is for manual saves if needed.', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'Snippet settings are automatically saved when you toggle switches. The button below is for manual saves if needed.', 'lukic-code-snippets' ); ?>
 								</p>
-								<?php submit_button( __( 'Manual Save All', 'Lukic-code-snippets' ), 'secondary', 'submit', true, array( 'style' => 'background-color: #f7f7f7; border-color: #ccc; color: #666;' ) ); ?>
+								<?php submit_button( __( 'Manual Save All', 'lukic-code-snippets' ), 'secondary', 'submit', true, array( 'style' => 'background-color: #f7f7f7; border-color: #ccc; color: #666;' ) ); ?>
 							</div>
 						</form>
 					</div>
@@ -526,12 +526,12 @@ class Lukic_Snippet_Codes_Settings {
 				<div class="wrap Lukic-wrap">
 			<?php
 			// Display header using the loaded component
-			Lukic_display_header( __( 'Plugin Settings', 'Lukic-code-snippets' ), array() );
+			Lukic_display_header( __( 'Plugin Settings', 'lukic-code-snippets' ), array() );
 			?>
 			
 			<?php if ( $settings_saved ) : ?>
 				<div class="notice notice-success is-dismissible">
-					<p><?php esc_html_e( 'Settings saved.', 'Lukic-code-snippets' ); ?></p>
+					<p><?php esc_html_e( 'Settings saved.', 'lukic-code-snippets' ); ?></p>
 				</div>
 			<?php endif; ?>
 			
@@ -541,29 +541,29 @@ class Lukic_Snippet_Codes_Settings {
 					settings_fields( 'Lukic_code_snippets_settings' );
 					?>
 					
-					<h2><?php esc_html_e( 'Plugin Behavior', 'Lukic-code-snippets' ); ?></h2>
+					<h2><?php esc_html_e( 'Plugin Behavior', 'lukic-code-snippets' ); ?></h2>
 					
 					<table class="form-table">
 						<tr>
-							<th scope="row"><?php esc_html_e( 'Plugin Uninstallation', 'Lukic-code-snippets' ); ?></th>
+							<th scope="row"><?php esc_html_e( 'Plugin Uninstallation', 'lukic-code-snippets' ); ?></th>
 							<td>
 								<fieldset>
-									<legend class="screen-reader-text"><span><?php esc_html_e( 'Plugin Uninstallation', 'Lukic-code-snippets' ); ?></span></legend>
+									<legend class="screen-reader-text"><span><?php esc_html_e( 'Plugin Uninstallation', 'lukic-code-snippets' ); ?></span></legend>
 									<label for="cleanup_preserve">
 										<input type="radio" id="cleanup_preserve" name="Lukic_snippet_codes_cleanup" value="preserve" <?php checked( $cleanup_data, 'preserve' ); ?>>
-										<?php esc_html_e( 'Preserve data when plugin is deleted (recommended)', 'Lukic-code-snippets' ); ?>
+										<?php esc_html_e( 'Preserve data when plugin is deleted (recommended)', 'lukic-code-snippets' ); ?>
 									</label><br>
 									<label for="cleanup_delete">
 										<input type="radio" id="cleanup_delete" name="Lukic_snippet_codes_cleanup" value="delete" <?php checked( $cleanup_data, 'delete' ); ?>>
-										<?php esc_html_e( 'Delete all plugin data when plugin is deleted (tables, options, etc.)', 'Lukic-code-snippets' ); ?>
+										<?php esc_html_e( 'Delete all plugin data when plugin is deleted (tables, options, etc.)', 'lukic-code-snippets' ); ?>
 									</label>
-									<p class="description"><?php esc_html_e( 'This setting determines what happens to your data when you delete the plugin. If you choose to delete all data, any custom tables created by the snippets (like redirect tables) will be permanently removed.', 'Lukic-code-snippets' ); ?></p>
+									<p class="description"><?php esc_html_e( 'This setting determines what happens to your data when you delete the plugin. If you choose to delete all data, any custom tables created by the snippets (like redirect tables) will be permanently removed.', 'lukic-code-snippets' ); ?></p>
 								</fieldset>
 							</td>
 						</tr>
 					</table>
 					
-					<?php submit_button( __( 'Save Settings', 'Lukic-code-snippets' ), 'primary', 'submit', true, array( 'style' => 'background-color: #00E1AF; border-color: #00E1AF;' ) ); ?>
+					<?php submit_button( __( 'Save Settings', 'lukic-code-snippets' ), 'primary', 'submit', true, array( 'style' => 'background-color: #00E1AF; border-color: #00E1AF;' ) ); ?>
 				</form>
 			</div>
 		</div>
@@ -616,10 +616,10 @@ class Lukic_Snippet_Codes_Settings {
 			'Lukic_auto_save',
 			array(
 				'nonce'              => wp_create_nonce( 'Lukic_auto_save_nonce' ),
-				'activated'          => __( 'Activated', 'Lukic-code-snippets' ),
-				'deactivated'        => __( 'Deactivated', 'Lukic-code-snippets' ),
-				'error_saving'       => __( 'Error saving settings', 'Lukic-code-snippets' ),
-				'refreshing_message' => __( 'Refreshing page to apply changes...', 'Lukic-code-snippets' ),
+				'activated'          => __( 'Activated', 'lukic-code-snippets' ),
+				'deactivated'        => __( 'Deactivated', 'lukic-code-snippets' ),
+				'error_saving'       => __( 'Error saving settings', 'lukic-code-snippets' ),
+				'refreshing_message' => __( 'Refreshing page to apply changes...', 'lukic-code-snippets' ),
 			)
 		);
 	}
@@ -631,17 +631,17 @@ class Lukic_Snippet_Codes_Settings {
 		// Verify nonce and capabilities
 		check_ajax_referer( 'Lukic_auto_save_nonce', 'nonce' );
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'Lukic-code-snippets' ), 403 );
+			wp_send_json_error( __( 'Insufficient permissions', 'lukic-code-snippets' ), 403 );
 		}
 
 		if ( ! isset( $_POST['options'] ) ) {
-			wp_send_json_error( __( 'Missing options payload.', 'Lukic-code-snippets' ), 400 );
+			wp_send_json_error( __( 'Missing options payload.', 'lukic-code-snippets' ), 400 );
 		}
 
 		$options_json = wp_unslash( $_POST['options'] );
 		$options      = json_decode( $options_json, true );
 		if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $options ) ) {
-			wp_send_json_error( __( 'Invalid JSON data.', 'Lukic-code-snippets' ), 400 );
+			wp_send_json_error( __( 'Invalid JSON data.', 'lukic-code-snippets' ), 400 );
 		}
 
 		$sanitized_options  = array();
@@ -653,9 +653,9 @@ class Lukic_Snippet_Codes_Settings {
 
 		$updated = update_option( 'Lukic_snippet_codes_options', $sanitized_options );
 		if ( ! $updated && get_option( 'Lukic_snippet_codes_options' ) !== $sanitized_options ) {
-			wp_send_json_error( __( 'Failed to save settings.', 'Lukic-code-snippets' ) );
+			wp_send_json_error( __( 'Failed to save settings.', 'lukic-code-snippets' ) );
 		}
 
-		wp_send_json_success( __( 'Settings saved successfully.', 'Lukic-code-snippets' ) );
+		wp_send_json_success( __( 'Settings saved successfully.', 'lukic-code-snippets' ) );
 	}
 }

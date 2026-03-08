@@ -41,8 +41,8 @@ function Lukic_content_order_add_submenus() {
 	// Add settings page under main plugin menu
 	add_submenu_page(
 		'lukic-code-snippets',
-		__( 'Content Order Settings', 'Lukic-code-snippets' ),
-		__( 'Order Settings', 'Lukic-code-snippets' ),
+		__( 'Content Order Settings', 'lukic-code-snippets' ),
+		__( 'Order Settings', 'lukic-code-snippets' ),
 		'manage_options',
 		'lukic-order-settings',
 		'Lukic_content_order_settings_page'
@@ -63,8 +63,8 @@ function Lukic_content_order_add_submenus() {
 		if ( $post_type === 'post' ) {
 			add_submenu_page(
 				'edit.php',
-				__( 'Order Posts', 'Lukic-code-snippets' ),
-				__( 'Order', 'Lukic-code-snippets' ),
+				__( 'Order Posts', 'lukic-code-snippets' ),
+				__( 'Order', 'lukic-code-snippets' ),
 				$capability,
 				'lukic-order-post',
 				'Lukic_content_order_interface'
@@ -73,8 +73,8 @@ function Lukic_content_order_add_submenus() {
 			add_submenu_page(
 				'edit.php?post_type=' . $post_type,
 				/* translators: %s: Post type name (e.g., Posts, Pages) */
-				sprintf( __( 'Order %s', 'Lukic-code-snippets' ), $post_type_obj->labels->name ),
-				__( 'Order', 'Lukic-code-snippets' ),
+				sprintf( __( 'Order %s', 'lukic-code-snippets' ), $post_type_obj->labels->name ),
+				__( 'Order', 'lukic-code-snippets' ),
 				$capability,
 				'lukic-order-' . $post_type,
 				'Lukic_content_order_interface'
@@ -200,9 +200,9 @@ function Lukic_content_order_scripts( $hook ) {
 			array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'Lukic_content_order_nonce' ),
-				'loading' => __( 'Updating order...', 'Lukic-code-snippets' ),
-				'success' => __( 'Order updated successfully.', 'Lukic-code-snippets' ),
-				'error'   => __( 'Error updating order.', 'Lukic-code-snippets' ),
+				'loading' => __( 'Updating order...', 'lukic-code-snippets' ),
+				'success' => __( 'Order updated successfully.', 'lukic-code-snippets' ),
+				'error'   => __( 'Error updating order.', 'lukic-code-snippets' ),
 			)
 		);
 	}
@@ -215,12 +215,12 @@ add_action( 'admin_enqueue_scripts', 'Lukic_content_order_scripts' );
 function Lukic_update_post_order() {
 	// Check nonce for security
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_content_order_nonce' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Security check failed.', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Security check failed.', 'lukic-code-snippets' ) ) );
 	}
 
 	// Check permissions
 	if ( ! current_user_can( 'edit_posts' ) ) {
-		wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'lukic-code-snippets' ) ) );
 	}
 
 	// Get and validate data
@@ -228,7 +228,7 @@ function Lukic_update_post_order() {
 	$post_ids  = isset( $_POST['post_ids'] ) ? $_POST['post_ids'] : array();
 
 	if ( empty( $post_type ) || empty( $post_ids ) || ! post_type_exists( $post_type ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid data received.', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Invalid data received.', 'lukic-code-snippets' ) ) );
 	}
 
 	// Update order
@@ -257,12 +257,12 @@ function Lukic_update_post_order() {
 	if ( $success ) {
 		wp_send_json_success(
 			array(
-				'message'  => __( 'Order updated successfully.', 'Lukic-code-snippets' ),
+				'message'  => __( 'Order updated successfully.', 'lukic-code-snippets' ),
 				'redirect' => add_query_arg( 'orderupdated', 'true', $_SERVER['HTTP_REFERER'] ),
 			)
 		);
 	} else {
-		wp_send_json_error( array( 'message' => __( 'Error updating some items.', 'Lukic-code-snippets' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Error updating some items.', 'lukic-code-snippets' ) ) );
 	}
 }
 add_action( 'wp_ajax_Lukic_update_post_order', 'Lukic_update_post_order' );
@@ -290,7 +290,7 @@ function Lukic_content_order_interface() {
 
 	// Final check for valid post type
 	if ( empty( $post_type ) || ! post_type_exists( $post_type ) ) {
-		wp_die( __( 'Invalid post type.', 'Lukic-code-snippets' ) );
+		wp_die( __( 'Invalid post type.', 'lukic-code-snippets' ) );
 	}
 
 	$post_type_obj = get_post_type_object( $post_type );
@@ -344,22 +344,22 @@ function Lukic_content_order_interface() {
 
 		// Display the header with stats
 		$stats = array(
-			__( 'Post Type', 'Lukic-code-snippets' ) => $post_type_obj->labels->name,
-			__( 'Items', 'Lukic-code-snippets' )     => count( $posts ),
+			__( 'Post Type', 'lukic-code-snippets' ) => $post_type_obj->labels->name,
+			__( 'Items', 'lukic-code-snippets' )     => count( $posts ),
 		);
 
 		/* translators: %s: Post type name (e.g., Posts, Pages) */
-		Lukic_display_header( sprintf( __( 'Order %s', 'Lukic-code-snippets' ), $post_type_obj->labels->name ), $stats );
+		Lukic_display_header( sprintf( __( 'Order %s', 'lukic-code-snippets' ), $post_type_obj->labels->name ), $stats );
 		?>
 		
 		<?php if ( $order_updated ) : ?>
 			<div class="notice notice-success is-dismissible">
-				<p><?php esc_html_e( 'Order updated successfully.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'Order updated successfully.', 'lukic-code-snippets' ); ?></p>
 			</div>
 		<?php endif; ?>
 		
 		<div class="Lukic-content-order-instructions">
-			<p><span class="dashicons dashicons-info"></span> <?php esc_html_e( 'Drag and drop items to change their order. Changes are saved automatically.', 'Lukic-code-snippets' ); ?></p>
+			<p><span class="dashicons dashicons-info"></span> <?php esc_html_e( 'Drag and drop items to change their order. Changes are saved automatically.', 'lukic-code-snippets' ); ?></p>
 		</div>
 		
 		<!-- Status message area -->
@@ -381,11 +381,11 @@ function Lukic_content_order_interface() {
 		
 		<?php if ( empty( $posts ) ) : ?>
 			<div class="Lukic-content-order-empty">
-				<p><?php esc_html_e( 'No items found to order.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'No items found to order.', 'lukic-code-snippets' ); ?></p>
 				
 				<?php if ( $current_parent ) : ?>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $page ) ); ?>" class="button">
-						<?php esc_html_e( 'Back to Top Level', 'Lukic-code-snippets' ); ?>
+						<?php esc_html_e( 'Back to Top Level', 'lukic-code-snippets' ); ?>
 					</a>
 				<?php endif; ?>
 			</div>
@@ -426,7 +426,7 @@ function Lukic_content_order_interface() {
 							<?php if ( $has_children ) : ?>
 								<a href="<?php echo esc_url( add_query_arg( 'parent', $post->ID ) ); ?>" class="Lukic-content-order-children">
 									<span class="dashicons dashicons-category"></span>
-									<?php esc_html_e( 'View Children', 'Lukic-code-snippets' ); ?>
+									<?php esc_html_e( 'View Children', 'lukic-code-snippets' ); ?>
 								</a>
 							<?php endif; ?>
 						<?php endif; ?>
@@ -447,7 +447,7 @@ function Lukic_content_order_interface() {
 function Lukic_content_order_settings_page() {
 	// Check user permissions
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( __( 'You do not have sufficient permissions to access this page.', 'Lukic-code-snippets' ) );
+		wp_die( __( 'You do not have sufficient permissions to access this page.', 'lukic-code-snippets' ) );
 	}
 
 	// Handle form submission
@@ -473,17 +473,17 @@ function Lukic_content_order_settings_page() {
 	$stats = array(
 		array(
 			'count' => count( $post_types ),
-			'label' => __( 'Post Types', 'Lukic-code-snippets' ),
+			'label' => __( 'Post Types', 'lukic-code-snippets' ),
 		),
 		array(
-			'count' => __( 'Active', 'Lukic-code-snippets' ),
-			'label' => __( 'Status', 'Lukic-code-snippets' ),
+			'count' => __( 'Active', 'lukic-code-snippets' ),
+			'label' => __( 'Status', 'lukic-code-snippets' ),
 		),
 	);
 
 	?>
 	<div class="wrap Lukic-admin-page">
-		<?php Lukic_display_header( __( 'Content Order Settings', 'Lukic-code-snippets' ), $stats ); ?>
+		<?php Lukic_display_header( __( 'Content Order Settings', 'lukic-code-snippets' ), $stats ); ?>
 		
 		<div class="Lukic-container">
 			<div class="Lukic-content-wrapper">
@@ -491,15 +491,15 @@ function Lukic_content_order_settings_page() {
 					
 					<?php if ( $settings_updated ) : ?>
 						<div class="Lukic-notice Lukic-notice-success">
-							<p><?php esc_html_e( 'Settings saved successfully.', 'Lukic-code-snippets' ); ?></p>
+							<p><?php esc_html_e( 'Settings saved successfully.', 'lukic-code-snippets' ); ?></p>
 						</div>
 					<?php endif; ?>
 					
 					<div class="Lukic-card" style="padding: 20px;">
 						<div class="Lukic-card-header">
-							<h2><?php esc_html_e( 'Frontend Ordering Settings', 'Lukic-code-snippets' ); ?></h2>
+							<h2><?php esc_html_e( 'Frontend Ordering Settings', 'lukic-code-snippets' ); ?></h2>
 							<p class="Lukic-description">
-								<?php esc_html_e( 'Enable custom ordering on the frontend for each post type. When enabled, the custom order you set in the admin will be applied to all frontend queries including blog pages, archives, Latest Posts blocks, and Query Loop blocks.', 'Lukic-code-snippets' ); ?>
+								<?php esc_html_e( 'Enable custom ordering on the frontend for each post type. When enabled, the custom order you set in the admin will be applied to all frontend queries including blog pages, archives, Latest Posts blocks, and Query Loop blocks.', 'lukic-code-snippets' ); ?>
 							</p>
 						</div>
 						
@@ -537,13 +537,13 @@ function Lukic_content_order_settings_page() {
 															/>
 															<?php
 															/* translators: %s: Post type name (e.g., Posts, Pages) */
-															echo esc_html( sprintf( __( 'Apply custom ordering to %s on the frontend', 'Lukic-code-snippets' ), strtolower( $post_type_obj->labels->name ) ) );
+															echo esc_html( sprintf( __( 'Apply custom ordering to %s on the frontend', 'lukic-code-snippets' ), strtolower( $post_type_obj->labels->name ) ) );
 															?>
 														</label>
 														<p class="description">
 															<?php
 															/* translators: %s: Post type name (e.g., Posts, Pages) */
-															echo esc_html( sprintf( __( 'When enabled, %s will display in your custom order on blog pages, archives, and Gutenberg block queries.', 'Lukic-code-snippets' ), strtolower( $post_type_obj->labels->name ) ) );
+															echo esc_html( sprintf( __( 'When enabled, %s will display in your custom order on blog pages, archives, and Gutenberg block queries.', 'lukic-code-snippets' ), strtolower( $post_type_obj->labels->name ) ) );
 															?>
 														</p>
 													</fieldset>
@@ -555,9 +555,9 @@ function Lukic_content_order_settings_page() {
 								
 								<div class="Lukic-submit-container">
 					<button type="submit" name="Lukic_content_order_save_settings" class="button button-primary">
-						<?php esc_html_e( 'Save Settings', 'Lukic-code-snippets' ); ?>
+						<?php esc_html_e( 'Save Settings', 'lukic-code-snippets' ); ?>
 					</button>
-					<p class="description"><?php esc_html_e( 'Changes will take effect immediately after saving.', 'Lukic-code-snippets' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Changes will take effect immediately after saving.', 'lukic-code-snippets' ); ?></p>
 				</div>
 							</form>
 						</div>
@@ -565,29 +565,29 @@ function Lukic_content_order_settings_page() {
 					
 					<div class="Lukic-card" style="padding: 20px; margin-top: 20px;">
 						<div class="Lukic-card-header">
-							<h2><?php esc_html_e( 'How It Works', 'Lukic-code-snippets' ); ?></h2>
+							<h2><?php esc_html_e( 'How It Works', 'lukic-code-snippets' ); ?></h2>
 						</div>
 						<div class="Lukic-card-body">
 							<ul class="Lukic-info-list">
 								<li>
 									<span class="dashicons dashicons-admin-generic"></span>
-									<strong><?php esc_html_e( 'Backend Ordering:', 'Lukic-code-snippets' ); ?></strong>
-									<?php esc_html_e( 'Always active. Use the "Order" submenu under each post type to drag and drop items into your preferred order.', 'Lukic-code-snippets' ); ?>
+									<strong><?php esc_html_e( 'Backend Ordering:', 'lukic-code-snippets' ); ?></strong>
+									<?php esc_html_e( 'Always active. Use the "Order" submenu under each post type to drag and drop items into your preferred order.', 'lukic-code-snippets' ); ?>
 								</li>
 								<li>
 									<span class="dashicons dashicons-admin-site-alt3"></span>
-									<strong><?php esc_html_e( 'Frontend Ordering:', 'Lukic-code-snippets' ); ?></strong>
-									<?php esc_html_e( 'Enable above to apply your custom order to frontend pages, including blog pages, archives, and Gutenberg query blocks.', 'Lukic-code-snippets' ); ?>
+									<strong><?php esc_html_e( 'Frontend Ordering:', 'lukic-code-snippets' ); ?></strong>
+									<?php esc_html_e( 'Enable above to apply your custom order to frontend pages, including blog pages, archives, and Gutenberg query blocks.', 'lukic-code-snippets' ); ?>
 								</li>
 								<li>
 									<span class="dashicons dashicons-editor-code"></span>
-									<strong><?php esc_html_e( 'Gutenberg Blocks:', 'Lukic-code-snippets' ); ?></strong>
-									<?php esc_html_e( 'Latest Posts blocks, Query Loop blocks, and Post List blocks will all respect your custom order when frontend ordering is enabled. Works even when the block is set to "Sort by Newest to Oldest".', 'Lukic-code-snippets' ); ?>
+									<strong><?php esc_html_e( 'Gutenberg Blocks:', 'lukic-code-snippets' ); ?></strong>
+									<?php esc_html_e( 'Latest Posts blocks, Query Loop blocks, and Post List blocks will all respect your custom order when frontend ordering is enabled. Works even when the block is set to "Sort by Newest to Oldest".', 'lukic-code-snippets' ); ?>
 								</li>
 								<li>
 									<span class="dashicons dashicons-info"></span>
-									<strong><?php esc_html_e( 'Note:', 'Lukic-code-snippets' ); ?></strong>
-									<?php esc_html_e( 'Custom ordering uses the menu_order field. Some themes or plugins may override this with their own ordering.', 'Lukic-code-snippets' ); ?>
+									<strong><?php esc_html_e( 'Note:', 'lukic-code-snippets' ); ?></strong>
+									<?php esc_html_e( 'Custom ordering uses the menu_order field. Some themes or plugins may override this with their own ordering.', 'lukic-code-snippets' ); ?>
 								</li>
 							</ul>
 						</div>

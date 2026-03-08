@@ -50,8 +50,8 @@ class Lukic_Custom_Login_URL {
 	public function add_submenu_page() {
 		add_submenu_page(
 			'lukic-code-snippets',
-			__( 'Custom Login URL', 'Lukic-code-snippets' ),
-			__( 'Custom Login URL', 'Lukic-code-snippets' ),
+			__( 'Custom Login URL', 'lukic-code-snippets' ),
+			__( 'Custom Login URL', 'lukic-code-snippets' ),
 			'manage_options',
 			'lukic-custom-login-url',
 			array( $this, 'display_settings_page' )
@@ -88,7 +88,7 @@ class Lukic_Custom_Login_URL {
 					'Lukic_custom_login_url',
 					'forbidden_slug',
 					/* translators: %s: The slug that was entered by the user */
-					sprintf( __( 'The slug "%s" is not allowed. Please choose a different one.', 'Lukic-code-snippets' ), $input['slug'] ),
+					sprintf( __( 'The slug "%s" is not allowed. Please choose a different one.', 'lukic-code-snippets' ), $input['slug'] ),
 					'error'
 				);
 				$input['slug'] = 'login';
@@ -137,19 +137,19 @@ class Lukic_Custom_Login_URL {
 		$stats     = array(
 			array(
 				'count' => $slug,
-				'label' => __( 'Login URL', 'Lukic-code-snippets' ),
+				'label' => __( 'Login URL', 'lukic-code-snippets' ),
 			),
 		);
 		?>
 		<div class="wrap Lukic-settings-wrap">
-			<?php Lukic_display_header( __( 'Custom Login URL', 'Lukic-code-snippets' ), $stats ); ?>
+			<?php Lukic_display_header( __( 'Custom Login URL', 'lukic-code-snippets' ), $stats ); ?>
 			
 			<div class="Lukic-settings-intro">
-				<p><?php esc_html_e( 'Change the WordPress login URL to improve security by hiding the default wp-login.php page.', 'Lukic-code-snippets' ); ?></p>
+				<p><?php esc_html_e( 'Change the WordPress login URL to improve security by hiding the default wp-login.php page.', 'lukic-code-snippets' ); ?></p>
 				<p>
 				<?php
 				/* translators: %s: The current login URL */
-				printf( __( 'Your current login URL: <strong>%s</strong>', 'Lukic-code-snippets' ), esc_url( $login_url ) );
+				printf( __( 'Your current login URL: <strong>%s</strong>', 'lukic-code-snippets' ), esc_url( $login_url ) );
 				?>
 				</p>
 			</div>
@@ -161,7 +161,7 @@ class Lukic_Custom_Login_URL {
 				<table class="form-table">
 					<tr>
 						<th scope="row">
-							<label for="Lukic_custom_login_url[slug]"><?php esc_html_e( 'Custom Login URL', 'Lukic-code-snippets' ); ?></label>
+							<label for="Lukic_custom_login_url[slug]"><?php esc_html_e( 'Custom Login URL', 'lukic-code-snippets' ); ?></label>
 						</th>
 						<td>
 							<div class="Lukic-url-input-group">
@@ -172,11 +172,11 @@ class Lukic_Custom_Login_URL {
 								<span class="Lukic-url-suffix">/</span>
 							</div>
 							<p class="description">
-								<?php esc_html_e( 'Enter the URL path for your custom login page (e.g., "admin-login" will create a login page at', 'Lukic-code-snippets' ); ?> 
+								<?php esc_html_e( 'Enter the URL path for your custom login page (e.g., "admin-login" will create a login page at', 'lukic-code-snippets' ); ?> 
 								<code><?php echo esc_html( $site_url ); ?>admin-login/</code>).
 							</p>
 							<p>
-								<?php esc_html_e( 'Your current custom login URL is:', 'Lukic-code-snippets' ); ?> 
+								<?php esc_html_e( 'Your current custom login URL is:', 'lukic-code-snippets' ); ?> 
 								<a href="<?php echo esc_url( $login_url ); ?>" target="_blank"><?php echo esc_html( $login_url ); ?></a>
 							</p>
 						</td>
@@ -184,7 +184,7 @@ class Lukic_Custom_Login_URL {
 				</table>
 				
 				<div class="Lukic-submit-container">
-					<?php submit_button( __( 'Save Changes', 'Lukic-code-snippets' ), 'primary Lukic-btn Lukic-btn--primary', 'submit', false ); ?>
+					<?php submit_button( __( 'Save Changes', 'lukic-code-snippets' ), 'primary Lukic-btn Lukic-btn--primary', 'submit', false ); ?>
 				</div>
 			</form>
 		</div>
