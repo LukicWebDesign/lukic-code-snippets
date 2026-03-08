@@ -1,5 +1,8 @@
 === Lukic-code-snippets Changelog ===
 
+== 2.7.6 - 2026-03-08 ==
+* New: Added AJAX powered image uploading and editing inside of Admin Tables (Posts and Taxonomies) for the "Show Featured Images in Admin Tables" snippet.
+
 == 2.7.5 - 2026-03-08 ==
 * Performance: Fixed "Doing it wrong" translation loading warning in Query Monitor
 * Performance: Added caching to snippet registry to avoid redundant localization overhead

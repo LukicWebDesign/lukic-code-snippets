@@ -4,7 +4,7 @@
 **Tags:** snippets, code, optimization, admin, seo  
 **Requires at least:** 5.8  
 **Tested up to:** 6.6  
-**Stable tag:** 2.7.4  
+**Stable tag:** 2.7.6  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -35,6 +35,16 @@ Lukic Code Snippets provides a centralized way to manage and activate useful cod
 By default, the plugin preserves your settings and data. You can choose to delete all data upon uninstallation in the "Plugin Settings" tab.
 
 ## Changelog
+
+### 2.7.6
+*   New: Added AJAX powered image uploading and editing inside of Admin Tables for the "Show Featured Images in Admin Tables" snippet.
+
+### 2.7.5
+*   Performance: Fixed "Doing it wrong" translation loading warning in Query Monitor
+*   Performance: Added caching to snippet registry to avoid redundant localization overhead
+*   Performance: Optimized activated snippet fetching logic to bypass unnecessary parsing
+*   Performance: Reordered plugin initialization hooks and deferred admin class instantiation
+*   Fix: Standardized text domain globally to correct case mismatches
 
 ### 2.7.4
 *   New: Added comprehensive Documentation page with detailed snippet descriptions.

@@ -194,13 +194,16 @@ class Lukic_Snippet_Registry {
 			'description'      => 'Hide unnecessary admin notices and notifications in the WordPress dashboard, creating a cleaner interface with all notices accessible through a dedicated panel in the admin bar.',
 			'long_description' => 'Moves all admin notices (success messages, warnings, promotional banners) into a hidden panel accessible via a "Notices" button in the admin bar. This keeps your dashboard clean and prevents notices from pushing down your content, while still allowing you to check them when needed.',
 		),
-		'hide_footer_thankyou'    => array(
-			'file'             => 'snippet-hide-footer-thankyou.php',
-			'name'             => 'Hide Footer Thank You',
+		'custom_admin_footer'     => array(
+			'file'             => 'snippet-custom-admin-footer.php',
+			'name'             => 'Custom Admin Footer Text',
 			'category'         => 'admin',
-			'tags'             => array( 'footer', 'interface' ),
-			'description'      => 'Removes the "Thank you for creating with WordPress" message from the admin footer for a cleaner, more professional admin interface.',
-			'long_description' => 'Removes the default "Thank you for creating with WordPress" text and version number from the bottom of every admin page. This is a small cosmetic change that contributes to a more white-labeled and professional-looking dashboard.',
+			'tags'             => array( 'footer', 'interface', 'customization' ),
+			'description'      => 'Change or remove the texts at the bottom left ("Thank you for creating with WordPress") and bottom right (version number) of the admin dashboard.',
+			'long_description' => 'Allows you to fully customize the text displayed at both the bottom-left and bottom-right of the WordPress admin area, or remove them entirely. Great for white-labeling the dashboard for clients.',
+			'cleanup'          => array(
+				'options' => array( 'Lukic_custom_admin_footer_text' ),
+			),
 		),
 		'fluid_typography'        => array(
 			'file'             => 'snippet-fluid-typography.php',
