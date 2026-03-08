@@ -22,6 +22,8 @@
     border-radius: var(--Lukic-header-border-radius);
     margin-bottom: var(--Lukic-header-margin-bottom);
     overflow: hidden;
+    max-width: 1400px;
+    box-sizing: border-box;
 }
 
 .wpl-code-snippets-header__content {
@@ -370,11 +372,11 @@
         flex-direction: column;
         text-align: center;
     }
-    
+
     .wpl-code-snippets-header__brand h2 {
         font-size: var(--Lukic-text-3xl);
     }
-    
+
     .wpl-code-snippets-header__stats {
         justify-content: center;
     }
