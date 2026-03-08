@@ -5,7 +5,8 @@
 
 /* Header and Container Styles */
 .Lukic-admin-page {
-    max-width: 100%;
+    max-width: 1400px;
+    box-sizing: border-box;
     margin: 20px 0 0 0;
     padding: 0;
     position: relative;
@@ -284,15 +285,31 @@ td[contenteditable=true]:focus {
 }
 
 @keyframes savedAnimation {
-    0% { background-color: transparent; }
-    50% { background-color: rgba(0, 225, 175, 0.2); }
-    100% { background-color: transparent; }
+    0% {
+        background-color: transparent;
+    }
+
+    50% {
+        background-color: rgba(0, 225, 175, 0.2);
+    }
+
+    100% {
+        background-color: transparent;
+    }
 }
 
 @keyframes errorAnimation {
-    0% { background-color: transparent; }
-    50% { background-color: rgba(255, 0, 0, 0.2); }
-    100% { background-color: transparent; }
+    0% {
+        background-color: transparent;
+    }
+
+    50% {
+        background-color: rgba(255, 0, 0, 0.2);
+    }
+
+    100% {
+        background-color: transparent;
+    }
 }
 
 /* Delete Button Styles */
@@ -386,7 +403,7 @@ td[contenteditable=true]:focus {
     border-radius: 4px;
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     background: #00E1AF !important;
     color: #212121 !important;

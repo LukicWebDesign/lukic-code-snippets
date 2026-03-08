@@ -13,6 +13,8 @@
     font-family: var(--Lukic-font-family);
     color: var(--Lukic-gray-800);
     line-height: var(--Lukic-leading-normal);
+    max-width: 1400px;
+    box-sizing: border-box;
 }
 
 /* === HEADER COMPONENT === */
