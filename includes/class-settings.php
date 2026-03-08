@@ -246,9 +246,16 @@ class Lukic_Snippet_Codes_Settings {
 							?>
 							
 							<div class="Lukic-filter-controls">
-								<div class="Lukic-search-bar">
-									<input type="text" id="snippet-search" placeholder="<?php esc_attr_e( 'Search...', 'lukic-code-snippets' ); ?>">
-									<span class="dashicons dashicons-search Lukic-search-icon"></span>
+								<div style="display: flex; align-items: center; justify-content: flex-end; gap: 20px; width: 100%;">
+									<div class="Lukic-search-bar" style="margin-right: 0; max-width: 300px;">
+										<input type="text" id="snippet-search" placeholder="<?php esc_attr_e( 'Search...', 'lukic-code-snippets' ); ?>">
+										<span class="dashicons dashicons-search Lukic-search-icon"></span>
+									</div>
+									
+									<button type="button" id="lukic-toggle-all-snippets" class="Lukic-btn Lukic-btn--secondary" style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 6px 16px; white-space: nowrap; line-height: 1;">
+										<span class="dashicons dashicons-update" style="font-size: 16px; width: 16px; height: 16px;"></span>
+										<span style="font-size: 14px;"><?php esc_html_e( 'Toggle All', 'lukic-code-snippets' ); ?></span>
+									</button>
 								</div>
 							</div>
 							
@@ -500,10 +507,79 @@ class Lukic_Snippet_Codes_Settings {
 					}
 				});
 				
+				// Handle Toggle All button
+				$('#lukic-toggle-all-snippets').on('click', function(e) {
+					e.preventDefault();
+					const $btn = $(this);
+					const $checkboxes = $('.Lukic-snippet:visible input[type="checkbox"]');
+					
+					if (!$checkboxes.length) return;
+					
+					// Determine target state: if all visible are checked, turn them off. Otherwise turn all on.
+					const allChecked = $checkboxes.length === $checkboxes.filter(':checked').length;
+					const newState = !allChecked;
+					
+					// Visual updates
+					$btn.find('span').last().text('<?php esc_html_e( 'Saving...', 'lukic-code-snippets' ); ?>');
+					$btn.find('.dashicons').addClass('spinning-icon'); // Will add CSS below
+					$btn.prop('disabled', true);
+					
+					// Change checkboxes without triggering 'change' event to avoid auto-save storm
+					$checkboxes.prop('checked', newState);
+					
+					// Update snippets visual state immediately
+					$checkboxes.each(function() {
+						const $snippetBox = $(this).closest('.Lukic-snippet');
+						$snippetBox.attr('data-active', newState ? 'true' : 'false');
+						if (newState) {
+							$snippetBox.addClass('snippet-active');
+						} else {
+							$snippetBox.removeClass('snippet-active');
+						}
+					});
+					
+					// Gather all snippet options on page
+					const currentOptions = {};
+					$('input[name^="Lukic_snippet_codes_options["]').each(function () {
+						const name = $(this).attr('name');
+						const match = name.match(/Lukic_snippet_codes_options\[(.+?)\]/);
+						if (match) {
+							currentOptions[match[1]] = $(this).is(':checked') ? '1' : '0';
+						}
+					});
+					
+					// Single bulk AJAX save
+					$.ajax({
+						url: ajaxurl,
+						type: 'POST',
+						data: {
+							action: 'Lukic_auto_save_snippet',
+							nonce: Lukic_auto_save.nonce,
+							options: JSON.stringify(currentOptions)
+						},
+						success: function(response) {
+							// Reload to apply any snippet hooks that need refreshing
+							window.location.reload();
+						},
+						error: function() {
+							alert('<?php esc_html_e( 'Error saving settings.', 'lukic-code-snippets' ); ?>');
+							window.location.reload();
+						}
+					});
+				});
+
 				// Trigger initial filtering on page load
 				filterSnippets();
 			});
 		</script>
+		<style>
+			@keyframes lukic-spin { 
+				100% { transform: rotate(360deg); } 
+			}
+			.spinning-icon { 
+				animation: lukic-spin 1s linear infinite; 
+			}
+		</style>
 		
 		<?php
 	}
