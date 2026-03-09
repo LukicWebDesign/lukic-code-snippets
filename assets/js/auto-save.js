@@ -55,6 +55,9 @@
                             $snippet.removeClass('snippet-active');
                         }
 
+                        // Update the "Active" count in the header stat live
+                        updateActiveCount();
+
                         // Check if this snippet requires a page refresh
                         if (needsPageRefresh($checkbox)) {
                             // Show refresh notification and auto-refresh
@@ -98,6 +101,13 @@
                 }
             });
         });
+
+        // Function to update the "Active" count in the header stat
+        function updateActiveCount() {
+            var activeCount = $('input[name^="Lukic_snippet_codes_options["]:checked').length;
+            // The first stat count in the header is always the "Active" count
+            $('.wpl-code-snippets-header__stats-item-count').first().text(activeCount);
+        }
 
         // Function to check if snippet needs page refresh
         function needsPageRefresh($checkbox) {
