@@ -1,5 +1,16 @@
 === Lukic-code-snippets Changelog ===
 
+== 2.8.0 - 2026-03-09 ==
+* New: Added "Login Page Designer" snippet for full visual customization of the WordPress login page.
+  - Upload a custom logo from the Media Library with configurable width, link URL, and alt text.
+  - Background options: solid color, image (with position/size controls), or CSS gradient (from/to colors + angle).
+  - Login form card: custom background color, border radius, and box shadow (none / soft / strong).
+  - Typography & colors: label color, link color, link hover color, #nav a and #backtoblog a link colors.
+  - Button styling: background, text, hover background, and border radius.
+  - Custom CSS textarea injected at the end for advanced overrides.
+  - Real-time live preview panel in the admin settings page.
+  - Auto-refresh on snippet toggle for instant effect.
+
 == 2.7.6 - 2026-03-08 ==
 * New: Added AJAX powered image uploading and editing inside of Admin Tables (Posts and Taxonomies) for the "Show Featured Images in Admin Tables" snippet.
 

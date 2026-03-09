@@ -263,6 +263,17 @@ class Lukic_Snippet_Registry {
 				'options' => array( 'Lukic_custom_login_url' ),
 			),
 		),
+		'login_page_designer'     => array(
+			'file'             => 'snippet-login-page-designer.php',
+			'name'             => 'Login Page Designer',
+			'category'         => 'admin',
+			'tags'             => array( 'login', 'branding', 'design', 'customization' ),
+			'description'      => 'Visually customize the WordPress login page: logo, background, form card, colors, button styling, and custom CSS.',
+			'long_description' => 'A full visual designer for the WordPress login screen. Upload a custom logo, choose a solid color, image, or gradient background, style the form card with custom colors, border-radius and shadow, fine-tune label and link colors, fully style the submit button, and inject any extra CSS — all without touching any code.',
+			'cleanup'          => array(
+				'options' => array( 'Lukic_login_page_designer_options' ),
+			),
+		),
 		'word_counter'            => array(
 			'file'             => 'snippet-word-counter.php',
 			'name'             => 'Word Counter',

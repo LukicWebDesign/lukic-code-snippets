@@ -4,7 +4,7 @@
 **Tags:** snippets, code, optimization, admin, seo  
 **Requires at least:** 5.8  
 **Tested up to:** 6.6  
-**Stable tag:** 2.7.6  
+**Stable tag:** 2.8.0  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -45,6 +45,10 @@ By default, the plugin preserves your settings and data. You can choose to delet
 *   Performance: Optimized activated snippet fetching logic to bypass unnecessary parsing
 *   Performance: Reordered plugin initialization hooks and deferred admin class instantiation
 *   Fix: Standardized text domain globally to correct case mismatches
+
+### 2.8.0
+*   New: Added "Login Page Designer" snippet for full visual customization of the WordPress login page (custom logo, background color/image/gradient, form card styling, colors, button, and custom CSS).
+*   New: Real-time live preview panel in the Login Page Designer settings page.
 
 ### 2.7.4
 *   New: Added comprehensive Documentation page with detailed snippet descriptions.

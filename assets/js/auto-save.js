@@ -133,7 +133,8 @@
                 'db_tables_manager',            // Custom Database Tables Manager (adds admin interface)
                 'media_replace',                // Media Replace (adds admin interface)
                 'disable_comments',             // Disable Comments (removes admin menu)
-                'admin_menu_organizer'          // Admin Menu Organizer (adds admin menu)
+                'admin_menu_organizer',          // Admin Menu Organizer (adds admin menu)
+                'login_page_designer'           // Login Page Designer (styles login page)
             ];
 
             return refreshRequired.includes(snippetId);
