@@ -41,7 +41,7 @@ class Lukic_Snippet_Codes {
 		// Localization.
 		add_action( 'init', array( $this, 'load_textdomain' ), 0 );
 		// Load activated snippets.
-		add_action( 'init', array( $this, 'load_snippets' ), 1 );
+		add_action( 'plugins_loaded', array( $this, 'load_snippets' ) );
 	}
 
 	/**
