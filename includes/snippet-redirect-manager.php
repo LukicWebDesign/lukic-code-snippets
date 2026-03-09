@@ -116,6 +116,7 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 		// Get all redirects and statistics
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'lukic_redirects';
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table_name uses $wpdb->prefix + hardcoded string.
 		$redirects  = $wpdb->get_results( "SELECT * FROM $table_name ORDER BY created_at DESC" );
 
 		// Calculate statistics for header
@@ -804,7 +805,7 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 
 		// Delete redirect
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'Lukic_redirects';
+		$table_name = $wpdb->prefix . 'lukic_redirects';
 
 		$result = $wpdb->delete(
 			$table_name,

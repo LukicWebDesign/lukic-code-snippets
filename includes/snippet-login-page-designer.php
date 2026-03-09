@@ -516,7 +516,7 @@ class Lukic_Login_Page_Designer {
 									);
 									foreach ( $bg_types as $value => $label ) :
 									?>
-									<label class="lpd-type-label <?php echo $opts['bg_type'] === $value ? 'is-active' : ''; ?>">
+									<label class="lpd-type-label <?php echo esc_attr( $opts['bg_type'] === $value ? 'is-active' : '' ); ?>">
 										<input type="radio"
 											name="<?php echo esc_attr( $this->option_name ); ?>[bg_type]"
 											value="<?php echo esc_attr( $value ); ?>"
@@ -670,7 +670,7 @@ class Lukic_Login_Page_Designer {
 									);
 									foreach ( $shadows as $val => $label ) :
 									?>
-									<label class="lpd-type-label <?php echo $opts['card_shadow'] === $val ? 'is-active' : ''; ?>">
+									<label class="lpd-type-label <?php echo esc_attr( $opts['card_shadow'] === $val ? 'is-active' : '' ); ?>">
 										<input type="radio"
 											name="<?php echo esc_attr( $this->option_name ); ?>[card_shadow]"
 											value="<?php echo esc_attr( $val ); ?>"

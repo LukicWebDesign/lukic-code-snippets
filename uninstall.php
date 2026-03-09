@@ -36,7 +36,7 @@ if ( 'delete' === $cleanup_data ) {
 	if ( ! empty( $cleanup_items['tables'] ) ) {
 		foreach ( $cleanup_items['tables'] as $table ) {
 			$table_name = ( strpos( $table, $wpdb->prefix ) === 0 ) ? $table : $wpdb->prefix . $table;
-			// phpcs:ignore WordPress.DB.PreparedSQL
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table_name is from the trusted snippet registry, not user input.
 			$wpdb->query( "DROP TABLE IF EXISTS $table_name" );
 		}
 	}

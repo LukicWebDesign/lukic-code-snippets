@@ -44,7 +44,7 @@ class Lukic_Helpers {
 		}
 
 		$current_page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
-		return strpos( $current_page, 'Lukic-' ) === 0;
+		return strpos( $current_page, 'lukic-' ) === 0;
 	}
 
 	/**

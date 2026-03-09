@@ -514,7 +514,7 @@ class Lukic_DB_Tables_Manager {
 	 */
 	private function render_tables_list( $tables ) {
 		if ( empty( $tables ) ) {
-			echo '<p>' . __( 'No tables found.', 'lukic-code-snippets' ) . '</p>';
+			echo '<p>' . esc_html__( 'No tables found.', 'lukic-code-snippets' ) . '</p>';
 			return;
 		}
 
@@ -534,7 +534,7 @@ class Lukic_DB_Tables_Manager {
 				<tr>
 					<td><?php echo esc_html( $table['name'] ); ?></td>
 					<td><?php echo esc_html( $table['engine'] ); ?></td>
-					<td><?php echo number_format( $table['rows'] ); ?></td>
+					<td><?php echo esc_html( number_format( $table['rows'] ) ); ?></td>
 					<td><?php echo esc_html( $table['size'] ); ?></td>
 					<td>
 						<button class="button view-table" data-table="<?php echo esc_attr( $table['name'] ); ?>">
@@ -657,7 +657,8 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'Invalid table specified.', 'lukic-code-snippets' ) );
 		}
 
-		// Get table structure
+		// Get table structure — $table is validated by validate_table_name().
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$columns = $wpdb->get_results( "DESCRIBE `{$table}`" );
 
 		if ( empty( $columns ) ) {
@@ -720,14 +721,16 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'Invalid table specified.', 'lukic-code-snippets' ) );
 		}
 
-		// Get total rows count
+		// Get total rows count — $table is validated by validate_table_name().
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$total_rows = $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
 
 		// Calculate offset
 		$offset = ( $page - 1 ) * $per_page;
 
-		// Get data with pagination
-		$rows = $wpdb->get_results( "SELECT * FROM `{$table}` LIMIT {$offset}, {$per_page}", ARRAY_A );
+		// Get data with pagination — use prepare() for LIMIT params.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `{$table}` LIMIT %d, %d", $offset, $per_page ), ARRAY_A );
 
 		if ( $rows === null ) {
 			wp_send_json_error( __( 'Error retrieving data from table.', 'lukic-code-snippets' ) . ' ' . $wpdb->last_error );
@@ -755,7 +758,8 @@ class Lukic_DB_Tables_Manager {
 		// Calculate total pages
 		$total_pages = ceil( $total_rows / $per_page );
 
-		// Get table structure to identify primary key
+		// Get table structure to identify primary key — $table is validated.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$columns     = $wpdb->get_results( "DESCRIBE `{$table}`" );
 		$primary_key = null;
 		foreach ( $columns as $column ) {
@@ -829,7 +833,8 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'Invalid table specified.', 'lukic-code-snippets' ) );
 		}
 
-		// Get all data from the table
+		// Get all data from the table — $table is validated by validate_table_name().
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$rows = $wpdb->get_results( "SELECT * FROM `{$table}`", ARRAY_A );
 
 		if ( empty( $rows ) ) {
@@ -891,7 +896,8 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'Missing required parameters.', 'lukic-code-snippets' ) );
 		}
 
-		// Get table structure
+		// Get table structure — $table is validated by validate_table_name().
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$columns      = $wpdb->get_results( "DESCRIBE `{$table}`" );
 		$column_names = wp_list_pluck( $columns, 'Field' );
 		if ( ! in_array( $primary_key, $column_names, true ) ) {
@@ -946,6 +952,7 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'Missing required parameters.', 'lukic-code-snippets' ) );
 		}
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$columns      = $wpdb->get_results( "DESCRIBE `{$table}`" );
 		$column_names = wp_list_pluck( $columns, 'Field' );
 		// Sanitize the row data
@@ -1012,7 +1019,8 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'Invalid table specified.', 'lukic-code-snippets' ) );
 		}
 
-		// Get table structure to build search query
+		// Get table structure to build search query — $table is validated.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$columns = $wpdb->get_results( "DESCRIBE `{$table}`" );
 
 		if ( empty( $columns ) ) {
@@ -1049,12 +1057,15 @@ class Lukic_DB_Tables_Manager {
 		// Calculate offset
 		$offset = ( $page - 1 ) * $per_page;
 
-		// Get data with search and pagination
-		$data_query = "SELECT * FROM `{$table}` {$where_clause} LIMIT {$offset}, {$per_page}";
+		// Get data with search and pagination — use prepare() for LIMIT params.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$data_query = "SELECT * FROM `{$table}` {$where_clause} LIMIT %d, %d";
 		if ( ! empty( $search_values ) ) {
+			$search_values[] = $offset;
+			$search_values[] = $per_page;
 			$rows = $wpdb->get_results( $wpdb->prepare( $data_query, $search_values ), ARRAY_A );
 		} else {
-			$rows = $wpdb->get_results( $data_query, ARRAY_A );
+			$rows = $wpdb->get_results( $wpdb->prepare( $data_query, $offset, $per_page ), ARRAY_A );
 		}
 
 		if ( $rows === null ) {
