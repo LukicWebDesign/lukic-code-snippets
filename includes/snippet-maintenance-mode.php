@@ -442,9 +442,21 @@ class Lukic_Maintenance_Mode {
 			$this->defaults
 		);
 
-		// Check for excluded IPs
-		$excluded_ips = array_filter( array_map( 'trim', explode( "\n", $options['exclude_ips'] ) ) );
-		if ( ! empty( $excluded_ips ) && in_array( $_SERVER['REMOTE_ADDR'], $excluded_ips ) ) {
+		// Get user IP and normalize local loopback addresses for local testing
+		$user_ip = $_SERVER['REMOTE_ADDR'];
+		if ( $user_ip === '::1' ) {
+			$user_ip = '127.0.0.1';
+		}
+
+		// Check for excluded IPs (split by newline, comma, or space)
+		$excluded_ips = array_filter( array_map( 'trim', preg_split( '/[\n,\s]+/', $options['exclude_ips'] ) ) );
+		
+		// If user entered ::1, make sure we check for 127.0.0.1 as well
+		if ( in_array( '::1', $excluded_ips, true ) && ! in_array( '127.0.0.1', $excluded_ips, true ) ) {
+			$excluded_ips[] = '127.0.0.1';
+		}
+
+		if ( ! empty( $excluded_ips ) && in_array( $user_ip, $excluded_ips, true ) ) {
 			return;
 		}
 

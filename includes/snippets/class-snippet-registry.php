@@ -137,6 +137,9 @@ class Lukic_Snippet_Registry {
 			'tags'             => array( 'media', 'replace' ),
 			'description'      => 'Replace media files while maintaining the same ID, filename and publish date - keeping all existing links intact.',
 			'long_description' => 'Adds a "Replace Media" functionality to the Media Library. This allows you to upload a new file to replace an existing one while preserving the attachment ID, filename, and permalink. This means you don\'t have to update any links or shortcodes that reference the old file.',
+			'cleanup'          => array(
+				'transients' => array( 'Lukic_media_replace_error', 'Lukic_media_replace_success' ),
+			),
 		),
 		'content_order'           => array(
 			'file'             => 'snippet-content-order.php',
@@ -145,6 +148,9 @@ class Lukic_Snippet_Registry {
 			'tags'             => array( 'content', 'order' ),
 			'description'      => 'Allows you to reorder the content of your posts and pages.',
 			'long_description' => 'Enables drag-and-drop reordering for posts, pages, and custom post types. This is particularly useful for custom post types where the display order on the frontend matters (e.g., portfolios, team members, FAQs).',
+			'cleanup'          => array(
+				'options' => array( 'Lukic_content_order_settings' ),
+			),
 		),
 		'show_acf_columns'        => array(
 			'file'             => 'snippet-acf-columns.php',
@@ -153,6 +159,9 @@ class Lukic_Snippet_Registry {
 			'tags'             => array( 'admin tables', 'acf', 'custom fields' ),
 			'description'      => 'Adds columns to the admin tables for posts, pages and custom post types to display the values of Advanced Custom Fields (ACF) fields.',
 			'long_description' => 'Automatically adds columns to admin list tables for any Advanced Custom Fields (ACF) associated with that post type. This gives you a quick overview of custom field data directly from the post list, saving you from opening each post to check values.',
+			'cleanup'          => array(
+				'options' => array( 'Lukic_acf_columns_settings' ),
+			),
 		),
 		'media_size_column'       => array(
 			'file'             => 'snippet-media-size-column.php',
@@ -382,6 +391,9 @@ class Lukic_Snippet_Registry {
 			'tags'             => array( 'admin', 'menu', 'organizer' ),
 			'description'      => 'Reorder, rename, hide, and reorganize admin menu items using a drag-and-drop interface.',
 			'long_description' => 'Gives you full control over the WordPress admin menu. You can drag and drop to reorder items, rename menus to be more intuitive for clients, hide unnecessary items, and organize the dashboard exactly how you want it.',
+			'cleanup'          => array(
+				'options' => array( 'lukic_admin_menu_settings' ),
+			),
 		),
 		'disable_file_editing'    => array(
 			'file'             => 'snippet-disable-file-editing.php',
@@ -514,8 +526,9 @@ class Lukic_Snippet_Registry {
 	 */
 	public static function get_cleanup_items() {
 		$cleanup = array(
-			'options' => array(),
-			'tables'  => array(),
+			'options'    => array(),
+			'tables'     => array(),
+			'transients' => array(),
 		);
 
 		foreach ( self::$snippets as $snippet ) {
@@ -526,10 +539,15 @@ class Lukic_Snippet_Registry {
 			if ( isset( $snippet['cleanup']['tables'] ) && is_array( $snippet['cleanup']['tables'] ) ) {
 				$cleanup['tables'] = array_merge( $cleanup['tables'], $snippet['cleanup']['tables'] );
 			}
+
+			if ( isset( $snippet['cleanup']['transients'] ) && is_array( $snippet['cleanup']['transients'] ) ) {
+				$cleanup['transients'] = array_merge( $cleanup['transients'], $snippet['cleanup']['transients'] );
+			}
 		}
 
-		$cleanup['options'] = array_values( array_unique( $cleanup['options'] ) );
-		$cleanup['tables']  = array_values( array_unique( $cleanup['tables'] ) );
+		$cleanup['options']    = array_values( array_unique( $cleanup['options'] ) );
+		$cleanup['tables']     = array_values( array_unique( $cleanup['tables'] ) );
+		$cleanup['transients'] = array_values( array_unique( $cleanup['transients'] ) );
 
 		return $cleanup;
 	}

@@ -297,7 +297,7 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 								<th scope="row"><label for="source_url"><?php esc_html_e( 'Source URL', 'lukic-code-snippets' ); ?></label></th>
 								<td>
 									<input type="text" id="source_url" name="source_url" value="" class="regular-text" placeholder="/old-page" required>
-									<p class="description"><?php esc_html_e( 'Enter the relative path (e.g., /old-page) or full URL of the page you want to redirect from.', 'lukic-code-snippets' ); ?></p>
+									<p class="description"><?php esc_html_e( 'Enter the relative path or full URL. It is usually best without a trailing slash (e.g., /old-page).', 'lukic-code-snippets' ); ?></p>
 									<label for="pattern_match" style="margin-top: 10px; display: block;">
 										<input type="checkbox" id="pattern_match" name="pattern_match" value="1">
 										<?php esc_html_e( 'Use wildcard pattern matching', 'lukic-code-snippets' ); ?>
@@ -309,8 +309,8 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 							<tr>
 								<th scope="row"><label for="target_url"><?php esc_html_e( 'Target URL', 'lukic-code-snippets' ); ?></label></th>
 								<td>
-									<input type="text" id="target_url" name="target_url" value="" class="regular-text" placeholder="/new-page" required>
-									<p class="description"><?php esc_html_e( 'Enter the relative path (e.g., /new-page) or full URL of the page you want to redirect to.', 'lukic-code-snippets' ); ?></p>
+									<input type="text" id="target_url" name="target_url" value="" class="regular-text" placeholder="/new-page/" required>
+									<p class="description"><?php esc_html_e( 'Enter the relative path or full URL. To avoid double redirects, include a trailing slash if your site normally uses them (e.g., /new-page/).', 'lukic-code-snippets' ); ?></p>
 								</td>
 							</tr>
 							<tr>
@@ -380,7 +380,6 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 						
 						<p class="submit">
 							<button type="submit" id="save-settings" class="button button-primary" style="background-color: #00E1AF; border-color: #00E1AF;">
-								<span class="dashicons dashicons-saved" style="margin-right: 5px;"></span>
 								<?php esc_html_e( 'Save Settings', 'lukic-code-snippets' ); ?>
 							</button>
 						</p>
@@ -396,6 +395,7 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 							<th scope="row"><label for="edit_source_url"><?php esc_html_e( 'Source URL', 'lukic-code-snippets' ); ?></label></th>
 							<td>
 								<input type="text" id="edit_source_url" name="source_url" class="regular-text" required>
+								<p class="description" style="margin-bottom: 10px;"><?php esc_html_e( 'Usually best without a trailing slash (e.g., /old-page).', 'lukic-code-snippets' ); ?></p>
 								<label for="edit_pattern_match" style="margin-top: 10px; display: block;">
 									<input type="checkbox" id="edit_pattern_match" name="pattern_match" value="1">
 									<?php esc_html_e( 'Use wildcard pattern matching', 'lukic-code-snippets' ); ?>
@@ -407,6 +407,7 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 							<th scope="row"><label for="edit_target_url"><?php esc_html_e( 'Target URL', 'lukic-code-snippets' ); ?></label></th>
 							<td>
 								<input type="text" id="edit_target_url" name="target_url" class="regular-text" required>
+								<p class="description"><?php esc_html_e( 'To avoid double redirects, include a trailing slash if your site uses them (e.g., /new-page/).', 'lukic-code-snippets' ); ?></p>
 							</td>
 						</tr>
 						<tr>
@@ -835,8 +836,8 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 		}
 
 		// Save settings
-		$track_hits      = isset( $_POST['track_hits'] ) ? 1 : 0;
-		$log_last_access = isset( $_POST['log_last_access'] ) ? 1 : 0;
+		$track_hits      = isset( $_POST['track_hits'] ) ? intval( $_POST['track_hits'] ) : 0;
+		$log_last_access = isset( $_POST['log_last_access'] ) ? intval( $_POST['log_last_access'] ) : 0;
 
 		update_option( 'Lukic_redirect_track_hits', $track_hits );
 		update_option( 'Lukic_redirect_log_last_access', $log_last_access );

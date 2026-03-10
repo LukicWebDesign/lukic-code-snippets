@@ -4,7 +4,7 @@ Donate link: https://developer.wordpress.org/plugins/
 Tags: snippets, performance, admin, security, seo
 Requires at least: 5.8
 Tested up to: 6.7
-Stable tag: 2.8.0
+Stable tag: 2.8.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -116,6 +116,13 @@ Yes. All UI strings use the `lukic-code-snippets` text domain with proper `__()`
 5. Maintenance Mode settings with customizable page and live preview.
 
 == Changelog ==
+
+= 2.8.1 =
+* Fix: Redirect Manager settings now save properly when toggled off.
+* Fix: Prevent WordPress canonical redirects from exposing the hidden Custom Login URL.
+* Fix: Maintenance Mode IP exclusions now correctly handle local loopback URLs (::1 and 127.0.0.1) and varied string formats.
+* Fix: Add missing transients to the clean uninstallation routine.
+* Docs: Clarify Redirect Manager trailing slash URL usage rules.
 
 = 2.8.0 =
 * New: Login Page Designer snippet — full visual customization of the WordPress login page (logo, background, form card, colors, button, custom CSS) with a real-time live preview panel.

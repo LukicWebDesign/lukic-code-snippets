@@ -42,6 +42,9 @@ class Lukic_Custom_Login_URL {
 		add_filter( 'site_url', array( $this, 'filter_site_url' ), 10, 4 );
 		add_filter( 'network_site_url', array( $this, 'filter_network_site_url' ), 10, 3 );
 		add_filter( 'wp_redirect', array( $this, 'filter_wp_redirect' ), 10, 2 );
+		
+		// Remove WordPress's default redirect for paths like /login or /admin
+		remove_action( 'template_redirect', 'wp_redirect_admin_locations', 1000 );
 	}
 
 	/**

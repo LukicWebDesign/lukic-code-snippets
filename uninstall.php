@@ -33,6 +33,12 @@ if ( 'delete' === $cleanup_data ) {
 		}
 	}
 
+	if ( ! empty( $cleanup_items['transients'] ) ) {
+		foreach ( $cleanup_items['transients'] as $transient_name ) {
+			delete_transient( $transient_name );
+		}
+	}
+
 	if ( ! empty( $cleanup_items['tables'] ) ) {
 		foreach ( $cleanup_items['tables'] as $table ) {
 			$table_name = ( strpos( $table, $wpdb->prefix ) === 0 ) ? $table : $wpdb->prefix . $table;
