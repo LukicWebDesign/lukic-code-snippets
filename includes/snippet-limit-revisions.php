@@ -202,7 +202,7 @@ class Lukic_Limit_Revisions {
 													<?php if ( $limit == -1 ) : ?>
 														<?php
 														/* translators: %d: The default revision limit number */
-														printf( __( 'Using default (%d)', 'lukic-code-snippets' ), $this->default_limit );
+								echo esc_html( sprintf( __( 'Using default (%d)', 'lukic-code-snippets' ), $this->default_limit ) );
 														?>
 													<?php endif; ?>
 												</span>
@@ -332,12 +332,12 @@ class Lukic_Limit_Revisions {
 		<div class="notice notice-info is-dismissible">
 			<p>
 				<?php
-				/* translators: %1$s: Post type name (e.g., Post, Page), %2$d: Revision limit number */
-				printf(
+				echo esc_html( sprintf(
+					/* translators: %1$s: Post type name (e.g., Post, Page), %2$d: Revision limit number */
 					__( 'Revisions for this %1$s are limited to %2$d. Older revisions will be automatically deleted.', 'lukic-code-snippets' ),
-					esc_html( $post_type_label ),
+					$post_type_label,
 					intval( $limit )
-				);
+				) );
 				?>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=lukic-limit-revisions' ) ); ?>">
 					<?php esc_html_e( 'Configure revision limits', 'lukic-code-snippets' ); ?>

@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Hide Admin Bar on Frontend
  * Description: Removes the WordPress admin bar from the frontend of your site
@@ -68,10 +69,13 @@ if ( ! function_exists( 'Lukic_hide_admin_bar_init' ) ) {
 
 		echo '<div class="notice notice-info is-dismissible">';
 		echo '<p>';
-		/* translators: %s: URL to the plugin settings page */
-		printf(
-			__( 'The Admin Bar is currently hidden on the frontend of your site. <a href="%s">Manage this setting</a> in Lukic Snippet Codes.', 'lukic-code-snippets' ),
-			esc_url( $settings_url )
+		echo wp_kses(
+			sprintf(
+				/* translators: %s: URL to the plugin settings page */
+				__( 'The Admin Bar is currently hidden on the frontend of your site. <a href="%s">Manage this setting</a> in Lukic Snippet Codes.', 'lukic-code-snippets' ),
+				esc_url( $settings_url )
+			),
+			array( 'a' => array( 'href' => array() ) )
 		);
 		echo '</p>';
 		echo '</div>';

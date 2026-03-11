@@ -151,8 +151,11 @@ class Lukic_Custom_Login_URL {
 				<p><?php esc_html_e( 'Change the WordPress login URL to improve security by hiding the default wp-login.php page.', 'lukic-code-snippets' ); ?></p>
 				<p>
 				<?php
-				/* translators: %s: The current login URL */
-				printf( __( 'Your current login URL: <strong>%s</strong>', 'lukic-code-snippets' ), esc_url( $login_url ) );
+				echo wp_kses(
+					/* translators: %s: The current login URL */
+					sprintf( __( 'Your current login URL: <strong>%s</strong>', 'lukic-code-snippets' ), esc_url( $login_url ) ),
+					array( 'strong' => array() )
+				);
 				?>
 				</p>
 			</div>
@@ -222,24 +225,27 @@ class Lukic_Custom_Login_URL {
 		global $pagenow;
 
 		// Get the request
-		$request    = parse_url( rawurldecode( $_SERVER['REQUEST_URI'] ) );
-		$login_slug = $this->get_login_slug();
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$request     = wp_parse_url( rawurldecode( $request_uri ) );
+		$login_slug  = $this->get_login_slug();
 
 		// Check if we're on the login page
-		if ( ( $pagenow === 'wp-login.php' || strpos( $_SERVER['REQUEST_URI'], 'wp-login.php' ) !== false ) && ! is_admin() ) {
+		if ( ( $pagenow === 'wp-login.php' || strpos( $request_uri, 'wp-login.php' ) !== false ) && ! is_admin() ) {
 			// Don't redirect for specific actions
-			$action = isset( $_GET['action'] ) ? $_GET['action'] : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
 			if ( in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ) ) ) {
 				return;
 			}
 
 			// Don't redirect POST requests (form submissions)
-			if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+			$request_method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
+			if ( $request_method === 'POST' ) {
 				return;
 			}
 
 			// Redirect to home page
-			wp_redirect( home_url() );
+			wp_safe_redirect( home_url() );
 			exit;
 		}
 
@@ -255,10 +261,13 @@ class Lukic_Custom_Login_URL {
 			$error         = '';
 			$user_login    = '';
 			$interim_login = false;
-			$action        = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$action        = isset( $_REQUEST['action'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) : '';
 
 			// Set redirect_to parameter
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( ! isset( $_REQUEST['redirect_to'] ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$_REQUEST['redirect_to'] = admin_url();
 			}
 
@@ -275,7 +284,8 @@ class Lukic_Custom_Login_URL {
 		global $pagenow;
 
 		// Get the request
-		$request = parse_url( rawurldecode( $_SERVER['REQUEST_URI'] ) );
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$request     = wp_parse_url( rawurldecode( $request_uri ) );
 
 		// Check if we're in wp-admin and not logged in
 		if ( is_admin() && ! is_user_logged_in() && ! defined( 'DOING_AJAX' ) && ! defined( 'DOING_CRON' ) ) {
@@ -285,12 +295,13 @@ class Lukic_Custom_Login_URL {
 			}
 
 			// Don't block POST requests (form submissions)
-			if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+			$request_method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
+			if ( $request_method === 'POST' ) {
 				return;
 			}
 
 			// Redirect to home page
-			wp_redirect( home_url() );
+			wp_safe_redirect( home_url() );
 			exit;
 		}
 	}

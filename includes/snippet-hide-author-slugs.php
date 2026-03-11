@@ -103,6 +103,7 @@ if ( ! function_exists( 'Lukic_hide_author_slugs_init' ) ) {
 		 */
 		private function get_user_by_hash( $hash ) {
 			// Try to find user with this hash in meta
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key, WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 			$users = get_users( array(
 				'meta_key'   => 'lukic_author_slug_hash',
 				'meta_value' => $hash,
@@ -176,17 +177,18 @@ if ( ! function_exists( 'Lukic_hide_author_slugs_init' ) ) {
 				// We need to check if the URL contains the hash or the nicename/ID.
 				
 				// Check if it's a ?author=N query
-				if ( isset( $_GET['author'] ) && $_GET['author'] == $user_id ) {
-					wp_redirect( get_author_posts_url( $user_id ), 301 );
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				if ( isset( $_GET['author'] ) && intval( wp_unslash( $_GET['author'] ) ) == $user_id ) {
+					wp_safe_redirect( get_author_posts_url( $user_id ), 301 );
 					exit;
 				}
 
 				// Check if the current URL contains the nicename instead of hash
 				// This is a bit tricky because get_author_posts_url is already filtered.
 				// We can check the request URI.
-				$request_uri = $_SERVER['REQUEST_URI'];
+				$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 				if ( strpos( $request_uri, '/' . $obj->user_nicename ) !== false ) {
-					wp_redirect( get_author_posts_url( $user_id ), 301 );
+					wp_safe_redirect( get_author_posts_url( $user_id ), 301 );
 					exit;
 				}
 			}

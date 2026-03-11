@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Show Featured Images in Admin Tables
  * Description: Adds a featured image column to admin tables for posts, pages, and custom post types
@@ -64,13 +65,8 @@ if ( ! function_exists( 'Lukic_show_featured_images_init' ) ) {
 	function Lukic_setup_featured_image_columns() {
 		$screen = get_current_screen();
 
-		// Debug info
-		error_log( 'Lukic Featured Images: Current screen is ' . $screen->id );
-
 		// Handle post types (only on list screens, not edit screens)
 		if ( $screen->base === 'edit' && post_type_supports( $screen->post_type, 'thumbnail' ) ) {
-			error_log( 'Lukic Featured Images: Adding column for post type ' . $screen->post_type );
-
 			// Add the column (priority 5 to ensure it's early in the list)
 			add_filter( 'manage_' . $screen->post_type . '_posts_columns', 'Lukic_add_featured_image_column', 5 );
 
@@ -80,8 +76,6 @@ if ( ! function_exists( 'Lukic_show_featured_images_init' ) ) {
 
 		// Handle taxonomies
 		if ( $screen->base === 'edit-tags' ) {
-			error_log( 'Lukic Featured Images: Adding column for taxonomy ' . $screen->taxonomy );
-
 			// Add the column
 			add_filter( 'manage_edit-' . $screen->taxonomy . '_columns', 'Lukic_add_featured_image_column', 5 );
 

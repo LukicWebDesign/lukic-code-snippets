@@ -157,7 +157,9 @@ class Lukic_Upload_Limits {
 		$settings = $this->settings;
 
 		// Try to set runtime values (will only work for some settings)
+		// phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
 		@ini_set( 'max_execution_time', $settings['max_execution_time'] );
+		// phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
 		@ini_set( 'memory_limit', $settings['memory_limit'] );
 
 		// For Apache servers, try to update .htaccess
@@ -170,7 +172,7 @@ class Lukic_Upload_Limits {
 	 * Check if running on Apache server
 	 */
 	private function is_apache_server() {
-		return ( strpos( $_SERVER['SERVER_SOFTWARE'], 'Apache' ) !== false );
+		return ( isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'Apache' ) !== false );
 	}
 
 	/**
@@ -181,7 +183,7 @@ class Lukic_Upload_Limits {
 		$htaccess_file = ABSPATH . '.htaccess';
 
 		// Check if file exists and is writable
-		if ( ! file_exists( $htaccess_file ) || ! is_writable( $htaccess_file ) ) {
+		if ( ! file_exists( $htaccess_file ) || ! wp_is_writable( $htaccess_file ) ) {
 			return false;
 		}
 
@@ -243,7 +245,7 @@ class Lukic_Upload_Limits {
 		$current_settings = $this->get_current_php_settings();
 
 		// Add timestamp
-		$current_settings['timestamp'] = date( 'Y-m-d H:i:s' );
+		$current_settings['timestamp'] = gmdate( 'Y-m-d H:i:s' );
 
 		// Send response
 		wp_send_json_success( $current_settings );
@@ -270,6 +272,7 @@ class Lukic_Upload_Limits {
 			);
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		$file = $_FILES['test_file'];
 
 		// Check for upload errors
@@ -335,7 +338,8 @@ class Lukic_Upload_Limits {
 		$current_php_settings = $this->get_current_php_settings();
 
 		// Check if settings were saved
-		$settings_saved = isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] === 'true';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$settings_saved = isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ) ) === 'true';
 
 		// Prepare stats for header
 		$stats = array(
@@ -398,7 +402,7 @@ class Lukic_Upload_Limits {
 			<?php
 			// Check if .htaccess is writable
 			$htaccess_file     = ABSPATH . '.htaccess';
-			$htaccess_writable = file_exists( $htaccess_file ) && is_writable( $htaccess_file );
+			$htaccess_writable = file_exists( $htaccess_file ) && wp_is_writable( $htaccess_file );
 
 			if ( $this->is_apache_server() && ! $htaccess_writable ) :
 				?>
@@ -437,7 +441,7 @@ class Lukic_Upload_Limits {
 							</tr>
 						</tbody>
 					</table>
-					<p class="description"><?php esc_html_e( 'Last updated: ', 'lukic-code-snippets' ); ?><span id="last-updated-time"><?php echo date( 'Y-m-d H:i:s' ); ?></span></p>
+					<p class="description"><?php esc_html_e( 'Last updated: ', 'lukic-code-snippets' ); ?><span id="last-updated-time"><?php echo esc_html( gmdate( 'Y-m-d H:i:s' ) ); ?></span></p>
 					<p>
 						<button type="button" id="refresh-php-settings" class="button button-secondary">
 							<span class="dashicons dashicons-update" style="margin-top: 3px;"></span> 

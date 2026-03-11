@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Content Order
  * Description: Enables custom ordering of hierarchical content types or those supporting page attributes
@@ -94,8 +95,9 @@ function Lukic_content_order_set_default_order( $query ) {
 			return $query;
 		}
 
-		// Don't modify if user has selected a specific orderby
-		if ( isset( $_GET['orderby'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : '';
+		if ( ! empty( $orderby ) ) {
 			return $query;
 		}
 
@@ -179,7 +181,9 @@ add_filter( 'query_loop_block_query_vars', 'Lukic_content_order_block_query_args
  */
 function Lukic_content_order_scripts( $hook ) {
 	// Check if we're on one of our order pages
-	if ( isset( $_GET['page'] ) && strpos( $_GET['page'], 'lukic-order-' ) === 0 ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+	if ( strpos( $page, 'lukic-order-' ) === 0 ) {
 		// CSS is now handled by the main plugin
 
 		// Enqueue jQuery UI for sortable functionality
@@ -214,6 +218,7 @@ add_action( 'admin_enqueue_scripts', 'Lukic_content_order_scripts' );
  */
 function Lukic_update_post_order() {
 	// Check nonce for security
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_content_order_nonce' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed.', 'lukic-code-snippets' ) ) );
 	}
@@ -224,8 +229,10 @@ function Lukic_update_post_order() {
 	}
 
 	// Get and validate data
-	$post_type = isset( $_POST['post_type'] ) ? sanitize_text_field( $_POST['post_type'] ) : '';
-	$post_ids  = isset( $_POST['post_ids'] ) ? $_POST['post_ids'] : array();
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$post_type = isset( $_POST['post_type'] ) ? sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) : '';
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$post_ids  = isset( $_POST['post_ids'] ) ? wp_unslash( (array) $_POST['post_ids'] ) : array();
 
 	if ( empty( $post_type ) || empty( $post_ids ) || ! post_type_exists( $post_type ) ) {
 		wp_send_json_error( array( 'message' => __( 'Invalid data received.', 'lukic-code-snippets' ) ) );
@@ -255,10 +262,12 @@ function Lukic_update_post_order() {
 	}
 
 	if ( $success ) {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$http_referer = isset( $_SERVER['HTTP_REFERER'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
 		wp_send_json_success(
 			array(
 				'message'  => __( 'Order updated successfully.', 'lukic-code-snippets' ),
-				'redirect' => add_query_arg( 'orderupdated', 'true', $_SERVER['HTTP_REFERER'] ),
+				'redirect' => add_query_arg( 'orderupdated', 'true', $http_referer ),
 			)
 		);
 	} else {
@@ -272,7 +281,8 @@ add_action( 'wp_ajax_Lukic_update_post_order', 'Lukic_update_post_order' );
  */
 function Lukic_content_order_interface() {
 	// Get current page slug
-	$page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
 
 	// Determine post type from page slug
 	$post_type = '';
@@ -290,7 +300,7 @@ function Lukic_content_order_interface() {
 
 	// Final check for valid post type
 	if ( empty( $post_type ) || ! post_type_exists( $post_type ) ) {
-		wp_die( __( 'Invalid post type.', 'lukic-code-snippets' ) );
+		wp_die( esc_html__( 'Invalid post type.', 'lukic-code-snippets' ) );
 	}
 
 	$post_type_obj = get_post_type_object( $post_type );
@@ -309,8 +319,10 @@ function Lukic_content_order_interface() {
 
 	// Allow filtering posts by parent
 	$current_parent = 0;
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( $is_hierarchical && isset( $_GET['parent'] ) ) {
-		$current_parent            = absint( $_GET['parent'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$current_parent            = absint( wp_unslash( $_GET['parent'] ) );
 		$query_args['post_parent'] = $current_parent;
 	}
 
@@ -318,7 +330,8 @@ function Lukic_content_order_interface() {
 	$posts = get_posts( $query_args );
 
 	// Get success message if posts were ordered
-	$order_updated = isset( $_GET['orderupdated'] ) && $_GET['orderupdated'] === 'true';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$order_updated = isset( $_GET['orderupdated'] ) && sanitize_text_field( wp_unslash( $_GET['orderupdated'] ) ) === 'true';
 
 	// Get parents for breadcrumb navigation in hierarchical post types
 	$parents = array();
@@ -447,7 +460,7 @@ function Lukic_content_order_interface() {
 function Lukic_content_order_settings_page() {
 	// Check user permissions
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( __( 'You do not have sufficient permissions to access this page.', 'lukic-code-snippets' ) );
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'lukic-code-snippets' ) );
 	}
 
 	// Handle form submission
@@ -533,7 +546,7 @@ function Lukic_content_order_settings_page() {
 																name="<?php echo esc_attr( $key ); ?>" 
 																id="<?php echo esc_attr( $key ); ?>" 
 																value="1" 
-																<?php echo $checked; ?>
+																<?php echo esc_attr( $checked ); ?>
 															/>
 															<?php
 															/* translators: %s: Post type name (e.g., Posts, Pages) */
@@ -607,10 +620,12 @@ function Lukic_content_order_debug() {
 	// Only show for admins
 	if ( current_user_can( 'manage_options' ) ) {
 		$screen     = get_current_screen();
-		$page       = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page       = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
 		$post_types = Lukic_get_orderable_post_types();
 
-		echo "<!-- Lukic Content Order snippet is active. Current screen: {$screen->id}, {$screen->base}. Page: {$page}. Post types: " . implode( ', ', $post_types ) . ' -->';
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- This is a debug HTML comment
+		echo "<!-- Lukic Content Order snippet is active. Current screen: " . esc_html( $screen->id ) . ", " . esc_html( $screen->base ) . ". Page: " . esc_html( $page ) . ". Post types: " . esc_html( implode( ', ', $post_types ) ) . " -->";
 	}
 }
 add_action( 'admin_footer', 'Lukic_content_order_debug' );

@@ -208,7 +208,8 @@ class Lukic_Asset_Manager {
 	 * @param string $hook Current page hook
 	 */
 	public function enqueue_assets( $hook ) {
-		$current_page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
 
 		// Always enqueue core framework on plugin pages
 		if ( $this->is_plugin_page( $current_page ) ) {
@@ -218,8 +219,10 @@ class Lukic_Asset_Manager {
 
 		// Debug: Log which page and assets are being loaded
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			error_log( "Lukic Asset Manager - Page: $current_page, Hook: $hook" );
 			if ( $this->is_plugin_page( $current_page ) ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 				error_log( 'Lukic Asset Manager - Enqueuing core styles for plugin page' );
 			}
 		}

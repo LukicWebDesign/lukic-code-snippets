@@ -18,7 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function Lukic_hide_admin_notices() {
 	// Check if we should bypass the notice hiding
-	if ( isset( $_GET['show_admin_notices'] ) && $_GET['show_admin_notices'] === '1' ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$show_notices = isset( $_GET['show_admin_notices'] ) ? sanitize_text_field( wp_unslash( $_GET['show_admin_notices'] ) ) : '';
+	if ( $show_notices === '1' ) {
 		return;
 	}
 

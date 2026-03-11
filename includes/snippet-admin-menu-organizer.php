@@ -58,7 +58,8 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 		 */
 		public function enqueue_scripts( $hook ) {
 			// Only load on our specific page
-			if ( isset( $_GET['page'] ) && $_GET['page'] === 'lukic-admin-menu-organizer' ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'lukic-admin-menu-organizer' ) {
 				wp_enqueue_script( 'jquery-ui-sortable' );
 				
 				// We'll use inline script for simplicity as per plan, or we could create a file.
@@ -176,6 +177,7 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 			if ( ! empty( $css ) ) {
 				echo '<style type="text/css">';
 				echo 'body:not(.show-all-menus) .wp-menu-separator { display: inherit; }'; // Fix separator visibility
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS is built from sanitized menu IDs
 				echo $css;
 				echo 'body.show-all-menus li.menu-top { display: block !important; }';
 				echo '</style>';
@@ -274,7 +276,7 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 					$found = false;
 					foreach ( $menu as $m ) {
 						if ( isset( $m[2] ) && $m[2] === $slug ) {
-							$original_title = strip_tags( $m[0] ); // Strip notification bubbles
+							$original_title = wp_strip_all_tags( $m[0] ); // Strip notification bubbles
 							// Check if separator
 							if ( isset( $m[4] ) && strpos( $m[4], 'wp-menu-separator' ) !== false ) {
 								$is_separator = true;
@@ -286,6 +288,7 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 
 					// If it's a separator, give it a name
 					if ( $is_separator ) {
+						/* translators: %d: separator number */
 						$display_title = sprintf( __( 'Separator %d', 'lukic-code-snippets' ), $sep_count++ );
 					} else {
 						$display_title = $config['title'] ?: $original_title;
@@ -314,10 +317,11 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 					continue;
 				}
 
-				$title = strip_tags( $item[0] );
+				$title = wp_strip_all_tags( $item[0] );
 				$is_separator = ( isset( $item[4] ) && strpos( $item[4], 'wp-menu-separator' ) !== false );
 				
 				if ( $is_separator ) {
+					/* translators: %d: separator number */
 					$title = sprintf( __( 'Separator %d', 'lukic-code-snippets' ), $sep_count++ );
 				}
 
@@ -468,7 +472,7 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 						data: {
 							action: 'lukic_save_menu_order',
 							settings: items,
-							nonce: '<?php echo wp_create_nonce( 'lukic_menu_organizer_nonce' ); ?>'
+							nonce: '<?php echo esc_attr( wp_create_nonce( 'lukic_menu_organizer_nonce' ) ); ?>'
 						},
 						success: function(response) {
 							if (response.success) {
@@ -505,8 +509,9 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 				wp_send_json_error( 'Permission denied' );
 			}
 
-			$settings = isset( $_POST['settings'] ) ? $_POST['settings'] : array();
-			
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$settings = isset( $_POST['settings'] ) ? wp_unslash( (array) $_POST['settings'] ) : array();
+
 			// Sanitize
 			$clean_settings = array();
 			if ( is_array( $settings ) ) {

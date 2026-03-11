@@ -153,7 +153,8 @@ class Lukic_Maintenance_Mode {
 	 */
 	public function enqueue_admin_scripts( $hook ) {
 		// Only load on our settings page
-		if ( ! isset( $_GET['page'] ) || 'lukic-maintenance-mode' !== $_GET['page'] ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['page'] ) || 'lukic-maintenance-mode' !== sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
 			return;
 		}
 
@@ -384,7 +385,7 @@ class Lukic_Maintenance_Mode {
 									<?php esc_html_e( 'Excluded IP Addresses', 'lukic-code-snippets' ); ?>
 								</label>
 								<textarea id="Lukic_maintenance_exclude_ips" name="Lukic_maintenance_mode_options[exclude_ips]" rows="3" class="large-text"><?php echo esc_textarea( $options['exclude_ips'] ); ?></textarea>
-								<p class="description"><?php esc_html_e( 'Enter IP addresses to exclude from maintenance mode, one per line. Your current IP is: ', 'lukic-code-snippets' ); ?><code><?php echo esc_html( $_SERVER['REMOTE_ADDR'] ); ?></code></p>
+								<p class="description"><?php esc_html_e( 'Enter IP addresses to exclude from maintenance mode, one per line. Your current IP is: ', 'lukic-code-snippets' ); ?><code><?php echo esc_html( isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '' ); ?></code></p>
 							</div>
 							
 							<div class="Lukic-field-row">
@@ -443,7 +444,7 @@ class Lukic_Maintenance_Mode {
 		);
 
 		// Get user IP and normalize local loopback addresses for local testing
-		$user_ip = $_SERVER['REMOTE_ADDR'];
+		$user_ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		if ( $user_ip === '::1' ) {
 			$user_ip = '127.0.0.1';
 		}
@@ -461,7 +462,7 @@ class Lukic_Maintenance_Mode {
 		}
 
 		// Check for excluded paths
-		$current_path   = $_SERVER['REQUEST_URI'];
+		$current_path   = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 		$excluded_paths = array_filter( array_map( 'trim', preg_split( '/[\n,]+/', $options['exclude_paths'] ) ) );
 
 		foreach ( $excluded_paths as $path ) {

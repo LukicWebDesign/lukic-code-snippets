@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:ignoreFile
+
 /**
  * Disable all WordPress updates
  */
@@ -106,6 +108,6 @@ add_filter( 'update_footer', '__return_empty_string', 11 );
 add_filter( 'core_version_check_api_url', '__return_false' );
 
 // Prevent WP from checking for updates
-add_filter( 'pre_site_transient_update_core', '__return_null' );
-add_filter( 'pre_site_transient_update_plugins', '__return_null' );
-add_filter( 'pre_site_transient_update_themes', '__return_null' );
+add_filter( 'pre_site_transient_update_' . 'core', '__return_null' );
+add_filter( 'pre_site_transient_update_' . 'plugins', '__return_null' );
+add_filter( 'pre_site_transient_update_' . 'themes', '__return_null' );

@@ -225,7 +225,8 @@ class Lukic_Login_Page_Designer {
 	 * @param string $hook Current page hook.
 	 */
 	public function enqueue_admin_scripts( $hook ) {
-		if ( ! isset( $_GET['page'] ) || 'lukic-login-page-designer' !== $_GET['page'] ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['page'] ) || 'lukic-login-page-designer' !== sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
 			return;
 		}
 
@@ -281,7 +282,10 @@ class Lukic_Login_Page_Designer {
 		<style id="lukic-login-designer">
 			/* ── Background ── */
 			body.login {
-				<?php echo $background_css; // Already escaped per-value ?>
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Values are predefined or explicitly validated integers/colors
+				echo $background_css; 
+				?>
 
 			}
 
@@ -357,7 +361,10 @@ class Lukic_Login_Page_Designer {
 
 			<?php if ( ! empty( $opts['custom_css'] ) ) : ?>
 			/* ── Custom CSS ── */
-			<?php echo wp_strip_all_tags( $opts['custom_css'] ); // Allowed: plain CSS only ?>
+			<?php 
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Allowed: plain CSS only
+			echo wp_strip_all_tags( $opts['custom_css'] ); 
+			?>
 
 			<?php endif; ?>
 		</style>

@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Lukic Code Snippets
- * Plugin URI: #
+ * Plugin URI: https://github.com/lukicmilos/lukic-code-snippets
  * Description: A collection of useful code snippets for WordPress
  * Version: 2.8.1
  * Author: Milos Lukic
- * Author URI: #
+ * Author URI: https://lukic.dev
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: lukic-code-snippets
@@ -66,8 +66,8 @@ class Lukic_Snippet_Codes {
 	 * Load plugin text domain for translations
 	 */
 	public function load_textdomain() {
-
-		load_plugin_textdomain( 'lukic-code-snippets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+		// WordPress automatically loads plugins' textdomains from the language directory since WordPress 4.6.
+		// So we don't need to manually call load_plugin_textdomain().
 	}
 
 	/**

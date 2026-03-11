@@ -43,7 +43,8 @@ class Lukic_Helpers {
 			return false;
 		}
 
-		$current_page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
 		return strpos( $current_page, 'lukic-' ) === 0;
 	}
 
@@ -57,7 +58,8 @@ class Lukic_Helpers {
 			return false;
 		}
 
-		return isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : false;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : false;
 	}
 
 	/**
@@ -152,9 +154,11 @@ class Lukic_Helpers {
 		}
 
 		if ( is_array( $message ) || is_object( $message ) ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 			$message = print_r( $message, true );
 		}
 
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		error_log( sprintf( '[%s] %s', $context, $message ) );
 	}
 

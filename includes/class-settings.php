@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Settings class for Lukic Snippet Codes plugin
  */
@@ -87,6 +88,7 @@ class Lukic_Snippet_Codes_Settings {
 			}
 		</style>
 		<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 	}
 
 	/**
@@ -169,7 +171,8 @@ class Lukic_Snippet_Codes_Settings {
 		$snippets_by_category = Lukic_Snippet_Registry::get_snippets_by_category();
 
 		// Check if settings were saved
-		$settings_saved = isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] === 'true';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$settings_saved = isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ) ) === 'true';
 
 		// Get existing options or initialize empty array
 		$options = get_option( 'Lukic_snippet_codes_options', array() );
@@ -229,6 +232,7 @@ class Lukic_Snippet_Codes_Settings {
 		?>
 		<div class="wrap Lukic-container Lukic-wrap">
 			<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 			// Display header using the loaded component
 			Lukic_display_header( __( 'List of all Snippets', 'lukic-code-snippets' ), $stats );
 			?>
@@ -242,6 +246,7 @@ class Lukic_Snippet_Codes_Settings {
 			<div class="Lukic-settings-container">
 						<form method="post" action="options.php">
 							<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 							settings_fields( 'Lukic_code_snippets' );
 							?>
 							
@@ -279,6 +284,7 @@ class Lukic_Snippet_Codes_Settings {
 										
 										<div class="Lukic-snippets">
 											<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 											if ( isset( $snippets_by_category[ $category_id ] ) ) {
 												foreach ( $snippets_by_category[ $category_id ] as $snippet_id => $snippet_data ) :
 													$is_checked = isset( $options[ $snippet_id ] ) && $options[ $snippet_id ] == 1;
@@ -303,6 +309,7 @@ class Lukic_Snippet_Codes_Settings {
 														</div>
 													</div>
 													<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 												endforeach;
 											}
 											?>
@@ -582,6 +589,7 @@ class Lukic_Snippet_Codes_Settings {
 		</style>
 		
 		<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 	}
 
 	/**
@@ -597,10 +605,12 @@ class Lukic_Snippet_Codes_Settings {
 		$cleanup_data = get_option( 'Lukic_snippet_codes_cleanup', 'preserve' );
 
 		// Check if settings were saved
-		$settings_saved = isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] === 'true';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$settings_saved = isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ) ) === 'true';
 		?>
 				<div class="wrap Lukic-wrap">
 			<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 			// Display header using the loaded component
 			Lukic_display_header( __( 'Plugin Settings', 'lukic-code-snippets' ), array() );
 			?>
@@ -614,6 +624,7 @@ class Lukic_Snippet_Codes_Settings {
 			<div class="Lukic-settings-container">
 				<form method="post" action="options.php">
 					<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 					settings_fields( 'Lukic_code_snippets_settings' );
 					?>
 					
@@ -644,6 +655,7 @@ class Lukic_Snippet_Codes_Settings {
 			</div>
 		</div>
 		<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 	}
 
 	/**
@@ -714,6 +726,7 @@ class Lukic_Snippet_Codes_Settings {
 			wp_send_json_error( __( 'Missing options payload.', 'lukic-code-snippets' ), 400 );
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$options_json = wp_unslash( $_POST['options'] );
 		$options      = json_decode( $options_json, true );
 		if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $options ) ) {

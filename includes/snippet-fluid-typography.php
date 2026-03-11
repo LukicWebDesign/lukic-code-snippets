@@ -45,7 +45,9 @@ class Lukic_Fluid_Typography {
 	 */
 	public function enqueue_scripts( $hook ) {
 		// Only load on our specific page
-		if ( isset( $_GET['page'] ) && $_GET['page'] === 'lukic-fluid-typography' ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		if ( $page === 'lukic-fluid-typography' ) {
 			wp_enqueue_script(
 				'Lukic-fluid-typography',
 				plugin_dir_url( __FILE__ ) . '../assets/js/fluid-typography.js',

@@ -29,7 +29,8 @@ add_action( 'admin_menu', 'Lukic_image_attributes_editor_menu' );
  */
 function Lukic_image_attributes_editor_localize( $hook ) {
 
-	$current_page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
 	if ( $current_page === 'lukic-image-attributes-editor' ) {
 		wp_localize_script(
 			'Lukic-image-attributes',
@@ -194,13 +195,17 @@ function Lukic_image_attributes_editor_page() {
  */
 function Lukic_update_image_attribute() {
 	// Verify nonce
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_image_editor_nonce' ) ) {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_image_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Security check failed' ) );
 	}
 
-	$field = isset( $_POST['field'] ) ? sanitize_text_field( $_POST['field'] ) : '';
-	$id    = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
-	$value = isset( $_POST['value'] ) ? sanitize_text_field( $_POST['value'] ) : '';
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$field = isset( $_POST['field'] ) ? sanitize_text_field( wp_unslash( $_POST['field'] ) ) : '';
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$id    = isset( $_POST['id'] ) ? absint( wp_unslash( $_POST['id'] ) ) : 0;
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$value = isset( $_POST['value'] ) ? sanitize_text_field( wp_unslash( $_POST['value'] ) ) : '';
 
 	if ( ! $id || ! $field ) {
 		wp_send_json_error( array( 'message' => 'Missing required parameters' ) );
@@ -258,7 +263,8 @@ add_action( 'wp_ajax_Lukic_update_image_attribute', 'Lukic_update_image_attribut
  */
 function Lukic_generate_csv_file() {
 	// Verify nonce
-	if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'], 'Lukic_image_editor_nonce' ) ) {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+	if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_GET['nonce'] ), 'Lukic_image_editor_nonce' ) ) {
 		wp_die( 'Security check failed' );
 	}
 
@@ -304,11 +310,13 @@ add_action( 'wp_ajax_Lukic_generate_csv_file', 'Lukic_generate_csv_file' );
  */
 function Lukic_delete_image() {
 	// Verify nonce
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_image_editor_nonce' ) ) {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_image_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Security check failed' ) );
 	}
 
-	$id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$id = isset( $_POST['id'] ) ? absint( wp_unslash( $_POST['id'] ) ) : 0;
 
 	if ( ! $id ) {
 		wp_send_json_error( array( 'message' => 'Missing image ID' ) );
@@ -330,15 +338,20 @@ add_action( 'wp_ajax_Lukic_delete_image', 'Lukic_delete_image' );
  */
 function Lukic_bulk_update_images() {
 	// Verify nonce
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_image_editor_nonce' ) ) {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_image_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Security check failed' ) );
 	}
 
 	// Get parameters
-	$image_ids = isset( $_POST['image_ids'] ) ? array_map( 'absint', $_POST['image_ids'] ) : array();
-	$title     = isset( $_POST['title'] ) ? sanitize_text_field( $_POST['title'] ) : '';
-	$alt       = isset( $_POST['alt'] ) ? sanitize_text_field( $_POST['alt'] ) : '';
-	$caption   = isset( $_POST['caption'] ) ? sanitize_text_field( $_POST['caption'] ) : '';
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$image_ids = isset( $_POST['image_ids'] ) ? array_map( 'absint', wp_unslash( (array) $_POST['image_ids'] ) ) : array();
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$title     = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$alt       = isset( $_POST['alt'] ) ? sanitize_text_field( wp_unslash( $_POST['alt'] ) ) : '';
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$caption   = isset( $_POST['caption'] ) ? sanitize_text_field( wp_unslash( $_POST['caption'] ) ) : '';
 
 	if ( empty( $image_ids ) ) {
 		wp_send_json_error( array( 'message' => 'No images selected' ) );
@@ -394,9 +407,9 @@ function Lukic_bulk_update_images() {
 		}
 	}
 
-	/* translators: %d: Number of images that were updated */
 	wp_send_json_success(
 		array(
+			/* translators: %d: Number of images that were updated */
 			'message' => sprintf( __( '%d images updated successfully', 'lukic-code-snippets' ), count( $updated ) ),
 			'updated' => $updated,
 			'errors'  => $errors,

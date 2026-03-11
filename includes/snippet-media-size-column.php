@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Media Size Column
  * Description: Adds a size column to the media library in list view that displays file size and allows sorting
@@ -64,7 +65,7 @@ function Lukic_media_size_column_content( $column_name, $post_id ) {
 	update_post_meta( $post_id, 'Lukic_file_size', $file_size );
 
 	// Format size for display
-	echo Lukic_format_file_size( $file_size );
+	echo esc_html( Lukic_format_file_size( $file_size ) );
 }
 add_action( 'manage_media_custom_column', 'Lukic_media_size_column_content', 10, 2 );
 
@@ -99,6 +100,7 @@ function Lukic_media_size_orderby( $vars ) {
 
 	// Check if we're on the media library screen and ordering by file size
 	if ( $vars['orderby'] === 'Lukic_file_size' ) {
+		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		$vars = array_merge(
 			$vars,
 			array(
@@ -143,5 +145,6 @@ function Lukic_media_size_column_style() {
 		}
 	</style>
 	<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 }
 add_action( 'admin_head', 'Lukic_media_size_column_style' );

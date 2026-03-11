@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Admin Notifications Manager
  * Description: Manage, organize, and control WordPress admin notifications
@@ -87,8 +88,8 @@ if ( ! function_exists( 'Lukic_admin_notifications_manager' ) ) {
 		// Create a container for the notices
 		echo '<div id="Lukic-admin-notifications-container">';
 		echo '<div class="Lukic-notifications-header">';
-		echo '<h3>Notifications</h3>';
-		echo '<span class="Lukic-notifications-count">' . Lukic_count_notifications( $notices ) . '</span>';
+		echo '<h3>' . esc_html__( 'Notifications', 'lukic-code-snippets' ) . '</h3>';
+		echo '<span class="Lukic-notifications-count">' . esc_html( Lukic_count_notifications( $notices ) ) . '</span>';
 		echo '<span class="Lukic-dismiss-all">Dismiss All</span>';
 		echo '</div>';
 		echo '<div class="Lukic-notifications-content">';
@@ -96,7 +97,8 @@ if ( ! function_exists( 'Lukic_admin_notifications_manager' ) ) {
 		// Add dismiss buttons to all notices
 		$notices = Lukic_add_dismiss_buttons( $notices );
 
-		// Group notifications by type
+		// Group notifications by type (the output is already properly formed HTML from inner notices)
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo Lukic_organize_notifications( $notices );
 
 		echo '</div>'; // .Lukic-notifications-content
@@ -258,7 +260,8 @@ if ( ! function_exists( 'Lukic_admin_notifications_manager' ) ) {
 	 */
 	function Lukic_dismiss_admin_notice_callback() {
 		// Check nonce
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_notifications_nonce' ) ) {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_notifications_nonce' ) ) {
 			wp_send_json_error( 'Invalid nonce' );
 		}
 

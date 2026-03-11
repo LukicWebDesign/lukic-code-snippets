@@ -34,7 +34,7 @@ add_action( 'admin_menu', 'Lukic_acf_columns_menu' );
  * Register settings
  */
 function Lukic_acf_columns_register_settings() {
-	register_setting( 'Lukic_acf_columns_group', Lukic_ACF_COLUMNS_OPTION );
+	register_setting( 'Lukic_acf_columns_group', Lukic_ACF_COLUMNS_OPTION, 'sanitize_text_field' );
 }
 add_action( 'admin_init', 'Lukic_acf_columns_register_settings' );
 
@@ -139,9 +139,10 @@ function Lukic_acf_columns_page() {
 
 	// Save settings if form is submitted
 	if ( isset( $_POST['Lukic_acf_columns_save'] ) && check_admin_referer( 'Lukic_acf_columns_nonce' ) ) {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$new_settings = array(
-			'fields'     => isset( $_POST['acf_fields'] ) ? array_map( 'sanitize_text_field', $_POST['acf_fields'] ) : array(),
-			'post_types' => isset( $_POST['post_types'] ) ? array_map( 'sanitize_text_field', $_POST['post_types'] ) : array(),
+			'fields'     => isset( $_POST['acf_fields'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_POST['acf_fields'] ) ) : array(),
+			'post_types' => isset( $_POST['post_types'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_POST['post_types'] ) ) : array(),
 		);
 
 		update_option( Lukic_ACF_COLUMNS_OPTION, $new_settings );

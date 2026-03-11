@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Admin Bar Site Visibility Indicator
  * Description: Shows whether search engines are discouraged from indexing the site
@@ -72,6 +73,7 @@ if ( ! function_exists( 'Lukic_site_visibility_indicator_css' ) ) {
 			}
 		</style>
 		<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 	}
 	add_action( 'admin_head', 'Lukic_site_visibility_indicator_css' );
 	add_action( 'wp_head', 'Lukic_site_visibility_indicator_css' );

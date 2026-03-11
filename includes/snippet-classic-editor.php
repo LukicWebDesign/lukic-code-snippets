@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Enable Classic Editor
  * Description: Disables Gutenberg block editor and enables the classic editor for all post types

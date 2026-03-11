@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Image Sizes Panel
  * Description: Displays available image sizes in the sidebar when viewing a single image in the WordPress admin dashboard
@@ -44,7 +45,7 @@ function Lukic_add_image_sizes_metabox() {
 function Lukic_display_image_sizes_metabox( $post ) {
 	// Only run for image attachments
 	if ( ! wp_attachment_is_image( $post->ID ) ) {
-		echo '<p>' . __( 'This is not an image attachment.', 'lukic-code-snippets' ) . '</p>';
+		echo '<p>' . esc_html__( 'This is not an image attachment.', 'lukic-code-snippets' ) . '</p>';
 		return;
 	}
 
@@ -139,4 +140,5 @@ function Lukic_image_sizes_panel_styles() {
 		}
 	</style>
 	<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 }

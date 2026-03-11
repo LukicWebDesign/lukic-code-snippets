@@ -29,7 +29,8 @@ add_action( 'admin_menu', 'Lukic_meta_tags_editor_menu' );
  */
 function Lukic_meta_tags_editor_localize( $hook ) {
 
-	$current_page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
 	if ( $current_page === 'lukic-meta-tags-editor' ) {
 		wp_localize_script(
 			'Lukic-meta-tags',
@@ -102,9 +103,9 @@ function Lukic_get_meta_description( $post_id ) {
 	if ( empty( $meta_description ) ) {
 		$post = get_post( $post_id );
 		if ( $post ) {
-			$excerpt = strip_tags( $post->post_excerpt );
+			$excerpt = wp_strip_all_tags( $post->post_excerpt );
 			if ( empty( $excerpt ) ) {
-				$excerpt = strip_tags( $post->post_content );
+				$excerpt = wp_strip_all_tags( $post->post_content );
 			}
 			$meta_description = wp_trim_words( $excerpt, 30, '...' );
 		}
@@ -338,7 +339,8 @@ function Lukic_meta_tags_editor_page() {
  */
 function Lukic_update_meta_tag() {
 	// Check nonce for security
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_meta_tags_editor_nonce' ) ) {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_meta_tags_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 	}
 
@@ -347,10 +349,14 @@ function Lukic_update_meta_tag() {
 		wp_send_json_error( array( 'message' => __( 'Missing required data', 'lukic-code-snippets' ) ) );
 	}
 
-	$id    = sanitize_text_field( $_POST['id'] );
-	$field = sanitize_text_field( $_POST['field'] );
-	$value = sanitize_textarea_field( $_POST['value'] );
-	$type  = isset( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : 'post';
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$id    = sanitize_text_field( wp_unslash( $_POST['id'] ) );
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$field = sanitize_text_field( wp_unslash( $_POST['field'] ) );
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$value = sanitize_textarea_field( wp_unslash( $_POST['value'] ) );
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$type  = isset( $_POST['type'] ) ? sanitize_text_field( wp_unslash( $_POST['type'] ) ) : 'post';
 
 	$success = false;
 	$message = '';
@@ -436,7 +442,8 @@ add_action( 'wp_ajax_Lukic_update_meta_tag', 'Lukic_update_meta_tag' );
  */
 function Lukic_export_meta_tags_csv() {
 	// Check nonce for security
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_meta_tags_editor_nonce' ) ) {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_meta_tags_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 	}
 
@@ -472,7 +479,7 @@ function Lukic_export_meta_tags_csv() {
 	// Send CSV content
 	wp_send_json_success(
 		array(
-			'filename' => 'meta-tags-export-' . date( 'Y-m-d' ) . '.csv',
+			'filename' => 'meta-tags-export-' . gmdate( 'Y-m-d' ) . '.csv',
 			'content'  => $csv_content,
 		)
 	);
@@ -484,16 +491,19 @@ add_action( 'wp_ajax_Lukic_export_meta_tags_csv', 'Lukic_export_meta_tags_csv' )
  */
 function Lukic_import_meta_tags_csv() {
 	// Check nonce for security
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_meta_tags_editor_nonce' ) ) {
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_meta_tags_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 	}
 
 	// Check if file was uploaded
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	if ( ! isset( $_FILES['file'] ) || $_FILES['file']['error'] !== UPLOAD_ERR_OK ) {
 		wp_send_json_error( array( 'message' => __( 'No file uploaded or upload error', 'lukic-code-snippets' ) ) );
 	}
 
 	// Get file content
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	$file_content = file_get_contents( $_FILES['file']['tmp_name'] );
 	if ( ! $file_content ) {
 		wp_send_json_error( array( 'message' => __( 'Could not read file content', 'lukic-code-snippets' ) ) );

@@ -49,7 +49,8 @@ class Lukic_DB_Tables_Manager {
 	public function localize_admin_scripts( $hook ) {
 
 		// Check if we are on the correct page
-		if ( ! isset( $_GET['page'] ) || 'lukic-db-tables-manager' !== $_GET['page'] ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['page'] ) || 'lukic-db-tables-manager' !== sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
 			return;
 		}
 
@@ -557,6 +558,7 @@ class Lukic_DB_Tables_Manager {
 		global $wpdb;
 
 		// Get all tables
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$tables = $wpdb->get_results( 'SHOW TABLE STATUS', ARRAY_A );
 
 		if ( empty( $tables ) ) {
@@ -652,7 +654,8 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
-		$table = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$table = isset( $_POST['table'] ) ? sanitize_text_field( wp_unslash( $_POST['table'] ) ) : '';
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
@@ -660,7 +663,7 @@ class Lukic_DB_Tables_Manager {
 		}
 
 		// Get table structure — $table is validated by validate_table_name().
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$columns = $wpdb->get_results( "DESCRIBE `{$table}`" );
 
 		if ( empty( $columns ) ) {
@@ -714,9 +717,12 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
-		$table    = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
-		$page     = isset( $_POST['page'] ) ? intval( $_POST['page'] ) : 1;
-		$per_page = isset( $_POST['per_page'] ) ? intval( $_POST['per_page'] ) : 20;
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$table    = isset( $_POST['table'] ) ? sanitize_text_field( wp_unslash( $_POST['table'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$page     = isset( $_POST['page'] ) ? intval( wp_unslash( $_POST['page'] ) ) : 1;
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$per_page = isset( $_POST['per_page'] ) ? intval( wp_unslash( $_POST['per_page'] ) ) : 20;
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
@@ -724,14 +730,14 @@ class Lukic_DB_Tables_Manager {
 		}
 
 		// Get total rows count — $table is validated by validate_table_name().
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$total_rows = $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
 
 		// Calculate offset
 		$offset = ( $page - 1 ) * $per_page;
 
 		// Get data with pagination — use prepare() for LIMIT params.
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `{$table}` LIMIT %d, %d", $offset, $per_page ), ARRAY_A );
 
 		if ( $rows === null ) {
@@ -761,7 +767,7 @@ class Lukic_DB_Tables_Manager {
 		$total_pages = ceil( $total_rows / $per_page );
 
 		// Get table structure to identify primary key — $table is validated.
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$columns     = $wpdb->get_results( "DESCRIBE `{$table}`" );
 		$primary_key = null;
 		foreach ( $columns as $column ) {
@@ -840,7 +846,8 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
-		$table = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$table = isset( $_POST['table'] ) ? sanitize_text_field( wp_unslash( $_POST['table'] ) ) : '';
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
@@ -848,7 +855,7 @@ class Lukic_DB_Tables_Manager {
 		}
 
 		// Get all data from the table — $table is validated by validate_table_name().
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$rows = $wpdb->get_results( "SELECT * FROM `{$table}`", ARRAY_A );
 
 		if ( empty( $rows ) ) {
@@ -875,7 +882,7 @@ class Lukic_DB_Tables_Manager {
 
 		wp_send_json_success(
 			array(
-				'filename' => sanitize_file_name( $table ) . '-export-' . date( 'Y-m-d' ) . '.csv',
+				'filename' => sanitize_file_name( $table ) . '-export-' . gmdate( 'Y-m-d' ) . '.csv',
 				'content'  => $csv_content,
 			)
 		);
@@ -892,9 +899,12 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
-		$table         = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
-		$primary_key   = isset( $_POST['primary_key'] ) ? sanitize_text_field( $_POST['primary_key'] ) : '';
-		$primary_value = isset( $_POST['primary_value'] ) ? sanitize_text_field( $_POST['primary_value'] ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$table         = isset( $_POST['table'] ) ? sanitize_text_field( wp_unslash( $_POST['table'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$primary_key   = isset( $_POST['primary_key'] ) ? sanitize_text_field( wp_unslash( $_POST['primary_key'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$primary_value = isset( $_POST['primary_value'] ) ? sanitize_text_field( wp_unslash( $_POST['primary_value'] ) ) : '';
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
@@ -911,7 +921,7 @@ class Lukic_DB_Tables_Manager {
 		}
 
 		// Get table structure — $table is validated by validate_table_name().
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$columns      = $wpdb->get_results( "DESCRIBE `{$table}`" );
 		$column_names = wp_list_pluck( $columns, 'Field' );
 		if ( ! in_array( $primary_key, $column_names, true ) ) {
@@ -919,6 +929,7 @@ class Lukic_DB_Tables_Manager {
 		}
 
 		// Get the specific row
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM `{$table}` WHERE `{$primary_key}` = %s",
@@ -951,10 +962,14 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
-		$table         = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
-		$primary_key   = isset( $_POST['primary_key'] ) ? sanitize_text_field( $_POST['primary_key'] ) : '';
-		$primary_value = isset( $_POST['primary_value'] ) ? sanitize_text_field( $_POST['primary_value'] ) : '';
-		$row_data      = isset( $_POST['row_data'] ) ? $_POST['row_data'] : array();
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$table         = isset( $_POST['table'] ) ? sanitize_text_field( wp_unslash( $_POST['table'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$primary_key   = isset( $_POST['primary_key'] ) ? sanitize_text_field( wp_unslash( $_POST['primary_key'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$primary_value = isset( $_POST['primary_value'] ) ? sanitize_text_field( wp_unslash( $_POST['primary_value'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$row_data      = isset( $_POST['row_data'] ) ? wp_unslash( (array) $_POST['row_data'] ) : array();
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
@@ -966,7 +981,7 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'Missing required parameters.', 'lukic-code-snippets' ) );
 		}
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$columns      = $wpdb->get_results( "DESCRIBE `{$table}`" );
 		$column_names = wp_list_pluck( $columns, 'Field' );
 		// Sanitize the row data
@@ -996,6 +1011,7 @@ class Lukic_DB_Tables_Manager {
 		}
 
 		// Update the row
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$result = $wpdb->update(
 			$table,
 			$update_data,
@@ -1023,10 +1039,14 @@ class Lukic_DB_Tables_Manager {
 			wp_send_json_error( __( 'You do not have sufficient permissions.', 'lukic-code-snippets' ) );
 		}
 
-		$table       = isset( $_POST['table'] ) ? sanitize_text_field( $_POST['table'] ) : '';
-		$search_term = isset( $_POST['search_term'] ) ? sanitize_text_field( $_POST['search_term'] ) : '';
-		$page        = isset( $_POST['page'] ) ? intval( $_POST['page'] ) : 1;
-		$per_page    = isset( $_POST['per_page'] ) ? intval( $_POST['per_page'] ) : 20;
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$table       = isset( $_POST['table'] ) ? sanitize_text_field( wp_unslash( $_POST['table'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$search_term = isset( $_POST['search_term'] ) ? sanitize_text_field( wp_unslash( $_POST['search_term'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$page        = isset( $_POST['page'] ) ? intval( wp_unslash( $_POST['page'] ) ) : 1;
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$per_page    = isset( $_POST['per_page'] ) ? intval( wp_unslash( $_POST['per_page'] ) ) : 20;
 		global $wpdb;
 		$table = $this->validate_table_name( $table );
 		if ( ! $table ) {
@@ -1034,7 +1054,7 @@ class Lukic_DB_Tables_Manager {
 		}
 
 		// Get table structure to build search query — $table is validated.
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$columns = $wpdb->get_results( "DESCRIBE `{$table}`" );
 
 		if ( empty( $columns ) ) {
@@ -1063,8 +1083,10 @@ class Lukic_DB_Tables_Manager {
 		// Get total rows count for search
 		$count_query = "SELECT COUNT(*) FROM `{$table}` {$where_clause}";
 		if ( ! empty( $search_values ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$total_rows = $wpdb->get_var( $wpdb->prepare( $count_query, $search_values ) );
 		} else {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$total_rows = $wpdb->get_var( $count_query );
 		}
 
@@ -1072,13 +1094,14 @@ class Lukic_DB_Tables_Manager {
 		$offset = ( $page - 1 ) * $per_page;
 
 		// Get data with search and pagination — use prepare() for LIMIT params.
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$data_query = "SELECT * FROM `{$table}` {$where_clause} LIMIT %d, %d";
 		if ( ! empty( $search_values ) ) {
 			$search_values[] = $offset;
 			$search_values[] = $per_page;
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$rows = $wpdb->get_results( $wpdb->prepare( $data_query, $search_values ), ARRAY_A );
 		} else {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$rows = $wpdb->get_results( $wpdb->prepare( $data_query, $offset, $per_page ), ARRAY_A );
 		}
 
@@ -1094,7 +1117,7 @@ class Lukic_DB_Tables_Manager {
 				<?php
 				if ( ! empty( $search_term ) ) {
 					/* translators: %s: The search term entered by the user */
-					printf( __( 'No results found for "%s".', 'lukic-code-snippets' ), esc_html( $search_term ) );
+					echo esc_html( sprintf( __( 'No results found for "%s".', 'lukic-code-snippets' ), $search_term ) );
 				} else {
 					esc_html_e( 'This table does not contain any data.', 'lukic-code-snippets' );
 				}
@@ -1211,6 +1234,7 @@ class Lukic_DB_Tables_Manager {
 		}
 
 		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
 		return $exists ? $table : false;
 	}

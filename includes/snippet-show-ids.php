@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Show IDs in Admin Tables
  * Description: Adds an ID column to admin tables for posts, pages, custom post types, and taxonomies

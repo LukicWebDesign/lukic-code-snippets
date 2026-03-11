@@ -72,7 +72,8 @@ add_action( 'restrict_manage_posts', 'Lukic_add_taxonomy_filters' );
  * @param int    $level     Current hierarchy level.
  */
 function Lukic_display_taxonomy_terms( $terms, $taxonomy, $parent = 0, $level = 0 ) {
-	$selected = isset( $_GET[ $taxonomy->name ] ) ? sanitize_text_field( $_GET[ $taxonomy->name ] ) : '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$selected = isset( $_GET[ $taxonomy->name ] ) ? sanitize_text_field( wp_unslash( $_GET[ $taxonomy->name ] ) ) : '';
 
 	foreach ( $terms as $term ) {
 		if ( $term->parent == $parent ) {

@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Search Posts by Slug
  * Description: Enhances WordPress admin search to include post slugs in search results for both regular posts and custom post types, with multilingual support
@@ -101,6 +102,7 @@ if ( ! function_exists( 'Lukic_search_by_slug_init' ) ) {
 				$taxonomy = 'language';
 			} elseif ( function_exists( 'icl_object_id' ) ) {
 				// WPML typically uses 'icl_translations' table, but we'll just check if posts have language term
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 				$taxonomy = apply_filters( 'wpml_current_language', 'language' );
 			}
 

@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Wider Admin Menu
  * Description: Makes the WordPress admin menu wider for better readability
@@ -82,6 +83,7 @@ if ( ! function_exists( 'Lukic_wider_admin_menu' ) ) {
 			}
 		</style>
 		<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 	}
 	// Use a high priority (999) to ensure this runs after WordPress core styles
 	add_action( 'admin_head', 'Lukic_wider_admin_menu', 999 );

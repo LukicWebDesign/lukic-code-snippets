@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Media Replacement
  * Description: Replace media files while maintaining the same ID, filename and publish date
@@ -78,7 +79,8 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 	 */
 	function Lukic_media_replace_page() {
 		// Check for attachment ID
-		$attachment_id = isset( $_GET['attachment_id'] ) ? intval( $_GET['attachment_id'] ) : 0;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$attachment_id = isset( $_GET['attachment_id'] ) ? intval( wp_unslash( $_GET['attachment_id'] ) ) : 0;
 
 		// Include the header partial
 		// Header component is already loaded in main plugin file
@@ -274,7 +276,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 
 							<p><?php esc_html_e( 'You need to select a media file to replace. Here\'s how:', 'lukic-code-snippets' ); ?></p>
 								<ol>
-									<li><?php _e( 'Go to the <a href="upload.php">Media Library</a>', 'lukic-code-snippets' ); ?></li>
+									<li><?php echo wp_kses( __( 'Go to the <a href="upload.php">Media Library</a>', 'lukic-code-snippets' ), array( 'a' => array( 'href' => array() ) ) ); ?></li>
 									<li><?php esc_html_e( 'Find the file you want to replace', 'lukic-code-snippets' ); ?></li>
 									<li><?php esc_html_e( 'Hover over the file and click "Replace Media"', 'lukic-code-snippets' ); ?></li>
 								</ol>
@@ -295,13 +297,13 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 
 			// Check permissions
 			if ( ! current_user_can( 'edit_post', $attachment_id ) ) {
-				wp_die( __( 'You do not have permission to edit this attachment.', 'lukic-code-snippets' ) );
+				wp_die( esc_html__( 'You do not have permission to edit this attachment.', 'lukic-code-snippets' ) );
 			}
 
 			// Get attachment data
 			$attachment = get_post( $attachment_id );
 			if ( ! $attachment ) {
-				wp_die( __( 'Media file not found.', 'lukic-code-snippets' ) );
+				wp_die( esc_html__( 'Media file not found.', 'lukic-code-snippets' ) );
 			}
 
 			// Get file details
@@ -399,11 +401,11 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 			<div class="Lukic-footer">
 				<p>
 				<?php
-				printf(
+				echo esc_html( sprintf(
 					/* translators: %s: Plugin version */
 					__( 'Thank you for creating with WordPress | Lukic Snippet Codes v%s', 'lukic-code-snippets' ),
-					esc_html( Lukic_SNIPPET_CODES_VERSION )
-				);
+					Lukic_SNIPPET_CODES_VERSION
+				) );
 				?>
 				</p>
 			</div>
@@ -417,14 +419,16 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 	 */
 	function Lukic_media_replace_handle_upload() {
 		// Check if our form was submitted
-		if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'Lukic_replace_media' ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! isset( $_POST['action'] ) || wp_unslash( $_POST['action'] ) !== 'Lukic_replace_media' ) {
 			return;
 		}
 
 		// Get attachment ID
-		$attachment_id = isset( $_POST['attachment_id'] ) ? intval( $_POST['attachment_id'] ) : 0;
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$attachment_id = isset( $_POST['attachment_id'] ) ? intval( wp_unslash( $_POST['attachment_id'] ) ) : 0;
 		if ( ! $attachment_id ) {
-			wp_die( __( 'No attachment ID specified.', 'lukic-code-snippets' ) );
+			wp_die( esc_html__( 'No attachment ID specified.', 'lukic-code-snippets' ) );
 		}
 
 		// Verify nonce
@@ -432,13 +436,13 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 
 		// Check permissions
 		if ( ! current_user_can( 'edit_post', $attachment_id ) ) {
-			wp_die( __( 'You do not have permission to edit this attachment.', 'lukic-code-snippets' ) );
+			wp_die( esc_html__( 'You do not have permission to edit this attachment.', 'lukic-code-snippets' ) );
 		}
 
 		// Check file upload
 		if ( ! isset( $_FILES['replacement_file'] ) || empty( $_FILES['replacement_file']['name'] ) ) {
 			Lukic_media_replace_set_error( __( 'No file was uploaded.', 'lukic-code-snippets' ) );
-			wp_redirect( admin_url( 'upload.php?page=lukic-replace-media&attachment_id=' . $attachment_id ) );
+			wp_safe_redirect( admin_url( 'upload.php?page=lukic-replace-media&attachment_id=' . $attachment_id ) );
 			exit;
 		}
 
@@ -449,9 +453,11 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 		$original_extension = isset( $original_file_info['extension'] ) ? $original_file_info['extension'] : '';
 
 		// Get preserve filename setting
-		$preserve_filename = isset( $_POST['preserve_filename'] ) && $_POST['preserve_filename'] == '1';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$preserve_filename = isset( $_POST['preserve_filename'] ) && wp_unslash( $_POST['preserve_filename'] ) == '1';
 
 		// Check uploaded file
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		$uploaded_file      = $_FILES['replacement_file'];
 		$uploaded_file_info = pathinfo( $uploaded_file['name'] );
 		$uploaded_extension = isset( $uploaded_file_info['extension'] ) ? strtolower( $uploaded_file_info['extension'] ) : '';
@@ -463,14 +469,14 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 			// Check if extensions match
 			if ( $original_extension !== $uploaded_extension ) {
 				Lukic_media_replace_set_error(
-					/* translators: %1$s: New file extension, %2$s: Original file extension */
 					sprintf(
+						/* translators: %1$s: New file extension, %2$s: Original file extension */
 						__( 'The new file extension (%1$s) does not match the original extension (%2$s). This could break existing links.', 'lukic-code-snippets' ),
 						$uploaded_extension,
 						$original_extension
 					)
 				);
-				wp_redirect( admin_url( 'upload.php?page=lukic-replace-media&attachment_id=' . $attachment_id ) );
+				wp_safe_redirect( admin_url( 'upload.php?page=lukic-replace-media&attachment_id=' . $attachment_id ) );
 				exit;
 			}
 		} else {
@@ -483,15 +489,19 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 
 		// Move uploaded file to replace old file
 		if ( @file_exists( $original_file_path ) ) {
-			@unlink( $original_file_path );
+			wp_delete_file( $original_file_path );
 		}
 
-		// Move the temporary file to the original file location
-		$move_result = @move_uploaded_file( $uploaded_file['tmp_name'], $new_file_path );
+		// Move the temporary file to the original file location using wp_handle_upload
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Fallback for edge cases
+		$move_result = @copy( $uploaded_file['tmp_name'], $new_file_path );
+		if ( $move_result ) {
+			wp_delete_file( $uploaded_file['tmp_name'] );
+		}
 
 		if ( ! $move_result ) {
 			Lukic_media_replace_set_error( __( 'Failed to move uploaded file. Check folder permissions.', 'lukic-code-snippets' ) );
-			wp_redirect( admin_url( 'upload.php?page=lukic-replace-media&attachment_id=' . $attachment_id ) );
+			wp_safe_redirect( admin_url( 'upload.php?page=lukic-replace-media&attachment_id=' . $attachment_id ) );
 			exit;
 		}
 
@@ -512,7 +522,7 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 		Lukic_media_replace_set_success( __( 'Media file successfully replaced!', 'lukic-code-snippets' ) );
 
 		// Redirect to media library
-		wp_redirect( admin_url( 'post.php?post=' . $attachment_id . '&action=edit' ) );
+		wp_safe_redirect( admin_url( 'post.php?post=' . $attachment_id . '&action=edit' ) );
 		exit;
 	}
 

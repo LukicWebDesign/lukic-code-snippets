@@ -79,7 +79,7 @@ add_action( 'admin_menu', 'lukic_disable_comments_admin_menu' );
 function lukic_disable_comments_admin_menu_redirect() {
 	global $pagenow;
 	if ( 'edit-comments.php' === $pagenow ) {
-		wp_redirect( admin_url() );
+		wp_safe_redirect( admin_url() );
 		exit;
 	}
 }

@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function Lukic_disable_file_editing() {
 	// Define the constant if not already defined
 	if ( ! defined( 'DISALLOW_FILE_EDIT' ) ) {
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 		define( 'DISALLOW_FILE_EDIT', true );
 	}
 
@@ -51,7 +52,7 @@ function Lukic_block_editor_access() {
 		// The requirement is "Disable the theme and plugin file editor".
 		// So we should enforce it.
 		
-		wp_die( __( 'File editing is disabled on this site.', 'lukic-code-snippets' ), 403 );
+		wp_die( esc_html__( 'File editing is disabled on this site.', 'lukic-code-snippets' ), 403 );
 	}
 }
 add_action( 'admin_init', 'Lukic_block_editor_access' );

@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: Clean Dashboard
  * Description: Removes default WordPress dashboard widgets for a clean admin experience

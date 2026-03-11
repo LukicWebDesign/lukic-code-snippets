@@ -40,7 +40,8 @@ add_action( 'init', 'Lukic_disable_xmlrpc' );
  */
 function Lukic_block_xmlrpc_request() {
 	// Check if the current request is for xmlrpc.php
-	if ( strpos( $_SERVER['REQUEST_URI'], 'xmlrpc.php' ) !== false ) {
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+	if ( strpos( $request_uri, 'xmlrpc.php' ) !== false ) {
 		// Return 403 Forbidden status
 		status_header( 403 );
 		// Exit with error message

@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Snippet: SVG Upload Support
  * Description: Enables SVG file uploads with sanitization for security
@@ -118,6 +119,7 @@ if ( ! function_exists( 'Lukic_enable_svg_upload' ) ) {
 			}
 		</style>
 		<?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 	}
 
 	/**

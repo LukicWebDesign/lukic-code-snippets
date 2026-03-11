@@ -54,14 +54,17 @@ function Lukic_snippet_name_sanitize_options($options) {
 function Lukic_snippet_name_page() {
     // Check user capabilities
     if (!Lukic_Helpers::user_can('manage_options')) {
-        wp_die(__('You do not have sufficient permissions to access this page.'));
+        wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'lukic-code-snippets'));
     }
     
     // Handle form submission
-    if (isset($_POST['submit']) && wp_verify_nonce($_POST['_wpnonce'], 'Lukic_snippet_name_nonce')) {
+    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+    if (isset($_POST['submit']) && isset($_POST['_wpnonce']) && wp_verify_nonce(wp_unslash($_POST['_wpnonce']), 'Lukic_snippet_name_nonce')) {
         $options = array(
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
             'enable_feature' => isset($_POST['enable_feature']) ? 1 : 0,
-            'custom_setting' => sanitize_text_field($_POST['custom_setting'] ?? '')
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+            'custom_setting' => isset($_POST['custom_setting']) ? sanitize_text_field(wp_unslash($_POST['custom_setting'])) : ''
         );
         
         update_option(Lukic_SNIPPET_NAME_OPTION, $options);

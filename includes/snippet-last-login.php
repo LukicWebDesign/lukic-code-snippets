@@ -112,8 +112,10 @@ class Lukic_Last_Login {
 		}
 
 		// Check if we're sorting by last login
-		if ( isset( $_GET['orderby'] ) && 'last_login' === $_GET['orderby'] ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['orderby'] ) && 'last_login' === sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) ) {
 			// Add the meta query to sort by last login
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			$user_query->query_vars['meta_key'] = 'Lukic_last_login';
 			$user_query->query_vars['orderby']  = 'meta_value_num';
 		}

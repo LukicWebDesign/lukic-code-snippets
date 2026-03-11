@@ -84,8 +84,10 @@ function lukic_save_user_profile_image( $user_id ) {
 		return;
 	}
 	
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	if ( isset( $_POST['lukic_user_avatar'] ) ) {
-		update_user_meta( $user_id, 'lukic_user_avatar', sanitize_text_field( $_POST['lukic_user_avatar'] ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		update_user_meta( $user_id, 'lukic_user_avatar', sanitize_text_field( wp_unslash( $_POST['lukic_user_avatar'] ) ) );
 	}
 }
 add_action( 'personal_options_update', 'lukic_save_user_profile_image' );
