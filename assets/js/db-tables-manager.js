@@ -32,8 +32,8 @@
             $('#' + tabId).addClass('active');
         });
 
-        // View table details button
-        $('.view-table').on('click', function() {
+        // View table details button (delegated event for DataTables pagination)
+        $(document).on('click', '.view-table', function() {
             const tableName = $(this).data('table');
             showTableDetails(tableName);
         });
@@ -468,7 +468,13 @@
             const fieldName = column.Field;
             const fieldType = column.Type;
             const isNullable = column.Null === 'YES';
+            const hasDefault = column.Default !== null;
+            const isAutoIncrement = column.Extra && column.Extra.includes('auto_increment');
             const isPrimaryKey = column.Key === 'PRI';
+            
+            // A field strictly requires user input ONLY if it cannot be null, has no default, and doesn't auto-increment
+            const isStrictlyRequired = !isNullable && !hasDefault && !isAutoIncrement && !isPrimaryKey;
+            
             const currentValue = row[fieldName] || '';
 
             formHTML += '<div class="Lukic-field-group">';
@@ -477,7 +483,7 @@
             if (isPrimaryKey) {
                 formHTML += ' <em>(Primary Key)</em>';
             }
-            if (!isNullable) {
+            if (isStrictlyRequired) {
                 formHTML += ' <span style="color: red;">*</span>';
             }
             
@@ -488,14 +494,19 @@
                 formHTML += '<input type="text" id="field-' + fieldName + '" value="' + currentValue + '" readonly style="background-color: #f5f5f5;">';
             } else if (fieldType.includes('text') || fieldType.includes('blob')) {
                 // Use textarea for text/blob fields
-                formHTML += '<textarea id="field-' + fieldName + '" name="' + fieldName + '" ' + (!isNullable ? 'required' : '') + '>' + currentValue + '</textarea>';
+                formHTML += '<textarea id="field-' + fieldName + '" name="' + fieldName + '" ' + (isStrictlyRequired ? 'required' : '') + '>' + currentValue + '</textarea>';
             } else {
                 // Use input for other fields
-                formHTML += '<input type="text" id="field-' + fieldName + '" name="' + fieldName + '" value="' + currentValue + '" ' + (!isNullable ? 'required' : '') + '>';
+                formHTML += '<input type="text" id="field-' + fieldName + '" name="' + fieldName + '" value="' + currentValue + '" ' + (isStrictlyRequired ? 'required' : '') + '>';
             }
 
-            if (isNullable) {
-                formHTML += '<small style="color: #666;">Leave empty for NULL</small>';
+            if (isNullable || hasDefault || isAutoIncrement) {
+                let hintText = [];
+                if (isNullable) hintText.push('NULL');
+                if (hasDefault) hintText.push('Default');
+                if (isAutoIncrement) hintText.push('Auto-increment');
+                
+                formHTML += '<small style="color: #666;">Leave empty for ' + hintText.join(' / ') + '</small>';
             }
 
             formHTML += '</div>';

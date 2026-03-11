@@ -237,6 +237,8 @@ class Lukic_DB_Tables_Manager {
 				padding: 20px;
 				border: 1px solid #888;
 				border-radius: 5px;
+				width: 90%;
+				max-width: 1200px;
 				box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 			}
 			
@@ -784,7 +786,19 @@ class Lukic_DB_Tables_Manager {
 				<?php foreach ( $rows as $row_index => $row ) : ?>
 				<tr>
 					<?php foreach ( $row as $column => $value ) : ?>
-					<td><?php echo is_null( $value ) ? '<em>NULL</em>' : esc_html( substr( maybe_serialize( $value ), 0, 100 ) ); ?></td>
+					<td>
+						<?php
+						if ( is_null( $value ) ) {
+							echo '<em>NULL</em>';
+						} else {
+							$string_value = is_scalar( $value ) ? (string) $value : maybe_serialize( $value );
+							if ( ! mb_check_encoding( $string_value, 'UTF-8' ) ) {
+								$string_value = wp_check_invalid_utf8( $string_value );
+							}
+							echo esc_html( mb_substr( $string_value, 0, 100, 'UTF-8' ) );
+						}
+						?>
+					</td>
 					<?php endforeach; ?>
 					<td>
 						<?php if ( $primary_key && isset( $row[ $primary_key ] ) ) : ?>
@@ -1130,7 +1144,15 @@ class Lukic_DB_Tables_Manager {
 					<?php foreach ( $row as $column => $value ) : ?>
 					<td>
 						<?php
-						$display_value = is_null( $value ) ? '<em>NULL</em>' : esc_html( substr( maybe_serialize( $value ), 0, 100 ) );
+						if ( is_null( $value ) ) {
+							$display_value = '<em>NULL</em>';
+						} else {
+							$string_value = is_scalar( $value ) ? (string) $value : maybe_serialize( $value );
+							if ( ! mb_check_encoding( $string_value, 'UTF-8' ) ) {
+								$string_value = wp_check_invalid_utf8( $string_value );
+							}
+							$display_value = esc_html( mb_substr( $string_value, 0, 100, 'UTF-8' ) );
+						}
 
 						// Highlight search term if present
 						if ( ! empty( $search_term ) && ! is_null( $value ) ) {

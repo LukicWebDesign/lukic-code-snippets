@@ -1717,3 +1717,41 @@ table.dataTable thead td {
     font-size: 13px;
     color: #4b5563;
 }
+
+/* WordPress Core UI Button Overrides (Scoped strictly to Lukic plugin) */
+/* Apply padding to ALL buttons */
+.Lukic-settings-wrap .button,
+.Lukic-wrap .button {
+    padding: 8px 20px;
+    height: auto;
+    line-height: normal;
+}
+
+/* Color overrides specifically for secondary/default buttons */
+.Lukic-settings-wrap .button:not(.button-primary),
+.Lukic-settings-wrap .button-secondary,
+.Lukic-wrap .button:not(.button-primary),
+.Lukic-wrap .button-secondary {
+    border-color: var(--Lukic-dark-surface, #444444);
+    color: var(--Lukic-dark-surface, #444444);
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.Lukic-settings-wrap .button:not(.button-primary):hover,
+.Lukic-settings-wrap .button-secondary:hover,
+.Lukic-settings-wrap .button:not(.button-primary):focus,
+.Lukic-settings-wrap .button-secondary:focus,
+.Lukic-wrap .button:not(.button-primary):hover,
+.Lukic-wrap .button-secondary:hover,
+.Lukic-wrap .button:not(.button-primary):focus,
+.Lukic-wrap .button-secondary:focus {
+    border-color: var(--Lukic-primary, #00E1AF);
+    color: var(--Lukic-primary, #00E1AF);
+}
+
+.Lukic-settings-wrap .button:not(.button-primary) .dashicons,
+.Lukic-settings-wrap .button-secondary .dashicons,
+.Lukic-wrap .button:not(.button-primary) .dashicons,
+.Lukic-wrap .button-secondary .dashicons {
+    color: var(--Lukic-primary, #00E1AF);
+}
