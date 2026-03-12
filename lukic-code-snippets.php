@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Lukic Code Snippets
- * Plugin URI: https://github.com/lukicmilos/lukic-code-snippets
+ * Plugin URI: https://wplukic.com/lukic-code-snippets
  * Description: A collection of useful code snippets for WordPress
  * Version: 2.8.1
- * Author: Milos Lukic
- * Author URI: https://lukic.dev
+ * Author: Miloš Lukić
+ * Author URI: https://wplukic.com
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: lukic-code-snippets
@@ -42,6 +42,9 @@ class Lukic_Snippet_Codes {
 		add_action( 'init', array( $this, 'load_textdomain' ), 0 );
 		// Load activated snippets.
 		add_action( 'plugins_loaded', array( $this, 'load_snippets' ) );
+
+		// Plugin action links.
+		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'add_action_links' ) );
 	}
 
 	/**
@@ -115,6 +118,16 @@ class Lukic_Snippet_Codes {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Add custom action links on the Plugins page
+	 */
+	public function add_action_links( $links ) {
+		$custom_links = array(
+			'<a href="https://wplukic.com" target="_blank" rel="noopener noreferrer" style="color: #00E1AF; font-weight: bold;">' . __( 'Hire Me', 'lukic-code-snippets' ) . '</a>',
+		);
+		return array_merge( $custom_links, $links );
 	}
 }
 

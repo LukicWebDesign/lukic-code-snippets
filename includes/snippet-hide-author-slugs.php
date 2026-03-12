@@ -63,20 +63,22 @@ if ( ! function_exists( 'Lukic_hide_author_slugs_init' ) ) {
 					<p><?php esc_html_e( 'This module protects your site by encrypting author URLs and hiding usernames from the REST API. No configuration is required.', 'lukic-code-snippets' ); ?></p>
 				</div>
 				
-				<div class="Lukic-card">
-					<div class="Lukic-card-header">
-						<h2><?php esc_html_e( 'Status', 'lukic-code-snippets' ); ?></h2>
-					</div>
-					<div class="Lukic-card-body">
-						<p>
-							<span class="dashicons dashicons-yes" style="color: #46b450;"></span>
-							<strong><?php esc_html_e( 'Active:', 'lukic-code-snippets' ); ?></strong>
-							<?php esc_html_e( 'Author slugs are currently being encrypted.', 'lukic-code-snippets' ); ?>
-						</p>
-						<p>
-							<?php esc_html_e( 'Example:', 'lukic-code-snippets' ); ?>
-							<code><?php echo esc_url( get_author_posts_url( get_current_user_id() ) ); ?></code>
-						</p>
+				<div class="Lukic-settings-container">
+					<div class="">
+						<div class="Lukic-card-header">
+							<h2><?php esc_html_e( 'Status', 'lukic-code-snippets' ); ?></h2>
+						</div>
+						<div class="Lukic-card-body">
+							<p>
+								<span class="dashicons dashicons-yes" style="color: #46b450;"></span>
+								<strong><?php esc_html_e( 'Active:', 'lukic-code-snippets' ); ?></strong>
+								<?php esc_html_e( 'Author slugs are currently being encrypted.', 'lukic-code-snippets' ); ?>
+							</p>
+							<p>
+								<?php esc_html_e( 'Example:', 'lukic-code-snippets' ); ?>
+								<code><?php echo esc_url( get_author_posts_url( get_current_user_id() ) ); ?></code>
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>

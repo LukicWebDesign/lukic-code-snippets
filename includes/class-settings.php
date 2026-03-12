@@ -243,7 +243,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				</div>
 			<?php endif; ?>
 			
-			<div class="Lukic-settings-container">
+			<div class="Lukic-settings-layout" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
+				<div class="Lukic-settings-main" style="flex: 1; min-width: 0;">
+					<div class="Lukic-settings-container" style="margin-top: 0;">
 						<form method="post" action="options.php">
 							<?php
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -330,6 +332,27 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 							</div>
 						</form>
 					</div>
+				</div>
+				
+				<div class="Lukic-settings-sidebar" style="width: 280px; flex-shrink: 0;">
+					<div class="Lukic-sidebar-widget" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; text-align: center; border-top: 4px solid #00E1AF;">
+						<div style="width: 48px; height: 48px; margin: 0 auto 15px; background: rgba(0, 225, 175, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+							<span class="dashicons dashicons-admin-customizer" style="color: #00E1AF; font-size: 24px; width: 24px; height: 24px;"></span>
+						</div>
+						<h3 style="margin-top: 0; font-size: 16px; font-weight: 600; color: #1e293b;"><?php esc_html_e( 'Need Custom Work?', 'lukic-code-snippets' ); ?></h3>
+						<p style="font-size: 14px; color: #64748b; line-height: 1.5; margin-bottom: 20px;"><?php esc_html_e( 'I offer professional WordPress custom development, performance optimization, and plugin adjustments.', 'lukic-code-snippets' ); ?></p>
+						<a href="https://wplukic.com" target="_blank" rel="noopener noreferrer" class="Lukic-btn Lukic-btn--primary" style="display: block; text-decoration: none; padding: 10px; background-color: #00E1AF; color: #fff; border-radius: 4px; font-weight: 600; transition: background-color 0.2s;"><?php esc_html_e( 'Hire Me', 'lukic-code-snippets' ); ?></a>
+					</div>
+					
+					<div class="Lukic-sidebar-widget" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; text-align: center; margin-top: 20px;">
+						<h3 style="margin-top: 0; font-size: 16px; font-weight: 600; color: #1e293b; display: flex; align-items: center; justify-content: center; gap: 5px;">
+							<span class="dashicons dashicons-star-filled" style="color: #fbbf24; font-size: 18px; width: 18px; height: 18px;"></span>
+							<?php esc_html_e( 'Show Your Support', 'lukic-code-snippets' ); ?>
+						</h3>
+						<p style="font-size: 14px; color: #64748b; line-height: 1.5; margin-bottom: 20px;"><?php esc_html_e( 'If you find this plugin useful, please consider leaving a 5-star review on WordPress.org. It helps a lot!', 'lukic-code-snippets' ); ?></p>
+						<a href="https://wordpress.org/plugins/lukic-code-snippets/" target="_blank" rel="noopener noreferrer" style="color: #00E1AF; text-decoration: none; font-weight: 600;"><?php esc_html_e( 'Leave a Review &rarr;', 'lukic-code-snippets' ); ?></a>
+					</div>
+				</div>
 			</div>
 		</div>
 		

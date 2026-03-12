@@ -1,6 +1,6 @@
 === Lukic Code Snippets ===
 Contributors: wplukic
-Donate link: https://developer.wordpress.org/plugins/
+Donate link: https://www.paypal.com/paypalme/lukicwebdesign
 Tags: snippets, performance, admin, security, seo
 Requires at least: 5.8
 Tested up to: 6.9

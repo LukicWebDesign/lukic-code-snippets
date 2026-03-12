@@ -130,43 +130,45 @@ class Lukic_Custom_Admin_Footer {
 				<p><?php esc_html_e( 'Change the text that appears at the bottom left and bottom right of the WordPress admin area, or leave it blank to remove it entirely.', 'lukic-code-snippets' ); ?></p>
 			</div>
 			
-			<form method="post" action="options.php" class="Lukic-settings-form">
-				<?php settings_fields( 'Lukic_custom_admin_footer_settings' ); ?>
-				<?php settings_errors(); ?>
-				
-				<table class="form-table">
-					<tr>
-						<th scope="row">
-							<label for="Lukic_custom_admin_footer_text[left_text]"><?php esc_html_e( 'Left Footer Text', 'lukic-code-snippets' ); ?></label>
-						</th>
-						<td>
-							<input type="text" name="<?php echo esc_attr( $this->option_name ); ?>[left_text]" 
-									id="Lukic_custom_admin_footer_text[left_text]" 
-									value="<?php echo esc_attr( $left_text ); ?>" class="regular-text">
-							<p class="description">
-								<?php esc_html_e( 'Enter your custom left footer text (e.g. "Thank you for creating with WordPress"). Use HTML for links. Leave empty to hide.', 'lukic-code-snippets' ); ?>
-							</p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">
-							<label for="Lukic_custom_admin_footer_text[right_text]"><?php esc_html_e( 'Right Footer Text', 'lukic-code-snippets' ); ?></label>
-						</th>
-						<td>
-							<input type="text" name="<?php echo esc_attr( $this->option_name ); ?>[right_text]" 
-									id="Lukic_custom_admin_footer_text[right_text]" 
-									value="<?php echo esc_attr( $right_text ); ?>" class="regular-text">
-							<p class="description">
-								<?php esc_html_e( 'Enter your custom right footer text (e.g. WordPress version string). Use HTML for links. Leave empty to hide.', 'lukic-code-snippets' ); ?>
-							</p>
-						</td>
-					</tr>
-				</table>
-				
-				<div class="Lukic-submit-container">
-					<?php submit_button( __( 'Save Changes', 'lukic-code-snippets' ), 'primary Lukic-btn Lukic-btn--primary', 'submit', false ); ?>
-				</div>
-			</form>
+			<div class="Lukic-settings-container">
+				<form method="post" action="options.php" class="Lukic-settings-form">
+					<?php settings_fields( 'Lukic_custom_admin_footer_settings' ); ?>
+					<?php settings_errors(); ?>
+					
+					<table class="form-table">
+						<tr>
+							<th scope="row">
+								<label for="Lukic_custom_admin_footer_text[left_text]"><?php esc_html_e( 'Left Footer Text', 'lukic-code-snippets' ); ?></label>
+							</th>
+							<td>
+								<input type="text" name="<?php echo esc_attr( $this->option_name ); ?>[left_text]" 
+										id="Lukic_custom_admin_footer_text[left_text]" 
+										value="<?php echo esc_attr( $left_text ); ?>" class="regular-text">
+								<p class="description">
+									<?php esc_html_e( 'Enter your custom left footer text (e.g. "Thank you for creating with WordPress"). Use HTML for links. Leave empty to hide.', 'lukic-code-snippets' ); ?>
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<label for="Lukic_custom_admin_footer_text[right_text]"><?php esc_html_e( 'Right Footer Text', 'lukic-code-snippets' ); ?></label>
+							</th>
+							<td>
+								<input type="text" name="<?php echo esc_attr( $this->option_name ); ?>[right_text]" 
+										id="Lukic_custom_admin_footer_text[right_text]" 
+										value="<?php echo esc_attr( $right_text ); ?>" class="regular-text">
+								<p class="description">
+									<?php esc_html_e( 'Enter your custom right footer text (e.g. WordPress version string). Use HTML for links. Leave empty to hide.', 'lukic-code-snippets' ); ?>
+								</p>
+							</td>
+						</tr>
+					</table>
+					
+					<div class="Lukic-submit-container">
+						<?php submit_button( __( 'Save Changes', 'lukic-code-snippets' ), 'primary Lukic-btn Lukic-btn--primary', 'submit', false ); ?>
+					</div>
+				</form>
+			</div>
 		</div>
 		<?php
 	}

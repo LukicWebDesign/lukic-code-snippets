@@ -1,3 +1,15 @@
+# WordPress
+wp-config.php
+wp-content/uploads/
+wp-content/blogs.dir/
+wp-content/upgrade/
+wp-content/backup-ext/
+wp-content/advanced-cache.php
+wp-content/wp-cache-config.php
+wp-content/cache/
+wp-content/languages/plugins/
+wp-content/languages/themes/
+
 # Operating System Files
 .DS_Store
 Thumbs.db
@@ -11,20 +23,5 @@ Thumbs.db
 *.sublime-project
 *.sublime-workspace
 
-# Node / NPM (if you add them later)
-node_modules/
-package-lock.json
-yarn.lock
-
-# WordPress Specific
-wp-config.php
-wp-content/uploads/
-debug.log
-
-# Build directories (if you add a build step)
-dist/
-build/
-
-# Composer (if you add it later)
-vendor/
-composer.lock
+# Plugin Specific
+nonces.txt

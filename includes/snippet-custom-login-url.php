@@ -160,39 +160,41 @@ class Lukic_Custom_Login_URL {
 				</p>
 			</div>
 			
-			<form method="post" action="options.php" class="Lukic-settings-form">
-				<?php settings_fields( 'Lukic_custom_login_url_settings' ); ?>
-				<?php settings_errors(); ?>
-				
-				<table class="form-table">
-					<tr>
-						<th scope="row">
-							<label for="Lukic_custom_login_url[slug]"><?php esc_html_e( 'Custom Login URL', 'lukic-code-snippets' ); ?></label>
-						</th>
-						<td>
-							<div class="Lukic-url-input-group">
-								<span class="Lukic-url-prefix"><?php echo esc_html( $site_url ); ?></span>
-								<input type="text" name="<?php echo esc_attr( $this->option_name ); ?>[slug]" 
-										id="Lukic_custom_login_url[slug]" 
-										value="<?php echo esc_attr( $slug ); ?>" class="Lukic-input Lukic-input--slug">
-								<span class="Lukic-url-suffix">/</span>
-							</div>
-							<p class="description">
-								<?php esc_html_e( 'Enter the URL path for your custom login page (e.g., "admin-login" will create a login page at', 'lukic-code-snippets' ); ?> 
-								<code><?php echo esc_html( $site_url ); ?>admin-login/</code>).
-							</p>
-							<p>
-								<?php esc_html_e( 'Your current custom login URL is:', 'lukic-code-snippets' ); ?> 
-								<a href="<?php echo esc_url( $login_url ); ?>" target="_blank"><?php echo esc_html( $login_url ); ?></a>
-							</p>
-						</td>
-					</tr>
-				</table>
-				
-				<div class="Lukic-submit-container">
-					<?php submit_button( __( 'Save Changes', 'lukic-code-snippets' ), 'primary Lukic-btn Lukic-btn--primary', 'submit', false ); ?>
-				</div>
-			</form>
+			<div class="Lukic-settings-container">
+				<form method="post" action="options.php" class="Lukic-settings-form">
+					<?php settings_fields( 'Lukic_custom_login_url_settings' ); ?>
+					<?php settings_errors(); ?>
+					
+					<table class="form-table">
+						<tr>
+							<th scope="row">
+								<label for="Lukic_custom_login_url[slug]"><?php esc_html_e( 'Custom Login URL', 'lukic-code-snippets' ); ?></label>
+							</th>
+							<td>
+								<div class="Lukic-url-input-group">
+									<span class="Lukic-url-prefix"><?php echo esc_html( $site_url ); ?></span>
+									<input type="text" name="<?php echo esc_attr( $this->option_name ); ?>[slug]" 
+											id="Lukic_custom_login_url[slug]" 
+											value="<?php echo esc_attr( $slug ); ?>" class="Lukic-input Lukic-input--slug">
+									<span class="Lukic-url-suffix">/</span>
+								</div>
+								<p class="description">
+									<?php esc_html_e( 'Enter the URL path for your custom login page (e.g., "admin-login" will create a login page at', 'lukic-code-snippets' ); ?> 
+									<code><?php echo esc_html( $site_url ); ?>admin-login/</code>).
+								</p>
+								<p>
+									<?php esc_html_e( 'Your current custom login URL is:', 'lukic-code-snippets' ); ?> 
+									<a href="<?php echo esc_url( $login_url ); ?>" target="_blank"><?php echo esc_html( $login_url ); ?></a>
+								</p>
+							</td>
+						</tr>
+					</table>
+					
+					<div class="Lukic-submit-container">
+						<?php submit_button( __( 'Save Changes', 'lukic-code-snippets' ), 'primary Lukic-btn Lukic-btn--primary', 'submit', false ); ?>
+					</div>
+				</form>
+			</div>
 		</div>
 		<?php
 	}
