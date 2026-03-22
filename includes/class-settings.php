@@ -307,6 +307,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 																<?php foreach ( $snippet_data['tags'] as $tag ) : ?>
 																	<span class="Lukic-tag"><?php echo esc_html( $tag ); ?></span>
 																<?php endforeach; ?>
+																<?php if ( ! empty( $snippet_data['warning'] ) ) : ?>
+																	<span class="Lukic-tag Lukic-tag--warning">
+																		<span class="dashicons dashicons-warning"></span>
+																		<span><?php echo esc_html( $snippet_data['warning'] ); ?></span>
+																	</span>
+																<?php endif; ?>
 															</div>
 														</div>
 													</div>
