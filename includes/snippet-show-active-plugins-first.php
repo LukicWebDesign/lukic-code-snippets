@@ -57,14 +57,12 @@ function lukic_active_plugins_separator_css() {
 	if ( 'plugins.php' !== $pagenow ) {
 		return;
 	}
-	?>
-	<style>
+	wp_add_inline_style( 'wp-admin', '
 		tr.active + tr.inactive th,
 		tr.active + tr.inactive td {
 			border-top: 2px solid #2271b1 !important;
 			position: relative;
 		}
-	</style>
-	<?php
+	' );
 }
-add_action( 'admin_head', 'lukic_active_plugins_separator_css' );
+add_action( 'admin_enqueue_scripts', 'lukic_active_plugins_separator_css' );

@@ -4,12 +4,12 @@ Donate link: https://www.paypal.com/paypalme/lukicwebdesign
 Tags: snippets, performance, admin, security, seo
 Requires at least: 5.8
 Tested up to: 6.9
-Stable tag: 2.8.2
+Stable tag: 2.9.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A modular performance toolkit: 30+ code snippets you toggle on and off — zero bloat when inactive.
+A modular performance toolkit: 40+ code snippets you toggle on and off — zero bloat when inactive.
 
 == Description ==
 
@@ -116,6 +116,14 @@ Yes. All UI strings use the `lukic-code-snippets` text domain with proper `__()`
 5. Maintenance Mode settings with customizable page and live preview.
 
 == Changelog ==
+
+= 2.9.0 =
+* Architecture: Migrated 40+ inline CSS/JS snippets to `wp_add_inline_style()` and `wp_add_inline_script()` for CSP compliance.
+* Security: Hardened all AJAX handlers with `sanitize_text_field()` and proper nonce verification.
+* Security: Fixed `PHP_INI_PERDIR` restriction on upload limits using WordPress native filters.
+* Compliance: Updated admin dashboard CTAs (Guideline 11) for repository standard.
+* Performance: Fixed documentation search logic and AJAX button response classes.
+* Fix: Resolved self-signed certificate issues in internal diagnostic tools.
 
 = 2.8.1 =
 * Fix: Redirect Manager settings now save properly when toggled off.

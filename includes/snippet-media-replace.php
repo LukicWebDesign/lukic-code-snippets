@@ -22,8 +22,53 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 
 		// Add success/error notices
 		add_action( 'admin_notices', 'Lukic_media_replace_admin_notices' );
+
+		// Enqueue inline styles
+		add_action( 'admin_enqueue_scripts', 'Lukic_media_replace_enqueue_assets' );
 	}
 	Lukic_media_replace_init();
+
+	/**
+	 * Enqueue inline styles
+	 */
+	function Lukic_media_replace_enqueue_assets( $hook ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['page'] ) || 'lukic-replace-media' !== sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
+			return;
+		}
+
+		wp_add_inline_style( 'Lukic-admin-styles', '
+			.media-replace-container { display: flex; flex-wrap: wrap; gap: 30px; }
+			.current-file-info, .replace-form { flex: 1; min-width: 300px; }
+			.media-item { background: transparent; padding: 0; border: none; box-shadow: none; }
+			.media-item h2, .replace-form h2 { margin-top: 0; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; color: #23282d; font-size: 1.3em; }
+			.thumbnail-container { display: flex; gap: 20px; align-items: flex-start; }
+			.file-info { flex: 1; }
+			.file-info p { margin: 8px 0; line-height: 1.5; }
+			.thumbnail { min-width: 150px; margin-right: 20px; padding: 5px; background: #fff; border: 1px solid #ddd; border-radius: 3px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+			.thumbnail img { display: block; max-width: 100%; height: auto; }
+			.replace-form { background: transparent; padding: 0; border: none; box-shadow: none; }
+			.replace-form .description { margin-bottom: 20px; color: #666; }
+			.replace-form p { margin: 15px 0; }
+			.replace-form label { display: block; margin-bottom: 5px; }
+			.replace-form input[type="file"] { padding: 10px 0; width: 100%; }
+			.Lukic-switch-label { display: flex; align-items: center; }
+			.Lukic-checkbox-text { margin-left: 8px; }
+			.notice-warning { margin: 20px 0 0 0; }
+			.Lukic-media-replace-no-id { margin: 0; }
+			.Lukic-media-replace-no-id .content { background: transparent; border: none; box-shadow: none; max-width: 100%; text-align: left; }
+			.Lukic-no-media-header { display: flex; align-items: center; margin-bottom: 20px; justify-content: flex-start; gap: 6px; }
+			.Lukic-no-media-header .dashicons { font-size: 24px; width: 24px; height: 24px; color: var(--Lukic-primary); }
+			.Lukic-no-media-header h2 { margin: 0 !important; color: #23282d !important; font-size: 24px !important; line-height: 24px !important; }
+			.Lukic-media-replace-no-id ol { margin: 0 0 20px 20px; }
+			.Lukic-media-replace-no-id ol li { margin-bottom: 8px; line-height: 1.5; }
+			.Lukic-media-replace-no-id .button-primary { margin-top: 10px; background: var(--Lukic-primary) !important; border-color: var(--Lukic-primary) !important; color: #fff !important; text-shadow: none; padding: 5px 20px; }
+			.Lukic-media-replace-no-id .button-primary:hover, .Lukic-media-replace-no-id .button-primary:focus { background: var(--Lukic-primary-hover) !important; border-color: var(--Lukic-primary-hover) !important; color: #fff !important; }
+			.Lukic-submit-container .button-secondary { background: #fff; border-color: #ddd; color: #555; padding: 5px 20px; height: auto; line-height: 2; font-size: 14px; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+			.Lukic-submit-container .button-secondary:hover, .Lukic-submit-container .button-secondary:focus { border-color: gray; color: gray; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transform: translateY(-1px); }
+			@media screen and (max-width: 782px) { .media-item .thumbnail-container { flex-direction: column; } .thumbnail { margin-right: 0; margin-bottom: 15px; text-align: center; } .thumbnail img { margin: 0 auto; } }
+		' );
+	}
 
 	/**
 	 * Add replace action to media list table
@@ -87,172 +132,6 @@ if ( ! function_exists( 'Lukic_media_replace_init' ) ) {
 
 		// Output base HTML structure
 		?>
-		<style>
-			/* Additional styles specific to media replacement page */
-			.media-replace-container {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 30px;
-			}
-			.current-file-info, .replace-form {
-				flex: 1;
-				min-width: 300px;
-			}
-			.media-item {
-				background: transparent;
-				padding: 0;
-				border: none;
-				box-shadow: none;
-			}
-			.media-item h2, .replace-form h2 {
-				margin-top: 0;
-				margin-bottom: 20px;
-				padding-bottom: 10px;
-				border-bottom: 1px solid #eee;
-				color: #23282d;
-				font-size: 1.3em;
-			}
-			.thumbnail-container {
-				display: flex;
-				gap: 20px;
-				align-items: flex-start;
-			}
-			.file-info {
-				flex: 1;
-			}
-			.file-info p {
-				margin: 8px 0;
-				line-height: 1.5;
-			}
-			.thumbnail {
-				min-width: 150px;
-				margin-right: 20px;
-				padding: 5px;
-				background: #fff;
-				border: 1px solid #ddd;
-				border-radius: 3px;
-				box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-			}
-			.thumbnail img {
-				display: block;
-				max-width: 100%;
-				height: auto;
-			}
-			.replace-form {
-				background: transparent;
-				padding: 0;
-				border: none;
-				box-shadow: none;
-			}
-			.replace-form .description {
-				margin-bottom: 20px;
-				color: #666;
-			}
-			.replace-form p {
-				margin: 15px 0;
-			}
-			.replace-form label {
-				display: block;
-				margin-bottom: 5px;
-			}
-			.replace-form input[type="file"] {
-				padding: 10px 0;
-				width: 100%;
-			}
-			.Lukic-switch-label {
-				display: flex;
-				align-items: center;
-			}
-			.Lukic-checkbox-text {
-				margin-left: 8px;
-			}
-			.notice-warning {
-				margin: 20px 0 0 0;
-			}
-			.Lukic-media-replace-no-id {
-				margin: 0;
-			}
-			.Lukic-media-replace-no-id .content {
-				background: transparent;
-				border: none;
-				box-shadow: none;
-				max-width: 100%;
-				text-align: left;
-			}
-			.Lukic-no-media-header {
-				display: flex;
-				align-items: center;	
-				margin-bottom: 20px;
-				justify-content: flex-start;
-				gap: 6px;
-			}	
-			.Lukic-no-media-header .dashicons {
-				font-size: 24px;
-				width: 24px;
-				height: 24px;
-				color: var(--Lukic-primary);
-			}
-			.Lukic-no-media-header h2 {
-				margin: 0 !important;
-				color: #23282d !important;
-				font-size: 24px !important;
-				line-height: 24px !important;
-			}
-			.Lukic-media-replace-no-id ol {
-				margin: 0 0 20px 20px;
-			}
-			.Lukic-media-replace-no-id ol li {
-				margin-bottom: 8px;
-				line-height: 1.5;
-			}
-			.Lukic-media-replace-no-id .button-primary {
-				margin-top: 10px;
-				background: var(--Lukic-primary) !important;
-				border-color: var(--Lukic-primary) !important;
-				color: #fff !important;
-				text-shadow: none;
-				padding: 5px 20px;
-			}
-			.Lukic-media-replace-no-id .button-primary:hover,
-			.Lukic-media-replace-no-id .button-primary:focus {
-				background: var(--Lukic-primary-hover) !important;
-				border-color: var(--Lukic-primary-hover) !important;
-				color: #fff !important;
-			}
-			/* Secondary button styles */
-			.Lukic-submit-container .button-secondary {
-				background: #fff;
-				border-color: #ddd;
-				color: #555;
-				padding: 5px 20px;
-				height: auto;
-				line-height: 2;
-				font-size: 14px;
-				transition: all 0.2s;
-				box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-			}
-			.Lukic-submit-container .button-secondary:hover,
-			.Lukic-submit-container .button-secondary:focus {
-				border-color: gray;
-				color: gray;
-				background: #fff;
-				box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-				transform: translateY(-1px);
-			}
-			@media screen and (max-width: 782px) {
-				.media-item .thumbnail-container {
-					flex-direction: column;
-				}
-				.thumbnail {
-					margin-right: 0;
-					margin-bottom: 15px;
-					text-align: center;
-				}
-				.thumbnail img {
-					margin: 0 auto;
-				}
-			}
-		</style>
 		<div class="wrap Lukic-settings-wrap">
 			<?php
 			Lukic_display_header( __( 'Replace Media File', 'lukic-code-snippets' ), array() );

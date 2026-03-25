@@ -14,7 +14,7 @@ if ( ! function_exists( 'Lukic_show_featured_images_init' ) ) {
 		add_action( 'current_screen', 'Lukic_setup_featured_image_columns' );
 
 		// Add styles for the image column
-		add_action( 'admin_head', 'Lukic_featured_image_column_style' );
+		add_action( 'admin_enqueue_scripts', 'Lukic_featured_image_column_style' );
 
 		// Enqueue scripts
 		add_action( 'admin_enqueue_scripts', 'Lukic_featured_image_admin_scripts' );
@@ -198,109 +198,107 @@ if ( ! function_exists( 'Lukic_show_featured_images_init' ) ) {
 	 * Add custom styling for the featured image column
 	 */
 	function Lukic_featured_image_column_style() {
-		echo '<style>
-            /* Featured Image Column Styles */
-            .column-Lukic_featured_image {
-                width: 80px !important;
-                text-align: center !important;
-                vertical-align: middle !important;
-            }
-            .lukic-featured-image-wrapper {
-                position: relative;
-                display: inline-block;
-                cursor: pointer;
-                border-radius: 3px;
-                border: 1px solid #ddd;
-                background: #f9f9f9;
-                padding: 2px;
-                overflow: hidden;
-                width: 76px;
-                height: 76px;
-                line-height: 72px; /* vertically center inside */
-                box-sizing: border-box;
-            }
-            .lukic-featured-image-wrapper img {
-                max-width: 100%;
-                max-height: 100%;
-                display: inline-block;
-                vertical-align: middle;
-            }
-            .lukic-featured-image-wrapper .Lukic-no-image-placeholder {
-                opacity: 0.5;
-            }
-            .lukic-fi-overlay-text {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: rgba(0, 0, 0, 0.6);
-                color: #fff;
-                font-size: 11px;
-                line-height: 1.5;
-                padding: 2px 0;
-                text-align: center;
-                opacity: 0;
-                transition: opacity 0.2s;
-            }
-            .lukic-featured-image-wrapper:hover .lukic-fi-overlay-text {
-                opacity: 1;
-            }
-            .lukic-fi-remove {
-                position: absolute;
-                top: 0;
-                right: 0;
-                background: #d63638;
-                color: #fff;
-                border: none;
-                width: 20px;
-                height: 20px;
-                line-height: 18px;
-                text-align: center;
-                cursor: pointer;
-                font-size: 16px;
-                font-weight: bold;
-                opacity: 0;
-                transition: opacity 0.2s;
-                padding: 0;
-                border-bottom-left-radius: 3px;
-            }
-            .lukic-fi-remove:hover {
-                background: #b32d2e;
-            }
-            .lukic-featured-image-wrapper:hover .lukic-fi-remove {
-                opacity: 1;
-            }
-            .lukic-fi-spinner {
-                display: none;
-                position: absolute;
-                top: 0; left: 0; right: 0; bottom: 0;
-                background: rgba(255,255,255,0.8);
-            }
-            .lukic-fi-spinner::after {
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                margin-top: -10px;
-                margin-left: -10px;
-                width: 20px;
-                height: 20px;
-                border: 2px solid #ccc;
-                border-top-color: #007cba;
-                border-radius: 50%;
-                animation: lukic-fi-spin 1s linear infinite;
-            }
-            @keyframes lukic-fi-spin {
-                to { transform: rotate(360deg); }
-            }
-            .lukic-featured-image-wrapper.loading .lukic-fi-spinner {
-                display: block;
-            }
-            /* Ensure column visibility */
-            .widefat .column-Lukic_featured_image {
-                display: table-cell !important;
-            }
-        </style>';
+		wp_add_inline_style( 'wp-admin', '
+			.column-Lukic_featured_image {
+				width: 80px !important;
+				text-align: center !important;
+				vertical-align: middle !important;
+			}
+			.lukic-featured-image-wrapper {
+				position: relative;
+				display: inline-block;
+				cursor: pointer;
+				border-radius: 3px;
+				border: 1px solid #ddd;
+				background: #f9f9f9;
+				padding: 2px;
+				overflow: hidden;
+				width: 76px;
+				height: 76px;
+				line-height: 72px;
+				box-sizing: border-box;
+			}
+			.lukic-featured-image-wrapper img {
+				max-width: 100%;
+				max-height: 100%;
+				display: inline-block;
+				vertical-align: middle;
+			}
+			.lukic-featured-image-wrapper .Lukic-no-image-placeholder {
+				opacity: 0.5;
+			}
+			.lukic-fi-overlay-text {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				background: rgba(0, 0, 0, 0.6);
+				color: #fff;
+				font-size: 11px;
+				line-height: 1.5;
+				padding: 2px 0;
+				text-align: center;
+				opacity: 0;
+				transition: opacity 0.2s;
+			}
+			.lukic-featured-image-wrapper:hover .lukic-fi-overlay-text {
+				opacity: 1;
+			}
+			.lukic-fi-remove {
+				position: absolute;
+				top: 0;
+				right: 0;
+				background: #d63638;
+				color: #fff;
+				border: none;
+				width: 20px;
+				height: 20px;
+				line-height: 18px;
+				text-align: center;
+				cursor: pointer;
+				font-size: 16px;
+				font-weight: bold;
+				opacity: 0;
+				transition: opacity 0.2s;
+				padding: 0;
+				border-bottom-left-radius: 3px;
+			}
+			.lukic-fi-remove:hover {
+				background: #b32d2e;
+			}
+			.lukic-featured-image-wrapper:hover .lukic-fi-remove {
+				opacity: 1;
+			}
+			.lukic-fi-spinner {
+				display: none;
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				background: rgba(255,255,255,0.8);
+			}
+			.lukic-fi-spinner::after {
+				content: "";
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-top: -10px;
+				margin-left: -10px;
+				width: 20px;
+				height: 20px;
+				border: 2px solid #ccc;
+				border-top-color: #007cba;
+				border-radius: 50%;
+				animation: lukic-fi-spin 1s linear infinite;
+			}
+			@keyframes lukic-fi-spin {
+				to { transform: rotate(360deg); }
+			}
+			.lukic-featured-image-wrapper.loading .lukic-fi-spinner {
+				display: block;
+			}
+			.widefat .column-Lukic_featured_image {
+				display: table-cell !important;
+			}
+		' );
 	}
 
 	/**

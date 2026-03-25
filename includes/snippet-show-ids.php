@@ -108,16 +108,16 @@ if ( ! function_exists( 'Lukic_show_ids_in_admin_tables_init' ) ) {
 	 * Add custom styling for the ID column
 	 */
 	function Lukic_id_column_style() {
-		echo '<style>
-            .column-Lukic_id {
-                width: 70px;
-                text-align: center;
-            }
-            .fixed .column-Lukic_id {
-                width: 70px;
-                text-align: left;
-            }
-        </style>';
+		wp_add_inline_style( 'wp-admin', '
+			.column-Lukic_id {
+				width: 70px;
+				text-align: center;
+			}
+			.fixed .column-Lukic_id {
+				width: 70px;
+				text-align: left;
+			}
+		' );
 	}
-	add_action( 'admin_head', 'Lukic_id_column_style' );
+	add_action( 'admin_enqueue_scripts', 'Lukic_id_column_style' );
 }

@@ -324,8 +324,8 @@ jQuery(document).ready(function ($) {
                             '<td>0</td>' +
                             '<td>Never</td>' +
                             '<td>' +
-                            '<a href="#" class="edit-redirect">Edit</a> | ' +
-                            '<a href="#" class="delete-redirect">Delete</a>' +
+                            '<a href="#" class="edit-redirect lcs-edit-btn">Edit</a> ' +
+                            '<a href="#" class="delete-redirect lcs-delete-btn">Delete</a>' +
                             '</td>' +
                             '</tr>');
 

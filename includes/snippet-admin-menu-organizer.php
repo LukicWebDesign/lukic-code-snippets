@@ -62,14 +62,106 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 			if ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'lukic-admin-menu-organizer' ) {
 				wp_enqueue_script( 'jquery-ui-sortable' );
 				
-				// We'll use inline script for simplicity as per plan, or we could create a file.
-				// Let's create a file for better maintainability in the future, but for now inline is fine for the logic.
-				// Actually, let's put the JS in the render_page footer to keep it self-contained in this snippet file for now,
-				// or use wp_add_inline_script.
+				wp_register_style( 'Lukic-admin-menu-styles', false );
+				wp_enqueue_style( 'Lukic-admin-menu-styles' );
+				wp_add_inline_style( 'Lukic-admin-menu-styles', '
+					#lukic-menu-organizer-list { max-width: 800px; padding: 20px; }
+					.lukic-menu-item { background: #fff; border: 1px solid #e5e5e5; margin-bottom: 10px; padding: 10px; display: flex; align-items: center; border-radius: 4px; }
+					.lukic-menu-item:hover { border-color: var(--Lukic-primary); }
+					.lukic-menu-item-handle { cursor: move; margin-right: 15px; color: #ccc; }
+					.lukic-menu-item-handle:hover { color: #333; }
+					.lukic-menu-item-content { flex-grow: 1; display: flex; justify-content: space-between; align-items: center; }
+					.lukic-menu-item-title-group { display: flex; align-items: center; gap: 15px; flex-grow: 1; }
+					.lukic-original-title { font-weight: 600; min-width: 150px; }
+					.lukic-menu-title-input { width: 200px; }
+					.lukic-menu-item-actions { margin-left: 20px; }
+					.ui-sortable-placeholder { border: 1px dashed #ccc; visibility: visible !important; height: 50px; margin-bottom: 10px; background: #f9f9f9; }
+				' );
+
+				wp_localize_script( 'jquery-ui-sortable', 'LukicMenuOrganizer', array(
+					'nonce'       => wp_create_nonce( 'lukic_menu_organizer_nonce' ),
+					'saved'       => __( 'Settings saved! Reloading...', 'lukic-code-snippets' ),
+					'errorSaving' => __( 'Error saving settings.', 'lukic-code-snippets' ),
+					'networkErr'  => __( 'Network error.', 'lukic-code-snippets' ),
+				) );
+
+				wp_add_inline_script( 'jquery-ui-sortable', '
+					jQuery(document).ready(function($) {
+						$("#lukic-menu-organizer-list").sortable({
+							handle: ".lukic-menu-item-handle",
+							placeholder: "ui-sortable-placeholder",
+							axis: "y"
+						});
+
+						$("#lukic-save-menu-order").on("click", function() {
+							var $btn = $(this);
+							var $spinner = $btn.siblings(".lukic-save-status").find(".spinner");
+							var $msg = $("#lukic-save-message");
+
+							$btn.prop("disabled", true);
+							$spinner.addClass("is-active");
+							$msg.text("");
+
+							var items = {};
+							$("#lukic-menu-organizer-list .lukic-menu-item").each(function(index) {
+								var $el = $(this);
+								var slug = $el.data("slug");
+								items[slug] = {
+									position: index,
+									title: $el.find(".lukic-menu-title-input").val(),
+									hidden: $el.find(".lukic-menu-hidden-checkbox").is(":checked") ? 1 : 0
+								};
+							});
+
+							$.ajax({
+								url: ajaxurl,
+								type: "POST",
+								data: {
+									action: "lukic_save_menu_order",
+									settings: items,
+									nonce: LukicMenuOrganizer.nonce
+								},
+								success: function(response) {
+									if (response.success) {
+										$msg.css("color", "var(--Lukic-primary)").text(LukicMenuOrganizer.saved);
+										setTimeout(function() {
+											location.reload();
+										}, 1000);
+									} else {
+										$msg.css("color", "red").text(LukicMenuOrganizer.errorSaving);
+									}
+								},
+								error: function() {
+									$msg.css("color", "red").text(LukicMenuOrganizer.networkErr);
+								},
+								complete: function() {
+									$btn.prop("disabled", false);
+									$spinner.removeClass("is-active");
+									setTimeout(function() { $msg.fadeOut(); }, 3000);
+								}
+							});
+						});
+					});
+				' );
 			}
 			
 			// Add script for "Show All" toggle on all admin pages if needed
-			// For now, let's just handle the organizer page.
+			$settings = get_option( $this->option_name, array() );
+			if ( ! empty( $settings ) ) {
+				wp_enqueue_script( 'jquery' );
+				wp_add_inline_script( 'jquery', '
+					jQuery(document).ready(function($) {
+						var $menu = $("#adminmenu");
+						var $btn = $("<li class=\"wp-menu-separator\"><a href=\"#\" id=\"lukic-toggle-menus\" style=\"text-align: center; color: #fff; opacity: 0.7;\">Show All</a></li>");
+						$btn.on("click", function(e) {
+							e.preventDefault();
+							$("body").toggleClass("show-all-menus");
+							$(this).text( $("body").hasClass("show-all-menus") ? "Hide Hidden" : "Show All" );
+						});
+						$menu.append($btn);
+					});
+				' );
+			}
 		}
 
 		/**
@@ -181,9 +273,6 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 				echo $css;
 				echo 'body.show-all-menus li.menu-top { display: block !important; }';
 				echo '</style>';
-				
-				// Add toggle button to footer
-				add_action( 'admin_footer', array( $this, 'output_toggle_button' ) );
 			}
 		}
 
@@ -227,25 +316,7 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 			return 'toplevel_page_' . $slug;
 		}
 
-		/**
-		 * Output "Show All" toggle button
-		 */
-		public function output_toggle_button() {
-			?>
-			<script>
-			jQuery(document).ready(function($) {
-				var $menu = $('#adminmenu');
-				var $btn = $('<li class="wp-menu-separator"><a href="#" id="lukic-toggle-menus" style="text-align: center; color: #fff; opacity: 0.7;">Show All</a></li>');
-				$btn.on('click', function(e) {
-					e.preventDefault();
-					$('body').toggleClass('show-all-menus');
-					$(this).text( $('body').hasClass('show-all-menus') ? 'Hide Hidden' : 'Show All' );
-				});
-				$menu.append($btn);
-			});
-			</script>
-			<?php
-		}
+			// Toggle button logic moved to enqueue_scripts
 
 		/**
 		 * Render the settings page
@@ -379,123 +450,6 @@ if ( ! function_exists( 'Lukic_admin_menu_organizer_init' ) ) {
 					</div>
 				</div>
 			</div>
-
-			<style>
-				#lukic-menu-organizer-list {
-					max_width: 800px;
-					padding: 20px;
-				}
-				.lukic-menu-item {
-					background: #fff;
-					border: 1px solid #e5e5e5;
-					margin-bottom: 10px;
-					padding: 10px;
-					display: flex;
-					align-items: center;
-					border-radius: 4px;
-				}
-				.lukic-menu-item:hover {
-					border-color: var(--Lukic-primary);
-				}
-				.lukic-menu-item-handle {
-					cursor: move;
-					margin-right: 15px;
-					color: #ccc;
-				}
-				.lukic-menu-item-handle:hover {
-					color: #333;
-				}
-				.lukic-menu-item-content {
-					flex-grow: 1;
-					display: flex;
-					justify-content: space-between;
-					align-items: center;
-				}
-				.lukic-menu-item-title-group {
-					display: flex;
-					align-items: center;
-					gap: 15px;
-					flex-grow: 1;
-				}
-				.lukic-original-title {
-					font-weight: 600;
-					min-width: 150px;
-				}
-				.lukic-menu-title-input {
-					width: 200px;
-				}
-				.lukic-menu-item-actions {
-					margin-left: 20px;
-				}
-				.ui-sortable-placeholder {
-					border: 1px dashed #ccc;
-					visibility: visible !important;
-					height: 50px;
-					margin-bottom: 10px;
-					background: #f9f9f9;
-				}
-			</style>
-
-			<script>
-			jQuery(document).ready(function($) {
-				// Initialize sortable
-				$('#lukic-menu-organizer-list').sortable({
-					handle: '.lukic-menu-item-handle',
-					placeholder: 'ui-sortable-placeholder',
-					axis: 'y'
-				});
-
-				// Save handler
-				$('#lukic-save-menu-order').on('click', function() {
-					var $btn = $(this);
-					var $spinner = $btn.siblings('.lukic-save-status').find('.spinner');
-					var $msg = $('#lukic-save-message');
-					
-					$btn.prop('disabled', true);
-					$spinner.addClass('is-active');
-					$msg.text('');
-
-					var items = {};
-					$('#lukic-menu-organizer-list .lukic-menu-item').each(function(index) {
-						var $el = $(this);
-						var slug = $el.data('slug');
-						items[slug] = {
-							position: index,
-							title: $el.find('.lukic-menu-title-input').val(),
-							hidden: $el.find('.lukic-menu-hidden-checkbox').is(':checked') ? 1 : 0
-						};
-					});
-
-					$.ajax({
-						url: ajaxurl,
-						type: 'POST',
-						data: {
-							action: 'lukic_save_menu_order',
-							settings: items,
-							nonce: '<?php echo esc_attr( wp_create_nonce( 'lukic_menu_organizer_nonce' ) ); ?>'
-						},
-						success: function(response) {
-							if (response.success) {
-								$msg.css('color', 'var(--Lukic-primary)').text('<?php esc_html_e( 'Settings saved! Reloading...', 'lukic-code-snippets' ); ?>');
-								setTimeout(function() {
-									location.reload();
-								}, 1000);
-							} else {
-								$msg.css('color', 'red').text('<?php esc_html_e( 'Error saving settings.', 'lukic-code-snippets' ); ?>');
-							}
-						},
-						error: function() {
-							$msg.css('color', 'red').text('<?php esc_html_e( 'Network error.', 'lukic-code-snippets' ); ?>');
-						},
-						complete: function() {
-							$btn.prop('disabled', false);
-							$spinner.removeClass('is-active');
-							setTimeout(function() { $msg.fadeOut(); }, 3000);
-						}
-					});
-				});
-			});
-			</script>
 			<?php
 		}
 

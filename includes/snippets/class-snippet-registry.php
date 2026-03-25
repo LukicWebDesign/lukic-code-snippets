@@ -501,8 +501,7 @@ class Lukic_Snippet_Registry {
 
 		foreach ( self::$categories as $category_id => $category ) {
 			$categories[ $category_id ] = array(
-				// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
-				'name' => __( $category['name'], 'lukic-code-snippets' ),
+				'name' => $category['name'],
 				'icon' => $category['icon'],
 			);
 		}
@@ -574,32 +573,17 @@ class Lukic_Snippet_Registry {
 	 * @return array
 	 */
 	private static function localize_snippet( $snippet ) {
-		// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
-		$snippet['name'] = __( $snippet['name'], 'lukic-code-snippets' );
-
-		if ( isset( $snippet['description'] ) ) {
-			// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
-			$snippet['description'] = __( $snippet['description'], 'lukic-code-snippets' );
-		}
-
-		if ( isset( $snippet['long_description'] ) ) {
-			// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
-			$snippet['long_description'] = __( $snippet['long_description'], 'lukic-code-snippets' );
-		}
+		// Note: Strings are defined as literals in self::$snippets and are extracted
+		// by the translation parser directly from there. We do not wrap them with
+		// __() here as the parser cannot read variable values at runtime.
 
 		if ( isset( $snippet['tags'] ) && is_array( $snippet['tags'] ) ) {
 			$snippet['tags'] = array_map(
 				function ( $tag ) {
-					// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
-					return __( $tag, 'lukic-code-snippets' );
+					return $tag;
 				},
 				$snippet['tags']
 			);
-		}
-
-		if ( isset( $snippet['warning'] ) ) {
-			// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
-			$snippet['warning'] = __( $snippet['warning'], 'lukic-code-snippets' );
 		}
 
 		return $snippet;

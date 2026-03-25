@@ -77,8 +77,74 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 
 		// Add settings save handler
 		add_action( 'wp_ajax_Lukic_save_redirect_settings', 'Lukic_redirect_manager_save_settings' );
+
+		// Enqueue scripts and styles
+		add_action( 'admin_enqueue_scripts', 'Lukic_redirect_manager_enqueue_assets' );
 	}
 	Lukic_redirect_manager_init();
+
+	/**
+	 * Enqueue admin scripts and styles
+	 */
+	function Lukic_redirect_manager_enqueue_assets( $hook ) {
+		if ( strpos( $hook, 'lukic-redirect-manager' ) === false ) {
+			return;
+		}
+
+		wp_enqueue_script( 'jquery' );
+		wp_enqueue_script( 'jquery-ui-tabs' );
+		wp_enqueue_script( 'jquery-ui-dialog' );
+		wp_enqueue_style( 'wp-jquery-ui-dialog' );
+
+		wp_localize_script(
+			'Lukic-redirect-manager',
+			'Lukic_redirect_vars',
+			array(
+				'ajax_url'       => admin_url( 'admin-ajax.php' ),
+				'nonce'          => wp_create_nonce( 'Lukic_redirect_nonce' ),
+				'confirm_delete' => __( 'Are you sure you want to delete this redirect?', 'lukic-code-snippets' ),
+			)
+		);
+
+		wp_add_inline_style( 'Lukic-admin-styles', '
+			:root { --Lukic-primary: #00E1AF; --Lukic-primary-hover: #00c99e; --Lukic-dark-bg: #272727; --Lukic-dark-surface: #444444; --Lukic-white: #ffffff; --Lukic-space-4: 1rem; --Lukic-space-5: 1.25rem; --Lukic-border-radius: 0.25rem; --Lukic-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+			.wpl-code-snippets-header { background: var(--Lukic-dark-bg); border-radius: var(--Lukic-border-radius); margin-bottom: var(--Lukic-space-5); padding: var(--Lukic-space-5); }
+			.wpl-code-snippets-header__content { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--Lukic-space-4); }
+			.wpl-code-snippets-header__brand h2 { color: var(--Lukic-white); font-size: 2.5rem; margin: 0; font-weight: 700; }
+			.wpl-code-snippets-header__brand h2 span { color: var(--Lukic-primary); }
+			.wpl-code-snippets-header__stats { display: flex; gap: 15px; flex-wrap: wrap; }
+			.wpl-code-snippets-header__stats-item { background: var(--Lukic-dark-surface); color: var(--Lukic-white); padding: 15px 20px; border-radius: var(--Lukic-border-radius); text-align: center; min-width: 100px; }
+			.wpl-code-snippets-header__stats-item-count { color: var(--Lukic-primary); font-size: 1.25rem; font-weight: 700; }
+			.Lukic-wrap h1 { margin-bottom: 20px; color: #23282d; }
+			.Lukic-tabs { margin-top: 20px; }
+			.Lukic-nav-tabs { margin-bottom: 0; border-bottom: 1px solid #ccd0d4; }
+			.Lukic-nav-tabs .nav-tab { margin-bottom: -1px; padding: 10px 15px; font-size: 14px; font-weight: 500; transition: all 0.2s ease; }
+			.Lukic-nav-tabs .nav-tab-active, .Lukic-nav-tabs .nav-tab:hover { background-color: #fff; border-bottom-color: #fff; color: #00E1AF; }
+			.tab-content { background: #fff; border: 1px solid #ccd0d4; border-top: none; padding: 20px; box-shadow: 0 1px 1px rgba(0,0,0,0.04); }
+			.Lukic-table-container { margin-top: 20px; }
+			.wp-list-table { border-collapse: collapse; width: 100%; }
+			.wp-list-table th { font-weight: 600; text-align: left; padding: 10px; }
+			.wp-list-table td { padding: 12px 10px; vertical-align: middle; }
+			.wp-list-table tr:hover { background-color: #f8f8f8; }
+			.button-primary, .button-primary:focus { background-color: #00E1AF !important; border-color: #00E1AF !important; color: #fff !important; box-shadow: none !important; }
+			.button-primary:hover { background-color: #00c99d !important; border-color: #00c99d !important; }
+			.search-input { padding: 6px 10px; min-width: 250px; border: 1px solid #ddd; border-radius: 4px; margin-right: 5px; height: 40px; }
+			#redirect-filter-type, #redirect-filter-status, #redirect-filter-pattern { padding: 6px 10px; min-width: 120px; border: 1px solid #ddd; border-radius: 4px; margin-right: 5px; }
+			.Lukic-empty-state { text-align: center; padding: 40px 20px; background: #f9f9f9; border-radius: 4px; }
+			form .form-table th { width: 200px; padding: 20px 10px 20px 0; }
+			form .form-table td { padding: 15px 10px; }
+			form select, form input[type="text"] { min-width: 300px; padding: 8px 12px; border-radius: 4px; border: 1px solid #ddd; }
+			input[type="checkbox"] { margin-right: 8px; }
+			.description { margin-top: 4px; color: #666; }
+			.Lukic-form { max-width: 800px; margin-top: 20px; }
+			.tab-content h2 { margin-top: 0; color: #23282d; font-size: 1.5em; font-weight: 500; }
+			#edit-redirect-dialog .ui-dialog-titlebar { background: #00E1AF; color: #fff; border: none; font-weight: 500; }
+			#edit-redirect-dialog .ui-dialog-buttonpane { border-top: 1px solid #eee; }
+			#edit-redirect-dialog .ui-dialog-buttonset .ui-button { background: #f7f7f7; border: 1px solid #ccc; color: #555; border-radius: 3px; padding: 0.4em 1em; cursor: pointer; }
+			#edit-redirect-dialog .ui-dialog-buttonset .ui-button:first-child { background: #00E1AF; border-color: #00E1AF; color: #fff; }
+			.alignleft.actions.bulkactions { justify-content: center; display: flex; }
+		' );
+	}
 
 	/**
 	 * Add menu page for redirect management
@@ -98,24 +164,6 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 	 * Display the redirect manager admin page
 	 */
 	function Lukic_redirect_manager_display_page() {
-		// Enqueue required assets
-		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'jquery-ui-tabs' );
-		wp_enqueue_script( 'jquery-ui-dialog' );
-		wp_enqueue_style( 'wp-jquery-ui-dialog' );
-
-		// Register and enqueue redirect manager script
-		// Note: Script is registered in Lukic_Asset_Manager
-
-		wp_localize_script(
-			'Lukic-redirect-manager',
-			'Lukic_redirect_vars',
-			array(
-				'ajax_url'       => admin_url( 'admin-ajax.php' ),
-				'nonce'          => wp_create_nonce( 'Lukic_redirect_nonce' ),
-				'confirm_delete' => __( 'Are you sure you want to delete this redirect?', 'lukic-code-snippets' ),
-			)
-		);
 
 		// Get all redirects and statistics
 		global $wpdb;
@@ -155,60 +203,6 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 		?>
 		<div class="wrap Lukic-container Lukic-wrap Lukic-redirect-manager">
 			<?php
-			// Ensure CSS variables are available - fallback if assets don't load
-			echo '<style>
-                :root {
-                    --Lukic-primary: #00E1AF;
-                    --Lukic-primary-hover: #00c99e;
-                    --Lukic-dark-bg: #272727;
-                    --Lukic-dark-surface: #444444;
-                    --Lukic-white: #ffffff;
-                    --Lukic-space-4: 1rem;
-                    --Lukic-space-5: 1.25rem;
-                    --Lukic-border-radius: 0.25rem;
-                    --Lukic-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                }
-                .wpl-code-snippets-header {
-                    background: var(--Lukic-dark-bg);
-                    border-radius: var(--Lukic-border-radius);
-                    margin-bottom: var(--Lukic-space-5);
-                    padding: var(--Lukic-space-5);
-                }
-                .wpl-code-snippets-header__content {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
-                    gap: var(--Lukic-space-4);
-                }
-                .wpl-code-snippets-header__brand h2 {
-                    color: var(--Lukic-white);
-                    font-size: 2.5rem;
-                    margin: 0;
-                    font-weight: 700;
-                }
-                .wpl-code-snippets-header__brand h2 span {
-                    color: var(--Lukic-primary);
-                }
-                .wpl-code-snippets-header__stats {
-                    display: flex;
-                    gap: 15px;
-                    flex-wrap: wrap;
-                }
-                .wpl-code-snippets-header__stats-item {
-                    background: var(--Lukic-dark-surface);
-                    color: var(--Lukic-white);
-                    padding: 15px 20px;
-                    border-radius: var(--Lukic-border-radius);
-                    text-align: center;
-                    min-width: 100px;
-                }
-                .wpl-code-snippets-header__stats-item-count {
-                    color: var(--Lukic-primary);
-                    font-size: 1.25rem;
-                    font-weight: 700;
-                }
-            </style>';
 
 			// Display header using the loaded component
 			Lukic_display_header( __( 'Redirect Manager', 'lukic-code-snippets' ), $stats );
@@ -439,148 +433,8 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 				</form>
 			</div>
 		</div>
-		
-		<style>
-			.Lukic-wrap h1 {
-				margin-bottom: 20px;
-				color: #23282d;
-			}
-			.Lukic-tabs {
-				margin-top: 20px;
-			}
-			.Lukic-nav-tabs {
-				margin-bottom: 0;
-				border-bottom: 1px solid #ccd0d4;
-			}
-			.Lukic-nav-tabs .nav-tab {
-				margin-bottom: -1px;
-				padding: 10px 15px;
-				font-size: 14px;
-				font-weight: 500;
-				transition: all 0.2s ease;
-			}
-			.Lukic-nav-tabs .nav-tab-active,
-			.Lukic-nav-tabs .nav-tab:hover {
-				background-color: #fff;
-				border-bottom-color: #fff;
-				color: #00E1AF;
-			}
-			.tab-content {
-				background: #fff;
-				border: 1px solid #ccd0d4;
-				border-top: none;
-				padding: 20px;
-				box-shadow: 0 1px 1px rgba(0,0,0,0.04);
-			}
-			.Lukic-table-container {
-				margin-top: 20px;
-			}
-			.wp-list-table {
-				border-collapse: collapse;
-				width: 100%;
-			}
-			.wp-list-table th {
-				font-weight: 600;
-				text-align: left;
-				padding: 10px;
-			}
-			.wp-list-table td {
-				padding: 12px 10px;
-				vertical-align: middle;
-			}
-			.wp-list-table tr:hover {
-				background-color: #f8f8f8;
-			}
-			.button-primary,
-			.button-primary:focus {
-				background-color: #00E1AF !important;
-				border-color: #00E1AF !important;
-				color: #fff !important;
-				box-shadow: none !important;
-			}
-			.button-primary:hover {
-				background-color: #00c99d !important;
-				border-color: #00c99d !important;
-			}
-			
-			.search-input {
-				padding: 6px 10px;
-				min-width: 250px;
-				border: 1px solid #ddd;
-				border-radius: 4px;
-				margin-right: 5px;
-				height: 40px;
-			}
-			#redirect-filter-type, #redirect-filter-status, #redirect-filter-pattern {
-				padding: 6px 10px;
-				min-width: 120px;
-				border: 1px solid #ddd;
-				border-radius: 4px;
-				margin-right: 5px;
-			}
-			.Lukic-empty-state {
-				text-align: center;
-				padding: 40px 20px;
-				background: #f9f9f9;
-				border-radius: 4px;
-			}
-			form .form-table th {
-				width: 200px;
-				padding: 20px 10px 20px 0;
-			}
-			form .form-table td {
-				padding: 15px 10px;
-			}
-			form select, form input[type="text"] {
-				min-width: 300px;
-				padding: 8px 12px;
-				border-radius: 4px;
-				border: 1px solid #ddd;
-			}
-			input[type="checkbox"] {
-				margin-right: 8px;
-			}
-			.description {
-				margin-top: 4px;
-				color: #666;
-			}
-			.Lukic-form {
-				max-width: 800px;
-				margin-top: 20px;
-			}
-			.tab-content h2 {
-				margin-top: 0;
-				color: #23282d;
-				font-size: 1.5em;
-				font-weight: 500;
-			}
-			#edit-redirect-dialog .ui-dialog-titlebar {
-				background: #00E1AF;
-				color: #fff;
-				border: none;
-				font-weight: 500;
-			}
-			#edit-redirect-dialog .ui-dialog-buttonpane {
-				border-top: 1px solid #eee;
-			}
-			#edit-redirect-dialog .ui-dialog-buttonset .ui-button {
-				background: #f7f7f7;
-				border: 1px solid #ccc;
-				color: #555;
-				border-radius: 3px;
-				padding: 0.4em 1em;
-				cursor: pointer;
-			}
-			#edit-redirect-dialog .ui-dialog-buttonset .ui-button:first-child {
-				background: #00E1AF;
-				border-color: #00E1AF;
-				color: #fff;
-			}
-			.alignleft.actions.bulkactions {
-				justify-content: center;
-				display: flex;
-			}
-		</style>
+		<?php
+		?>
 		<?php
 	}
 
@@ -676,8 +530,7 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 	 */
 	function Lukic_redirect_manager_save_redirect() {
 		// Check nonce
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_redirect_nonce' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_redirect_nonce' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 		}
 
@@ -795,8 +648,7 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 	 */
 	function Lukic_redirect_manager_delete_redirect() {
 		// Check nonce
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_redirect_nonce' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_redirect_nonce' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 		}
 
@@ -836,8 +688,7 @@ if ( ! function_exists( 'Lukic_redirect_manager_init' ) ) {
 	 */
 	function Lukic_redirect_manager_save_settings() {
 		// Check nonce
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_redirect_settings_nonce' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_redirect_settings_nonce' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 		}
 

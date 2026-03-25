@@ -14,7 +14,7 @@ if ( ! function_exists( 'Lukic_hide_admin_bar_init' ) ) {
 		add_filter( 'show_admin_bar', 'Lukic_disable_admin_bar', 999 );
 
 		// Remove the margin added to <html> element when admin bar is showing
-		add_action( 'wp_head', 'Lukic_remove_admin_bar_margin', 999 );
+		add_action( 'wp_enqueue_scripts', 'Lukic_remove_admin_bar_margin', 999 );
 
 		// Add dashboard notice to remind users the admin bar is hidden
 		add_action( 'admin_notices', 'Lukic_admin_bar_notice' );
@@ -41,11 +41,11 @@ if ( ! function_exists( 'Lukic_hide_admin_bar_init' ) ) {
 	 */
 	function Lukic_remove_admin_bar_margin() {
 		if ( ! is_admin() ) {
-			echo '<style>
-                html { margin-top: 0 !important; }
-                body.admin-bar { margin-top: 0 !important; padding-top: 0 !important; }
-                #wpadminbar { display: none !important; }
-            </style>';
+			wp_add_inline_style( 'wp-block-library', '
+				html { margin-top: 0 !important; }
+				body.admin-bar { margin-top: 0 !important; padding-top: 0 !important; }
+				#wpadminbar { display: none !important; }
+			' );
 		}
 	}
 

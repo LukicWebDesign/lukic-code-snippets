@@ -77,131 +77,63 @@ function Lukic_display_documentation_page() {
 		<div id="Lukic-doc-no-results" style="display: none; text-align: center; padding: 40px;">
 			<p><?php esc_html_e( 'No snippets found matching your search.', 'lukic-code-snippets' ); ?></p>
 		</div>
-	</div>
+	<?php
+}
 
-	<style>
-		.Lukic-documentation-controls {
-			margin-bottom: 30px;
-			display: flex;
-			justify-content: flex-end;
-		}
-		.Lukic-search-input {
-			width: 100%;
-			max-width: 220px;
-			padding: 10px 15px;
-			font-size: 16px;
-			border: 1px solid #ddd;
-			border-radius: 4px;
-		}
-		.Lukic-doc-section {
-			margin-bottom: 40px;
-		}
-		.Lukic-doc-section-title {
-			font-size: 1.5em;
-			margin-bottom: 20px;
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			border-bottom: 1px solid #eee;
-			padding-bottom: 10px;
-		}
-		.Lukic-doc-grid {
-			display: grid;
-			grid-template-columns: 1fr;
-			gap: 20px;
-		}
-		@media (min-width: 768px) {
-			.Lukic-doc-grid {
-				grid-template-columns: repeat(2, 1fr);
-			}
-		}
-		.Lukic-doc-card {
-			background: #fff;
-			border: 1px solid #e5e7eb;
-			border-radius: 6px;
-			padding: 20px;
-			display: flex;
-			flex-direction: column;
-			transition: box-shadow 0.2s ease;
-			height: 100%;
-			box-sizing: border-box;
-		}
-		.Lukic-doc-card:hover {
-			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-		}
-		.Lukic-doc-card-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: flex-start;
-			margin-bottom: 10px;
-			gap: 10px;
-		}
-		.Lukic-doc-card-title {
-			margin: 0;
-			font-size: 1.3em;
-			color: #1f2937;
-		}
-		.Lukic-doc-card-body {
-			flex-grow: 1;
-			margin-bottom: 15px;
-		}
-		.Lukic-doc-card-body p {
-			margin: 0;
-			color: #4b5563;
-			font-size: 1.1em;
-			line-height: 1.6;
-		}
-		.Lukic-status-badge {
-			font-size: 0.75em;
-			padding: 2px 8px;
-			border-radius: 12px;
-			font-weight: 500;
-			white-space: nowrap;
-		}
-		.Lukic-status-active {
-			background-color: #d1fae5;
-			color: #065f46;
-		}
-		.Lukic-status-inactive {
-			background-color: #f3f4f6;
-			color: #6b7280;
-		}
-		.Lukic-doc-tags {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 5px;
-		}
-		.Lukic-tag {
-			background: #f3f4f6;
-			color: #374151;
-			font-size: 0.8em;
-			padding: 2px 8px;
-			border-radius: 4px;
-		}
-	</style>
+/**
+ * Enqueue scripts and styles for documentation page
+ */
+function Lukic_enqueue_documentation_scripts( $hook ) {
+	if ( strpos( $hook, 'lukic-code-snippets-documentation' ) === false ) {
+		return;
+	}
 
-	<script>
+	wp_register_style( 'Lukic-doc-styles', false );
+	wp_enqueue_style( 'Lukic-doc-styles' );
+	wp_add_inline_style( 'Lukic-doc-styles', '
+		.Lukic-documentation-controls { margin-bottom: 30px; display: flex; justify-content: flex-end; }
+		.Lukic-search-input { width: 100%; max-width: 220px; padding: 10px 15px; font-size: 16px; border: 1px solid #ddd; border-radius: 4px; }
+		.Lukic-doc-section { margin-bottom: 40px; }
+		.Lukic-doc-section-title { font-size: 1.5em; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+		.Lukic-doc-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+		@media (min-width: 768px) { .Lukic-doc-grid { grid-template-columns: repeat(2, 1fr); } }
+		.Lukic-doc-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 20px; display: flex; flex-direction: column; transition: box-shadow 0.2s ease; height: 100%; box-sizing: border-box; }
+		.Lukic-doc-card:hover { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+		.Lukic-doc-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 10px; }
+		.Lukic-doc-card-title { margin: 0; font-size: 1.3em; color: #1f2937; }
+		.Lukic-doc-card-body { flex-grow: 1; margin-bottom: 15px; }
+		.Lukic-doc-card-body p { margin: 0; color: #4b5563; font-size: 1.1em; line-height: 1.6; }
+		.Lukic-status-badge { font-size: 0.75em; padding: 2px 8px; border-radius: 12px; font-weight: 500; white-space: nowrap; }
+		.Lukic-status-active { background-color: #d1fae5; color: #065f46; }
+		.Lukic-status-inactive { background-color: #f3f4f6; color: #6b7280; }
+		.Lukic-doc-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+		.Lukic-tag { background: #f3f4f6; color: #374151; font-size: 0.8em; padding: 2px 8px; border-radius: 4px; }
+	' );
+
+	wp_enqueue_script( 'jquery' );
+	wp_add_inline_script( 'jquery', '
 		jQuery(document).ready(function($) {
-			$('#Lukic-doc-search').on('keyup', function() {
+			$("#Lukic-doc-search").on("keyup", function() {
 				var value = $(this).val().toLowerCase();
 				var hasVisible = false;
 
-				$('.Lukic-doc-card').filter(function() {
-					var match = $(this).data('search').indexOf(value) > -1;
-					$(this).toggle(match);
+				$(".Lukic-doc-card").each(function() {
+					var searchData = String($(this).data("search") || "").toLowerCase();
+					var match = searchData.indexOf(value) > -1;
+					
+					$(this).toggle(match).toggleClass("is-hidden-by-search", !match);
 					if (match) hasVisible = true;
 				});
 
 				// Hide empty sections
-				$('.Lukic-doc-section').each(function() {
-					var sectionHasVisible = $(this).find('.Lukic-doc-card:visible').length > 0;
+				$(".Lukic-doc-section").each(function() {
+					var sectionHasVisible = $(this).find(".Lukic-doc-card").not(".is-hidden-by-search").length > 0;
 					$(this).toggle(sectionHasVisible);
 				});
-
-				// Show no results message
-				$('#Lukic-doc-no-results').toggle(!hasVisible);
+				
+				$("#Lukic-doc-no-results").toggle(!hasVisible);
 			});
 		});
-	</script>
-	<?php
+	' );
 }
+add_action( 'admin_enqueue_scripts', 'Lukic_enqueue_documentation_scripts' );

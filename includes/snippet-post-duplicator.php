@@ -50,8 +50,7 @@ if ( ! function_exists( 'Lukic_duplicate_post_init' ) ) {
 		}
 
 		// Verify nonce
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! isset( $_GET['duplicate_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_GET['duplicate_nonce'] ), 'Lukic_duplicate_post' ) ) {
+		if ( ! isset( $_GET['duplicate_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['duplicate_nonce'] ) ), 'Lukic_duplicate_post' ) ) {
 			wp_die( esc_html__( 'Security check failed. Please try again.', 'lukic-code-snippets' ) );
 		}
 

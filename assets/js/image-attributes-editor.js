@@ -30,12 +30,12 @@
             ]
         });
 
-        // Initialize Magnific Popup for image lightbox
-        $('.thumbnail-link').magnificPopup({
-            type: 'image',
-            gallery: {
-                enabled: true
-            }
+        // Initialize Thickbox for image lightbox (replaces deprecated Magnific Popup)
+        $('.thumbnail-link').on('click', function(e) {
+            e.preventDefault();
+            var imageUrl = $(this).attr('href');
+            var imageTitle = $(this).find('img').attr('alt') || 'Image Preview';
+            tb_show(imageTitle, imageUrl + '?TB_iframe=false&width=800&height=600');
         });
 
         // Handle Select All checkbox
@@ -270,11 +270,12 @@
 
         // Reattach event listeners after pagination change
         table.on("draw.dt", function () {
-            $('.thumbnail-link').magnificPopup({
-                type: 'image',
-                gallery: {
-                    enabled: true
-                }
+            // Re-bind Thickbox click handler for new rows
+            $('.thumbnail-link').off('click').on('click', function(e) {
+                e.preventDefault();
+                var imageUrl = $(this).attr('href');
+                var imageTitle = $(this).find('img').attr('alt') || 'Image Preview';
+                tb_show(imageTitle, imageUrl + '?TB_iframe=false&width=800&height=600');
             });
 
             // Update selected status after table redraw

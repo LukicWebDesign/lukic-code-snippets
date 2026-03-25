@@ -195,8 +195,7 @@ function Lukic_image_attributes_editor_page() {
  */
 function Lukic_update_image_attribute() {
 	// Verify nonce
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_image_editor_nonce' ) ) {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_image_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Security check failed' ) );
 	}
 
@@ -263,8 +262,7 @@ add_action( 'wp_ajax_Lukic_update_image_attribute', 'Lukic_update_image_attribut
  */
 function Lukic_generate_csv_file() {
 	// Verify nonce
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-	if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_GET['nonce'] ), 'Lukic_image_editor_nonce' ) ) {
+	if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['nonce'] ) ), 'Lukic_image_editor_nonce' ) ) {
 		wp_die( 'Security check failed' );
 	}
 
@@ -310,8 +308,7 @@ add_action( 'wp_ajax_Lukic_generate_csv_file', 'Lukic_generate_csv_file' );
  */
 function Lukic_delete_image() {
 	// Verify nonce
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_image_editor_nonce' ) ) {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_image_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Security check failed' ) );
 	}
 
@@ -338,8 +335,7 @@ add_action( 'wp_ajax_Lukic_delete_image', 'Lukic_delete_image' );
  */
 function Lukic_bulk_update_images() {
 	// Verify nonce
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_image_editor_nonce' ) ) {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_image_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Security check failed' ) );
 	}
 

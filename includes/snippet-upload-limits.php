@@ -70,6 +70,9 @@ class Lukic_Upload_Limits {
 		// Add submenu page
 		add_action( 'admin_menu', array( $this, 'add_submenu_page' ), 20 );
 
+		// Add inline styles
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_inline_styles' ) );
+
 		// Register settings
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 
@@ -79,6 +82,10 @@ class Lukic_Upload_Limits {
 		// Add AJAX handlers
 		add_action( 'wp_ajax_Lukic_refresh_php_settings', array( $this, 'ajax_refresh_php_settings' ) );
 		add_action( 'wp_ajax_Lukic_test_upload', array( $this, 'ajax_test_upload' ) );
+		add_action( 'wp_ajax_Lukic_save_upload_limits', array( $this, 'ajax_save_upload_limits' ) );
+
+		// Filter WordPress upload limit UI and enforcement
+		add_filter( 'upload_size_limit', array( $this, 'filter_upload_size_limit' ), 999 );
 	}
 
 	/**
@@ -101,6 +108,31 @@ class Lukic_Upload_Limits {
 			'lukic-upload-limits',
 			array( $this, 'render_settings_page' )
 		);
+	}
+
+	/**
+	 * Enqueue inline styles
+	 */
+	public function enqueue_inline_styles( $hook ) {
+		if ( strpos( $hook, 'lukic-upload-limits' ) === false ) {
+			return;
+		}
+
+		wp_add_inline_style( 'Lukic-admin-styles', '
+			.Lukic-settings-section { background: #fff; border: 1px solid #ccd0d4; border-radius: 4px; padding: 20px; margin-bottom: 20px; }
+			.Lukic-settings-section h2 { margin-top: 0; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+			.ul-disc { list-style: disc; margin-left: 20px; }
+			.Lukic-button, .Lukic-settings-section .button-primary, #test-upload-button { background-color: var(--Lukic-primary, #00E1AF) !important; border-color: var(--Lukic-primary, #00E1AF) !important; color: #fff !important; text-shadow: none !important; box-shadow: none !important; transition: all 0.2s ease; }
+			.Lukic-button:hover, .Lukic-settings-section .button-primary:hover, #test-upload-button:hover { background-color: var(--Lukic-primary-hover, #00c99e) !important; border-color: var(--Lukic-primary-hover, #00c99e) !important; }
+			.Lukic-button:focus, .Lukic-settings-section .button-primary:focus, #test-upload-button:focus { box-shadow: 0 0 0 1px #fff, 0 0 0 3px var(--Lukic-primary-focus, rgba(0, 225, 175, 0.2)) !important; }
+			#refresh-php-settings { background-color: #f7f7f7; border-color: #ccc; color: #555; }
+			#refresh-php-settings:hover { background-color: #f0f0f0; border-color: #999; }
+			.upload-test-form { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+			.test-upload-input { flex: 1; }
+			.widefat { border-collapse: collapse; margin-top: 10px; margin-bottom: 20px; width: 100%; }
+			.widefat th { font-weight: 600; text-align: left; padding: 8px 10px; }
+			.widefat td { padding: 8px 10px; }
+		' );
 	}
 
 	/**
@@ -166,6 +198,9 @@ class Lukic_Upload_Limits {
 		if ( $this->is_apache_server() ) {
 			$this->update_htaccess( $settings );
 		}
+
+		// Try to update .user.ini for Nginx/PHP-FPM/CGI environments
+		$this->update_user_ini( $settings );
 	}
 
 	/**
@@ -173,6 +208,24 @@ class Lukic_Upload_Limits {
 	 */
 	private function is_apache_server() {
 		return ( isset( $_SERVER['SERVER_SOFTWARE'] ) && strpos( sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ), 'Apache' ) !== false );
+	}
+
+	/**
+	 * Filter WordPress upload size limit
+	 * 
+	 * Ensures WordPress UI reflects the limit and strictly enforces limits lower than php.ini
+	 */
+	public function filter_upload_size_limit( $size ) {
+		if ( ! empty( $this->settings['upload_max_filesize'] ) ) {
+			$limit_str = $this->settings['upload_max_filesize'];
+			$limit_bytes = wp_convert_hr_to_bytes( $limit_str );
+			
+			if ( $limit_bytes > 0 ) {
+				return $limit_bytes;
+			}
+		}
+		
+		return $size;
 	}
 
 	/**
@@ -218,15 +271,86 @@ class Lukic_Upload_Limits {
 	}
 
 	/**
+	 * Update .user.ini file with PHP settings (For Nginx / PHP-FPM)
+	 */
+	private function update_user_ini( $settings ) {
+		$user_ini_file = ABSPATH . '.user.ini';
+
+		// Check if file exists and is writable, or directory is writable
+		if ( ( file_exists( $user_ini_file ) && ! wp_is_writable( $user_ini_file ) ) || ( ! file_exists( $user_ini_file ) && ! wp_is_writable( ABSPATH ) ) ) {
+			return false;
+		}
+
+		$user_ini_content = file_exists( $user_ini_file ) ? file_get_contents( $user_ini_file ) : '';
+
+		// Remove existing Lukic upload limits if they exist
+		$pattern          = '/; BEGIN Lukic Upload Limits.*?; END Lukic Upload Limits\s*/s';
+		$user_ini_content = preg_replace( $pattern, '', $user_ini_content );
+
+		// Create new PHP limits section
+		$new_limits  = "\n; BEGIN Lukic Upload Limits\n";
+		$new_limits .= "upload_max_filesize = {$settings['upload_max_filesize']}\n";
+		$new_limits .= "post_max_size = {$settings['upload_max_filesize']}\n";
+		$new_limits .= "max_execution_time = {$settings['max_execution_time']}\n";
+		$new_limits .= "memory_limit = {$settings['memory_limit']}\n";
+		$new_limits .= "; END Lukic Upload Limits\n";
+
+		// Add new limits
+		$user_ini_content .= $new_limits;
+
+		// Write updated content
+		return @file_put_contents( $user_ini_file, ltrim( $user_ini_content, "\n" ) );
+	}
+
+	/**
 	 * Get current PHP settings
 	 */
 	private function get_current_php_settings() {
+		$saved_limit    = ! empty( $this->settings['upload_max_filesize'] ) ? $this->settings['upload_max_filesize'] : '';
+		$server_limit   = ini_get( 'upload_max_filesize' );
+		$effective_limit = $saved_limit ?: $server_limit;
+
 		return array(
-			'upload_max_filesize' => ini_get( 'upload_max_filesize' ),
-			'post_max_size'       => ini_get( 'post_max_size' ),
-			'max_execution_time'  => ini_get( 'max_execution_time' ),
-			'memory_limit'        => ini_get( 'memory_limit' ),
+			'upload_max_filesize'  => $server_limit,
+			'effective_upload_limit' => $effective_limit,
+			'post_max_size'        => ini_get( 'post_max_size' ),
+			'max_execution_time'   => ini_get( 'max_execution_time' ),
+			'memory_limit'         => ini_get( 'memory_limit' ),
 		);
+	}
+
+	/**
+	 * AJAX handler for saving upload limits settings
+	 */
+	public function ajax_save_upload_limits() {
+		check_ajax_referer( 'Lukic_upload_test_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Unauthorized', 'lukic-code-snippets' ) ) );
+		}
+
+		$input = array(
+			'upload_max_filesize' => isset( $_POST['upload_max_filesize'] ) ? sanitize_text_field( wp_unslash( $_POST['upload_max_filesize'] ) ) : '',
+			'max_execution_time'  => isset( $_POST['max_execution_time'] )  ? absint( $_POST['max_execution_time'] )  : 300,
+			'memory_limit'        => isset( $_POST['memory_limit'] )        ? sanitize_text_field( wp_unslash( $_POST['memory_limit'] ) ) : '256M',
+		);
+
+		$sanitized = $this->sanitize_settings( $input );
+		update_option( $this->option_name, $sanitized );
+
+		// Reload settings into instance
+		$this->settings = $sanitized;
+
+		// Try to apply limits immediately
+		$this->apply_upload_limits();
+
+		$current = $this->get_current_php_settings();
+		$current['timestamp'] = gmdate( 'Y-m-d H:i:s' );
+
+		wp_send_json_success( array(
+			'message'  => __( 'Settings saved and applied successfully.', 'lukic-code-snippets' ),
+			'settings' => $current,
+		) );
 	}
 
 	/**
@@ -563,91 +687,6 @@ class Lukic_Upload_Limits {
 				</div>
 			</div>
 		</div>
-		
-		<style>
-			.Lukic-settings-section {
-				background: #fff;
-				border: 1px solid #ccd0d4;
-				border-radius: 4px;
-				padding: 20px;
-				margin-bottom: 20px;
-			}
-			.Lukic-settings-section h2 {
-				margin-top: 0;
-				padding-bottom: 10px;
-				border-bottom: 1px solid #eee;
-			}
-			.ul-disc {
-				list-style: disc;
-				margin-left: 20px;
-			}
-			
-			/* Custom button styles */
-			.Lukic-button,
-			.Lukic-settings-section .button-primary,
-			#test-upload-button {
-				background-color: var(--Lukic-primary, #00E1AF) !important;
-				border-color: var(--Lukic-primary, #00E1AF) !important;
-				color: #fff !important;
-				text-shadow: none !important;
-				box-shadow: none !important;
-				transition: all 0.2s ease;
-			}
-			
-			.Lukic-button:hover,
-			.Lukic-settings-section .button-primary:hover,
-			#test-upload-button:hover {
-				background-color: var(--Lukic-primary-hover, #00c99e) !important;
-				border-color: var(--Lukic-primary-hover, #00c99e) !important;
-			}
-			
-			.Lukic-button:focus,
-			.Lukic-settings-section .button-primary:focus,
-			#test-upload-button:focus {
-				box-shadow: 0 0 0 1px #fff, 0 0 0 3px var(--Lukic-primary-focus, rgba(0, 225, 175, 0.2)) !important;
-			}
-			
-			#refresh-php-settings {
-				background-color: #f7f7f7;
-				border-color: #ccc;
-				color: #555;
-			}
-			
-			#refresh-php-settings:hover {
-				background-color: #f0f0f0;
-				border-color: #999;
-			}
-			
-			/* Test upload form styling */
-			.upload-test-form {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				margin-bottom: 20px;
-			}
-			
-			.test-upload-input {
-				flex: 1;
-			}
-			
-			/* Table styling */
-			.widefat {
-				border-collapse: collapse;
-				margin-top: 10px;
-				margin-bottom: 20px;
-				width: 100%;
-			}
-			
-			.widefat th {
-				font-weight: 600;
-				text-align: left;
-				padding: 8px 10px;
-			}
-			
-			.widefat td {
-				padding: 8px 10px;
-			}
-		</style>
 		<?php
 	}
 }

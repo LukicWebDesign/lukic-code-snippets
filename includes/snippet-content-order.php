@@ -218,8 +218,7 @@ add_action( 'admin_enqueue_scripts', 'Lukic_content_order_scripts' );
  */
 function Lukic_update_post_order() {
 	// Check nonce for security
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'Lukic_content_order_nonce' ) ) {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_content_order_nonce' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed.', 'lukic-code-snippets' ) ) );
 	}
 

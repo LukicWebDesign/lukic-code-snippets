@@ -45,6 +45,264 @@ class Lukic_Snippet_Codes_Settings {
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
 
 		// CSS is now handled by the main plugin centrally
+		
+		wp_register_style( 'Lukic-admin-styles', false );
+		wp_enqueue_style( 'Lukic-admin-styles' );
+		wp_add_inline_style( 'Lukic-admin-styles', '
+			@keyframes lukic-spin { 
+				100% { transform: rotate(360deg); } 
+			}
+			.spinning-icon { 
+				animation: lukic-spin 1s linear infinite; 
+			}
+		' );
+
+		wp_add_inline_script( 'jquery', '
+			jQuery(document).ready(function($) {
+				
+				// Filter snippets
+				function filterSnippets() {
+					// Get the search term from the input (add trim to remove whitespace)
+					const searchTerm = $("#snippet-search").val().toLowerCase().trim();
+					// Get selected tag from active tag button
+					const selectedTag = $(".Lukic-tag-button.active").data("tag") || "";
+					// Get filter type (if any)
+					const filterType = $(".Lukic-tag-button.active").data("filter-type") || "";
+					
+					// Always reset no results message
+					$(".Lukic-no-search-results").remove();
+					
+					// Initialize counter for visible snippets
+					let visibleSnippetsCount = 0;
+					
+					// If no filters active (no search term and showing all tags), show everything
+					if ((selectedTag === "" || selectedTag === "all") && searchTerm === "") {
+						// Show all snippets when no filters are active
+						$(".Lukic-snippet").show();
+						$(".Lukic-category").show();
+						return; // Exit early, no need to check each snippet
+					}
+					
+					// Apply filters to each snippet
+					$(".Lukic-snippet").each(function() {
+						const $snippet = $(this);
+						const snippetName = $snippet.find("h3").text().toLowerCase();
+						const snippetDesc = $snippet.find(".Lukic-snippet-description p").text().toLowerCase();
+						
+						// Get all tag elements and extract their text content
+						const snippetTagElements = $snippet.find(".Lukic-tag");
+						const snippetTagsArray = [];
+						snippetTagElements.each(function() {
+							snippetTagsArray.push($(this).text().toLowerCase());
+						});
+						
+						// Get the active status
+						const isActive = $snippet.attr("data-active") === "true";
+						
+						// Check if search term matches
+						const matchesSearch = searchTerm === "" || 
+							snippetName.includes(searchTerm) || 
+							snippetDesc.includes(searchTerm) || 
+							snippetTagsArray.some(tag => tag.includes(searchTerm));
+						
+						// Handle different filter types
+						let matchesFilter = true;
+						
+						if (filterType === "status" && selectedTag === "active") {
+							// Filter by active status
+							matchesFilter = isActive;
+						} else if (selectedTag && selectedTag !== "" && selectedTag !== "all") {
+							// Regular tag filtering - only if a specific tag is selected
+							matchesFilter = false; // Default to false when filtering by tag
+							
+							// Convert selected tag to lowercase for case-insensitive comparison
+							const lowerSelectedTag = selectedTag.toLowerCase();
+							
+							// Check each tag in the snippet
+							for (let i = 0; i < snippetTagsArray.length; i++) {
+								// Trim whitespace and convert to lowercase
+								const snippetTag = snippetTagsArray[i].trim().toLowerCase();
+								if (snippetTag === lowerSelectedTag) {
+									matchesFilter = true;
+									break;
+								}
+							}
+						}
+						
+						// Show snippet only if BOTH conditions are met
+						if (matchesSearch && matchesFilter) {
+							$snippet.show();
+							visibleSnippetsCount++;
+						} else {
+							$snippet.hide();
+						}
+					});
+					
+					// Show/hide category headers based on visible snippets
+					$(".Lukic-category").each(function() {
+						const visibleSnippets = $(this).find(".Lukic-snippet:visible").length;
+						
+						if (visibleSnippets > 0) {
+							$(this).show();
+						} else {
+							$(this).hide();
+						}
+					});
+					
+					// Show no results message if needed
+					const anyVisibleSnippets = $(".Lukic-snippet:visible").length > 0;
+					if (!anyVisibleSnippets) {
+						$(".Lukic-snippets-container").append(
+							"<div class=\"Lukic-no-search-results\">" +
+							"<p>" + "No snippets found matching your criteria. Try a different search term or tag filter." + "</p>" +
+							"<p><strong>Tip:</strong> Click the \"All\" tag button to see all snippets.</p>" +
+							"</div>"
+						);
+					}
+				}
+				
+				// Apply filters when search input changes
+				$("#snippet-search").on("input", function() {
+					filterSnippets();
+				});
+				
+				// Make sure the search input is focused when clicked
+				$("#snippet-search").on("click", function() {
+					$(this).focus();
+				});
+				
+				// Dropdown filter removed - now using only tag buttons
+				
+				// Handle tag button clicks
+				$(document).on("click", ".Lukic-tag-button", function() {
+					// First, show all snippets to reset any previous filtering
+					$(".Lukic-snippet").show();
+					$(".Lukic-category").show();
+					$(".Lukic-no-search-results").remove();
+					
+					// Get tag data
+					const tag = $(this).data("tag");
+					const filterType = $(this).data("filter-type") || "";
+					
+					// Update active state
+					$(".Lukic-tag-button").removeClass("active");
+					$(this).addClass("active");
+					
+					// Clear search input when changing tags to avoid confusion
+					if ($("#snippet-search").val()) {
+						$("#snippet-search").val("");
+					}
+					
+					// Filter snippets with a slight delay to ensure DOM is updated
+					setTimeout(function() {
+						filterSnippets();
+					}, 50);
+				});
+				
+				// Make tags in snippet boxes clickable for filtering
+				$(document).on("click", ".Lukic-tag", function(e) {
+					e.preventDefault();
+					const tag = $(this).text().toLowerCase();
+					
+					// Find and click corresponding tag button if exists
+					const $tagButton = $(".Lukic-tag-button").filter(function() {
+						return $(this).text().toLowerCase() === tag;
+					});
+					
+					if ($tagButton.length) {
+						$tagButton.click();
+					} else {
+						// If no matching button exists, create a temporary one and click it
+						// This handles cases where a snippet has a tag that isn\'t in the top tags list
+						$(".Lukic-tag-button").removeClass("active");
+						
+						// Use active tag styling to indicate selection
+						filterSnippets();
+					}
+					
+					// Filter snippets
+					filterSnippets();
+				});
+				
+				// Set the initial active button to "All"
+				$(".Lukic-tag-button[data-tag=\"\"]").addClass("active");
+				
+				// Update data-active attribute when checkboxes are toggled
+				$(document).on("change", ".Lukic-snippet input[type=\"checkbox\"]", function() {
+					const isChecked = $(this).is(":checked");
+					$(this).closest(".Lukic-snippet").attr("data-active", isChecked ? "true" : "false");
+					
+					// If the active filter is currently selected, re-filter to update the view
+					if ($(".Lukic-tag-button.active").data("tag") === "active") {
+						filterSnippets();
+					}
+				});
+				
+				// Handle Toggle All button
+				$("#lukic-toggle-all-snippets").on("click", function(e) {
+					e.preventDefault();
+					const $btn = $(this);
+					const $checkboxes = $(".Lukic-snippet:visible input[type=\"checkbox\"]");
+					
+					if (!$checkboxes.length) return;
+					
+					// Determine target state: if all visible are checked, turn them off. Otherwise turn all on.
+					const allChecked = $checkboxes.length === $checkboxes.filter(":checked").length;
+					const newState = !allChecked;
+					
+					// Visual updates
+					$btn.find("span").last().text("' . esc_js( __( 'Saving...', 'lukic-code-snippets' ) ) . '");
+					$btn.find(".dashicons").addClass("spinning-icon"); // Will add CSS below
+					$btn.prop("disabled", true);
+					
+					// Change checkboxes without triggering "change" event to avoid auto-save storm
+					$checkboxes.prop("checked", newState);
+					
+					// Update snippets visual state immediately
+					$checkboxes.each(function() {
+						const $snippetBox = $(this).closest(".Lukic-snippet");
+						$snippetBox.attr("data-active", newState ? "true" : "false");
+						if (newState) {
+							$snippetBox.addClass("snippet-active");
+						} else {
+							$snippetBox.removeClass("snippet-active");
+						}
+					});
+					
+					// Gather all snippet options on page
+					const currentOptions = {};
+					$("input[name^=\"Lukic_snippet_codes_options[\"]").each(function () {
+						const name = $(this).attr("name");
+						const match = name.match(/Lukic_snippet_codes_options\[(.+?)\]/);
+						if (match) {
+							currentOptions[match[1]] = $(this).is(":checked") ? "1" : "0";
+						}
+					});
+					
+					// Single bulk AJAX save
+					$.ajax({
+						url: ajaxurl,
+						type: "POST",
+						data: {
+							action: "Lukic_auto_save_snippet",
+							nonce: Lukic_auto_save.nonce,
+							options: JSON.stringify(currentOptions)
+						},
+						success: function(response) {
+							// Reload to apply any snippet hooks that need refreshing
+							window.location.reload();
+						},
+						error: function() {
+							alert("' . esc_js( __( 'Error saving settings.', 'lukic-code-snippets' ) ) . '");
+							window.location.reload();
+						}
+					});
+				});
+
+				// Trigger initial filtering on page load
+				filterSnippets();
+			});
+		' );
 	}
 
 	/**
@@ -347,7 +605,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 						</div>
 						<h3 style="margin-top: 0; font-size: 16px; font-weight: 600; color: #1e293b;"><?php esc_html_e( 'Need Custom Work?', 'lukic-code-snippets' ); ?></h3>
 						<p style="font-size: 14px; color: #64748b; line-height: 1.5; margin-bottom: 20px;"><?php esc_html_e( 'I offer professional WordPress custom development, performance optimization, and plugin adjustments.', 'lukic-code-snippets' ); ?></p>
-						<a href="https://wplukic.com" target="_blank" rel="noopener noreferrer" class="Lukic-btn Lukic-btn--primary" style="display: block; text-decoration: none; padding: 10px; background-color: #00E1AF; color: #fff; border-radius: 4px; font-weight: 600; transition: background-color 0.2s;"><?php esc_html_e( 'Hire Me', 'lukic-code-snippets' ); ?></a>
+						<a href="https://wplukic.com" target="_blank" rel="noopener noreferrer" class="Lukic-btn Lukic-btn--primary" style="display: block; text-decoration: none; padding: 10px; background-color: #00E1AF; color: #fff; border-radius: 4px; font-weight: 600; transition: background-color 0.2s;"><?php esc_html_e( 'About the Author', 'lukic-code-snippets' ); ?></a>
 					</div>
 					
 					<div class="Lukic-sidebar-widget" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; text-align: center; margin-top: 20px;">
@@ -361,264 +619,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				</div>
 			</div>
 		</div>
-		
-		<script>
-			jQuery(document).ready(function($) {
-				
-				// Filter snippets
-				function filterSnippets() {
-					// Get the search term from the input (add trim to remove whitespace)
-					const searchTerm = $('#snippet-search').val().toLowerCase().trim();
-					// Get selected tag from active tag button
-					const selectedTag = $('.Lukic-tag-button.active').data('tag') || '';
-					// Get filter type (if any)
-					const filterType = $('.Lukic-tag-button.active').data('filter-type') || '';
-					
-					// Always reset no results message
-					$('.Lukic-no-search-results').remove();
-					
-					// Initialize counter for visible snippets
-					let visibleSnippetsCount = 0;
-					
-					// If no filters active (no search term and showing all tags), show everything
-					if ((selectedTag === '' || selectedTag === 'all') && searchTerm === '') {
-						// Show all snippets when no filters are active
-						$('.Lukic-snippet').show();
-						$('.Lukic-category').show();
-						return; // Exit early, no need to check each snippet
-					}
-					
-					// Apply filters to each snippet
-					$('.Lukic-snippet').each(function() {
-						const $snippet = $(this);
-						const snippetName = $snippet.find('h3').text().toLowerCase();
-						const snippetDesc = $snippet.find('.Lukic-snippet-description p').text().toLowerCase();
-						
-						// Get all tag elements and extract their text content
-						const snippetTagElements = $snippet.find('.Lukic-tag');
-						const snippetTagsArray = [];
-						snippetTagElements.each(function() {
-							snippetTagsArray.push($(this).text().toLowerCase());
-						});
-						
-						// Get the active status
-						const isActive = $snippet.attr('data-active') === 'true';
-						
-						// Check if search term matches
-						const matchesSearch = searchTerm === '' || 
-							snippetName.includes(searchTerm) || 
-							snippetDesc.includes(searchTerm) || 
-							snippetTagsArray.some(tag => tag.includes(searchTerm));
-						
-						// Handle different filter types
-						let matchesFilter = true;
-						
-						if (filterType === 'status' && selectedTag === 'active') {
-							// Filter by active status
-							matchesFilter = isActive;
-						} else if (selectedTag && selectedTag !== '' && selectedTag !== 'all') {
-							// Regular tag filtering - only if a specific tag is selected
-							matchesFilter = false; // Default to false when filtering by tag
-							
-							// Convert selected tag to lowercase for case-insensitive comparison
-							const lowerSelectedTag = selectedTag.toLowerCase();
-							
-							// Check each tag in the snippet
-							for (let i = 0; i < snippetTagsArray.length; i++) {
-								// Trim whitespace and convert to lowercase
-								const snippetTag = snippetTagsArray[i].trim().toLowerCase();
-								if (snippetTag === lowerSelectedTag) {
-									matchesFilter = true;
-									break;
-								}
-							}
-						}
-						
-						// Show snippet only if BOTH conditions are met
-						if (matchesSearch && matchesFilter) {
-							$snippet.show();
-							visibleSnippetsCount++;
-						} else {
-							$snippet.hide();
-						}
-					});
-					
-					// Show/hide category headers based on visible snippets
-					$('.Lukic-category').each(function() {
-						const visibleSnippets = $(this).find('.Lukic-snippet:visible').length;
-						
-						if (visibleSnippets > 0) {
-							$(this).show();
-						} else {
-							$(this).hide();
-						}
-					});
-					
-					// Show no results message if needed
-					const anyVisibleSnippets = $('.Lukic-snippet:visible').length > 0;
-					if (!anyVisibleSnippets) {
-						$('.Lukic-snippets-container').append(
-							'<div class="Lukic-no-search-results">' +
-							'<p>' + 'No snippets found matching your criteria. Try a different search term or tag filter.' + '</p>' +
-							'<p><strong>Tip:</strong> Click the "All" tag button to see all snippets.</p>' +
-							'</div>'
-						);
-					}
-				}
-				
-				// Apply filters when search input changes
-				$('#snippet-search').on('input', function() {
-					filterSnippets();
-				});
-				
-				// Make sure the search input is focused when clicked
-				$('#snippet-search').on('click', function() {
-					$(this).focus();
-				});
-				
-				// Dropdown filter removed - now using only tag buttons
-				
-				// Handle tag button clicks
-				$(document).on('click', '.Lukic-tag-button', function() {
-					// First, show all snippets to reset any previous filtering
-					$('.Lukic-snippet').show();
-					$('.Lukic-category').show();
-					$('.Lukic-no-search-results').remove();
-					
-					// Get tag data
-					const tag = $(this).data('tag');
-					const filterType = $(this).data('filter-type') || '';
-					
-					// Update active state
-					$('.Lukic-tag-button').removeClass('active');
-					$(this).addClass('active');
-					
-					// Clear search input when changing tags to avoid confusion
-					if ($('#snippet-search').val()) {
-						$('#snippet-search').val('');
-					}
-					
-					// Filter snippets with a slight delay to ensure DOM is updated
-					setTimeout(function() {
-						filterSnippets();
-					}, 50);
-				});
-				
-				// Make tags in snippet boxes clickable for filtering
-				$(document).on('click', '.Lukic-tag', function(e) {
-					e.preventDefault();
-					const tag = $(this).text().toLowerCase();
-					
-					// Find and click corresponding tag button if exists
-					const $tagButton = $('.Lukic-tag-button').filter(function() {
-						return $(this).text().toLowerCase() === tag;
-					});
-					
-					if ($tagButton.length) {
-						$tagButton.click();
-					} else {
-						// If no matching button exists, create a temporary one and click it
-						// This handles cases where a snippet has a tag that isn't in the top tags list
-						$('.Lukic-tag-button').removeClass('active');
-						
-						// Use active tag styling to indicate selection
-						filterSnippets();
-					}
-					
-					// Filter snippets
-					filterSnippets();
-				});
-				
-				// Set the initial active button to "All"
-				$('.Lukic-tag-button[data-tag=""]').addClass('active');
-				
-				// Update data-active attribute when checkboxes are toggled
-				$(document).on('change', '.Lukic-snippet input[type="checkbox"]', function() {
-					const isChecked = $(this).is(':checked');
-					$(this).closest('.Lukic-snippet').attr('data-active', isChecked ? 'true' : 'false');
-					
-					// If the active filter is currently selected, re-filter to update the view
-					if ($('.Lukic-tag-button.active').data('tag') === 'active') {
-						filterSnippets();
-					}
-				});
-				
-				// Handle Toggle All button
-				$('#lukic-toggle-all-snippets').on('click', function(e) {
-					e.preventDefault();
-					const $btn = $(this);
-					const $checkboxes = $('.Lukic-snippet:visible input[type="checkbox"]');
-					
-					if (!$checkboxes.length) return;
-					
-					// Determine target state: if all visible are checked, turn them off. Otherwise turn all on.
-					const allChecked = $checkboxes.length === $checkboxes.filter(':checked').length;
-					const newState = !allChecked;
-					
-					// Visual updates
-					$btn.find('span').last().text('<?php esc_html_e( 'Saving...', 'lukic-code-snippets' ); ?>');
-					$btn.find('.dashicons').addClass('spinning-icon'); // Will add CSS below
-					$btn.prop('disabled', true);
-					
-					// Change checkboxes without triggering 'change' event to avoid auto-save storm
-					$checkboxes.prop('checked', newState);
-					
-					// Update snippets visual state immediately
-					$checkboxes.each(function() {
-						const $snippetBox = $(this).closest('.Lukic-snippet');
-						$snippetBox.attr('data-active', newState ? 'true' : 'false');
-						if (newState) {
-							$snippetBox.addClass('snippet-active');
-						} else {
-							$snippetBox.removeClass('snippet-active');
-						}
-					});
-					
-					// Gather all snippet options on page
-					const currentOptions = {};
-					$('input[name^="Lukic_snippet_codes_options["]').each(function () {
-						const name = $(this).attr('name');
-						const match = name.match(/Lukic_snippet_codes_options\[(.+?)\]/);
-						if (match) {
-							currentOptions[match[1]] = $(this).is(':checked') ? '1' : '0';
-						}
-					});
-					
-					// Single bulk AJAX save
-					$.ajax({
-						url: ajaxurl,
-						type: 'POST',
-						data: {
-							action: 'Lukic_auto_save_snippet',
-							nonce: Lukic_auto_save.nonce,
-							options: JSON.stringify(currentOptions)
-						},
-						success: function(response) {
-							// Reload to apply any snippet hooks that need refreshing
-							window.location.reload();
-						},
-						error: function() {
-							alert('<?php esc_html_e( 'Error saving settings.', 'lukic-code-snippets' ); ?>');
-							window.location.reload();
-						}
-					});
-				});
-
-				// Trigger initial filtering on page load
-				filterSnippets();
-			});
-		</script>
-		<style>
-			@keyframes lukic-spin { 
-				100% { transform: rotate(360deg); } 
-			}
-			.spinning-icon { 
-				animation: lukic-spin 1s linear infinite; 
-			}
-		</style>
-		
 		<?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+		if ( ! defined( 'ABSPATH' ) ) exit;
 	}
 
 	/**
@@ -755,8 +757,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			wp_send_json_error( __( 'Missing options payload.', 'lukic-code-snippets' ), 400 );
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$options_json = wp_unslash( $_POST['options'] );
+		$options_json = sanitize_text_field( wp_unslash( $_POST['options'] ) );
 		$options      = json_decode( $options_json, true );
 		if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $options ) ) {
 			wp_send_json_error( __( 'Invalid JSON data.', 'lukic-code-snippets' ), 400 );

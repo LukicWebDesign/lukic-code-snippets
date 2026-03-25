@@ -30,6 +30,9 @@ class Lukic_Limit_Revisions {
 		// Add submenu page
 		add_action( 'admin_menu', array( $this, 'add_submenu_page' ) );
 
+		// Enqueue admin assets
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
+
 		// Register settings
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 
@@ -72,6 +75,29 @@ class Lukic_Limit_Revisions {
 			'lukic-limit-revisions',
 			array( $this, 'display_settings_page' )
 		);
+	}
+
+	/**
+	 * Enqueue admin assets
+	 */
+	public function enqueue_admin_assets( $hook ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['page'] ) || 'lukic-limit-revisions' !== sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
+			return;
+		}
+
+		wp_add_inline_style( 'Lukic-admin-styles', '
+			.Lukic-settings-section { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); padding: 20px; margin-bottom: 20px; }
+			.Lukic-settings-section h3 { margin-top: 0; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 15px; }
+			.Lukic-settings-field { margin-bottom: 15px; }
+			.Lukic-settings-field label { display: block; font-weight: 600; margin-bottom: 5px; }
+			.Lukic-limit-revisions-table { width: 100%; border-collapse: collapse; }
+			.Lukic-limit-revisions-table th, .Lukic-limit-revisions-table td { padding: 10px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+			.Lukic-limit-revisions-table th { background: #f9f9f9; }
+			.Lukic-notice { background: #f9f9f9; border-left: 4px solid #00E1AF; padding: 10px 15px; margin: 10px 0; }
+			input[type="number"] { width: 80px; }
+			.description { color: #666; font-style: italic; margin-left: 10px; }
+		' );
 	}
 
 	/**
@@ -227,66 +253,6 @@ class Lukic_Limit_Revisions {
 					<?php submit_button( __( 'Save Settings', 'lukic-code-snippets' ), 'primary', 'submit', true, array( 'style' => 'background-color: #00E1AF; border-color: #00E1AF;' ) ); ?>
 				</form>
 			</div>
-			
-			<style>
-				.Lukic-settings-section {
-					background: #fff;
-					border-radius: 8px;
-					box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-					padding: 20px;
-					margin-bottom: 20px;
-				}
-				
-				.Lukic-settings-section h3 {
-					margin-top: 0;
-					border-bottom: 1px solid #f0f0f0;
-					padding-bottom: 10px;
-					margin-bottom: 15px;
-				}
-				
-				.Lukic-settings-field {
-					margin-bottom: 15px;
-				}
-				
-				.Lukic-settings-field label {
-					display: block;
-					font-weight: 600;
-					margin-bottom: 5px;
-				}
-				
-				.Lukic-limit-revisions-table {
-					width: 100%;
-					border-collapse: collapse;
-				}
-				
-				.Lukic-limit-revisions-table th,
-				.Lukic-limit-revisions-table td {
-					padding: 10px;
-					text-align: left;
-					border-bottom: 1px solid #f0f0f0;
-				}
-				
-				.Lukic-limit-revisions-table th {
-					background: #f9f9f9;
-				}
-				
-				.Lukic-notice {
-					background: #f9f9f9;
-					border-left: 4px solid #00E1AF;
-					padding: 10px 15px;
-					margin: 10px 0;
-				}
-				
-				input[type="number"] {
-					width: 80px;
-				}
-				
-				.description {
-					color: #666;
-					font-style: italic;
-					margin-left: 10px;
-				}
-			</style>
 		</div>
 		<?php
 	}

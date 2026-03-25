@@ -660,32 +660,12 @@ function Lukic_display_acf_field_value( $post_id, $field ) {
  * Add custom styling for ACF columns
  */
 function Lukic_acf_columns_admin_head() {
-	?>
-	<style>
-		.Lukic-acf-image-preview {
-			max-width: 60px;
-			max-height: 60px;
-			display: block;
-		}
-		
-		.acf-true {
-			color: #46b450;
-			font-weight: bold;
-		}
-		
-		.acf-false {
-			color: #dc3232;
-		}
-		
-		.acf-empty {
-			color: #ccc;
-		}
-		
-		.acf-complex {
-			color: #555;
-			font-style: italic;
-		}
-	</style>
-	<?php
+	wp_add_inline_style( 'Lukic-admin-styles', '
+		.Lukic-acf-image-preview { max-width: 60px; max-height: 60px; display: block; }
+		.acf-true { color: #46b450; font-weight: bold; }
+		.acf-false { color: #dc3232; }
+		.acf-empty { color: #ccc; }
+		.acf-complex { color: #555; font-style: italic; }
+	' );
 }
-add_action( 'admin_head', 'Lukic_acf_columns_admin_head' );
+add_action( 'admin_enqueue_scripts', 'Lukic_acf_columns_admin_head' ); // Changed to enqueue_scripts for asset pipeline

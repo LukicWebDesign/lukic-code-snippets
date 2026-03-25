@@ -61,6 +61,20 @@ if ( ! function_exists( 'Lukic_admin_notifications_manager' ) ) {
 		);
 
 		wp_enqueue_script( 'Lukic-admin-notifications' );
+
+		// Add inline CSS via WordPress API
+		wp_add_inline_style( 'Lukic-admin-notifications', '
+			#Lukic-admin-notifications-container { background: #fff; border: 1px solid #ccd0d4; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin: 10px 20px 0 2px; padding: 10px; position: relative; border-radius: 4px; }
+			.Lukic-notifications-header { display: flex; align-items: center; border-bottom: 1px solid #e2e4e7; padding-bottom: 8px; margin-bottom: 10px; }
+			.Lukic-notifications-header h3 { margin: 0; flex-grow: 1; }
+			.Lukic-notifications-count { background: #ca4a1f; color: #fff; border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; margin-right: 10px; }
+			.Lukic-dismiss-all { cursor: pointer; color: #0073aa; font-size: 12px; }
+			.Lukic-dismiss-all:hover { text-decoration: underline; }
+			.Lukic-notice-group { margin-bottom: 15px; }
+			.Lukic-notice-group h4 { margin: 0 0 5px 0; padding-bottom: 5px; border-bottom: 1px solid #f1f1f1; }
+			.Lukic-notice-dismiss { float: right; color: #aaa; cursor: pointer; margin-left: 5px; }
+			.Lukic-notice-dismiss:hover { color: #dc3232; }
+		' );
 	}
 
 	/**
@@ -69,14 +83,17 @@ if ( ! function_exists( 'Lukic_admin_notifications_manager' ) ) {
 	function Lukic_group_admin_notices() {
 		// Start output buffering to capture notices
 		ob_start();
-
-		// We'll end the buffer in the footer and replace it with our organized notices
 	}
 
 	/**
 	 * End output buffering and render organized notices
 	 */
 	function Lukic_render_notifications_container() {
+		// Only clean the buffer if one is active (ob_start was called)
+		if ( ob_get_level() < 1 ) {
+			return;
+		}
+
 		// Get the buffered notices
 		$notices = ob_get_clean();
 
@@ -104,66 +121,6 @@ if ( ! function_exists( 'Lukic_admin_notifications_manager' ) ) {
 		echo '</div>'; // .Lukic-notifications-content
 		echo '</div>'; // #Lukic-admin-notifications-container
 
-		// Add inline CSS since the CSS file might not be loaded yet
-		echo '<style>
-            #Lukic-admin-notifications-container {
-                background: #fff;
-                border: 1px solid #ccd0d4;
-                box-shadow: 0 1px 1px rgba(0,0,0,.04);
-                margin: 10px 20px 0 2px;
-                padding: 10px;
-                position: relative;
-                border-radius: 4px;
-            }
-            .Lukic-notifications-header {
-                display: flex;
-                align-items: center;
-                border-bottom: 1px solid #e2e4e7;
-                padding-bottom: 8px;
-                margin-bottom: 10px;
-            }
-            .Lukic-notifications-header h3 {
-                margin: 0;
-                flex-grow: 1;
-            }
-            .Lukic-notifications-count {
-                background: #ca4a1f;
-                color: #fff;
-                border-radius: 50%;
-                width: 20px;
-                height: 20px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 11px;
-                margin-right: 10px;
-            }
-            .Lukic-dismiss-all {
-                cursor: pointer;
-                color: #0073aa;
-                font-size: 12px;
-            }
-            .Lukic-dismiss-all:hover {
-                text-decoration: underline;
-            }
-            .Lukic-notice-group {
-                margin-bottom: 15px;
-            }
-            .Lukic-notice-group h4 {
-                margin: 0 0 5px 0;
-                padding-bottom: 5px;
-                border-bottom: 1px solid #f1f1f1;
-            }
-            .Lukic-notice-dismiss {
-                float: right;
-                color: #aaa;
-                cursor: pointer;
-                margin-left: 5px;
-            }
-            .Lukic-notice-dismiss:hover {
-                color: #dc3232;
-            }
-        </style>';
 	}
 
 	/**
@@ -260,8 +217,7 @@ if ( ! function_exists( 'Lukic_admin_notifications_manager' ) ) {
 	 */
 	function Lukic_dismiss_admin_notice_callback() {
 		// Check nonce
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_notifications_nonce' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_notifications_nonce' ) ) {
 			wp_send_json_error( 'Invalid nonce' );
 		}
 

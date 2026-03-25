@@ -159,12 +159,10 @@ jQuery(document).ready(function($) {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
     
-    // Handle form submission with AJAX
+    // Handle form submission with custom AJAX (not options.php)
     $('#upload-limits-form').on('submit', function(e) {
         e.preventDefault();
         
-        var $form = $(this);
-        var formData = $form.serialize();
         var $saveButton = $('#save-settings-button');
         var $savingIndicator = $('#settings-saving-indicator');
         var $savedIndicator = $('#settings-saved-indicator');
@@ -174,36 +172,51 @@ jQuery(document).ready(function($) {
         $savingIndicator.show();
         $savedIndicator.hide();
         
-        // Submit the form via AJAX
+        // Gather form values
+        var uploadMaxFilesize = $('#upload_max_filesize').val();
+        var maxExecutionTime  = $('#max_execution_time').val();
+        var memoryLimit       = $('#memory_limit').val();
+        
         $.ajax({
-            url: 'options.php',
+            url: Lukic_upload_vars.ajax_url,
             type: 'POST',
-            data: formData,
-            success: function() {
-                // Update the PHP settings
-                refreshPhpSettings(false).done(function() {
-                    // Show saved indicator
+            data: {
+                action:               'Lukic_save_upload_limits',
+                nonce:                Lukic_upload_vars.nonce,
+                upload_max_filesize:  uploadMaxFilesize,
+                max_execution_time:   maxExecutionTime,
+                memory_limit:         memoryLimit
+            },
+            success: function(response) {
+                if (response.success) {
+                    var s = response.data.settings;
+                    
+                    // Update the Current PHP Settings table
+                    $('#current-upload-max-filesize').text(
+                        s.effective_upload_limit + ' (WP enforced) / Server: ' + s.upload_max_filesize
+                    );
+                    $('#current-post-max-size').text(s.post_max_size);
+                    $('#current-max-execution-time').text(s.max_execution_time + ' seconds');
+                    $('#current-memory-limit').text(s.memory_limit);
+                    $('#last-updated-time').text(s.timestamp);
+                    
+                    // Update header stats
+                    updateHeaderStats({ upload_max_filesize: s.effective_upload_limit, memory_limit: s.memory_limit });
+                    
+                    // Show saved badge
                     $savingIndicator.hide();
                     $savedIndicator.show();
-                    
-                    // Hide saved indicator after 3 seconds
-                    setTimeout(function() {
-                        $savedIndicator.fadeOut();
-                    }, 3000);
-                    
-                    // Update URL without reloading page (to maintain state)
-                    if (history.pushState) {
-                        var newUrl = window.location.href.split('?')[0] + '?page=Lukic-upload-limits&settings-updated=true';
-                        window.history.pushState({path: newUrl}, '', newUrl);
-                    }
-                });
+                    setTimeout(function() { $savedIndicator.fadeOut(); }, 3000);
+                } else {
+                    alert(response.data && response.data.message ? response.data.message : 'Error saving settings.');
+                    $savingIndicator.hide();
+                }
             },
             error: function() {
                 alert('Error saving settings. Please try again.');
                 $savingIndicator.hide();
             },
             complete: function() {
-                // Re-enable save button
                 $saveButton.prop('disabled', false);
             }
         });

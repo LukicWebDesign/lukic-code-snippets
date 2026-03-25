@@ -72,6 +72,9 @@ class Lukic_Security_Headers {
 		// Add submenu page with a priority of 20 to ensure it appears after the main menu
 		add_action( 'admin_menu', array( $this, 'add_submenu_page' ), 20 );
 
+		// Enqueue scripts
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
 		// Register settings
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 
@@ -79,7 +82,7 @@ class Lukic_Security_Headers {
 		add_action( 'send_headers', array( $this, 'add_security_headers' ) );
 
 		// Add AJAX handlers for testing
-		add_action( 'wp_ajax_test_security_headers', array( $this, 'ajax_test_headers' ) );
+		add_action( 'wp_ajax_lukic_test_security_headers', array( $this, 'ajax_test_headers' ) );
 	}
 
 	/**
@@ -102,6 +105,77 @@ class Lukic_Security_Headers {
 			'lukic-security-headers',
 			array( $this, 'render_settings_page' )
 		);
+	}
+
+	/**
+	 * Enqueue scripts
+	 */
+	public function enqueue_scripts( $hook ) {
+		if ( strpos( $hook, 'lukic-security-headers' ) === false ) {
+			return;
+		}
+
+		wp_enqueue_script( 'jquery' );
+		wp_localize_script( 'jquery', 'LukicSecHeaders', array(
+			'nonce'    => wp_create_nonce( 'security_headers_test' ),
+			'testing'  => __( 'Testing headers...', 'lukic-code-snippets' ),
+			'error'    => __( 'Error testing headers', 'lukic-code-snippets' ),
+			'present'  => __( 'Present', 'lukic-code-snippets' ),
+			'missing'  => __( 'Missing', 'lukic-code-snippets' ),
+			'current'  => __( 'Current', 'lukic-code-snippets' ),
+			'expected' => __( 'Expected', 'lukic-code-snippets' ),
+		) );
+
+		wp_add_inline_script( 'jquery', '
+			jQuery(document).ready(function($) {
+				$("#test-headers").on("click", function() {
+					var $button = $(this);
+					var $results = $("#test-results");
+					var $content = $(".test-results-content");
+
+					$button.prop("disabled", true);
+					$button.addClass("is-loading");
+					$content.html("<p class=\"Lukic-loading\">" + LukicSecHeaders.testing + "</p>");
+					$results.show();
+
+					$.ajax({
+						url: ajaxurl,
+						type: "POST",
+						data: {
+							action: "lukic_test_security_headers",
+							nonce: LukicSecHeaders.nonce
+						},
+						success: function(response) {
+							if (response.success) {
+								var html = "";
+								$.each(response.data, function(header, result) {
+									var status = result.present && result.value === result.expected ? "success" : "error";
+									html += "<div class=\"header-test-result " + status + "\">";
+									html += "<div class=\"header-test-result__title\">" + header.toUpperCase() + "</div>";
+									html += "<div class=\"header-test-result__status\">" + (result.present ? "✔ " + LukicSecHeaders.present : "✖ " + LukicSecHeaders.missing) + "</div>";
+									if (result.present) {
+										html += "<div class=\"header-test-result__value\"><strong>" + LukicSecHeaders.current + ":</strong> " + result.value + "</div>";
+										html += "<div class=\"header-test-result__value\"><strong>" + LukicSecHeaders.expected + ":</strong> " + result.expected + "</div>";
+									}
+									html += "</div>";
+								});
+								$content.html(html);
+							} else {
+								var message = response.data ? response.data : LukicSecHeaders.error;
+								$content.html("<p class=\"error\">" + message + "</p>");
+							}
+						},
+						error: function() {
+							$content.html("<p class=\"error\">" + LukicSecHeaders.error + "</p>");
+						},
+						complete: function() {
+							$button.prop("disabled", false);
+							$button.removeClass("is-loading");
+						}
+					});
+				});
+			});
+		' );
 	}
 
 	/**
@@ -162,7 +236,10 @@ class Lukic_Security_Headers {
 		}
 
 		$url      = get_site_url();
-		$response = wp_remote_get( $url );
+		$response = wp_remote_get( $url, array(
+			'sslverify' => false,
+			'timeout'   => 15,
+		) );
 
 		if ( is_wp_error( $response ) ) {
 			wp_send_json_error( $response->get_error_message() );
@@ -273,58 +350,6 @@ class Lukic_Security_Headers {
 			</div>
 		</div>
 
-		<script>
-		jQuery(document).ready(function($) {
-			$('#test-headers').on('click', function() {
-				var $button = $(this);
-				var $results = $('#test-results');
-				var $content = $('.test-results-content');
-				var testingMessage = '<?php echo esc_js( __( 'Testing headers...', 'lukic-code-snippets' ) ); ?>';
-				var errorMessage = '<?php echo esc_js( __( 'Error testing headers', 'lukic-code-snippets' ) ); ?>';
-
-				$button.prop('disabled', true);
-				$button.addClass('is-loading');
-				$content.html('<p class="Lukic-loading">' + testingMessage + '</p>');
-				$results.show();
-
-				$.ajax({
-					url: ajaxurl,
-					type: 'POST',
-					data: {
-						action: 'test_security_headers',
-						nonce: '<?php echo esc_js( wp_create_nonce( 'security_headers_test' ) ); ?>'
-					},
-					success: function(response) {
-						if (response.success) {
-							var html = '';
-							$.each(response.data, function(header, result) {
-								var status = result.present && result.value === result.expected ? 'success' : 'error';
-								html += '<div class="header-test-result ' + status + '">';
-								html += '<div class="header-test-result__title">' + header.toUpperCase() + '</div>';
-								html += '<div class="header-test-result__status">' + (result.present ? '✔ <?php echo esc_js( __( 'Present', 'lukic-code-snippets' ) ); ?>' : '✖ <?php echo esc_js( __( 'Missing', 'lukic-code-snippets' ) ); ?>') + '</div>';
-								if (result.present) {
-									html += '<div class="header-test-result__value"><strong><?php echo esc_js( __( 'Current', 'lukic-code-snippets' ) ); ?>:</strong> ' + result.value + '</div>';
-									html += '<div class="header-test-result__value"><strong><?php echo esc_js( __( 'Expected', 'lukic-code-snippets' ) ); ?>:</strong> ' + result.expected + '</div>';
-								}
-								html += '</div>';
-							});
-							$content.html(html);
-						} else {
-							var message = response.data ? response.data : errorMessage;
-							$content.html('<p class="error">' + message + '</p>');
-						}
-					},
-					error: function() {
-						$content.html('<p class="error">' + errorMessage + '</p>');
-					},
-					complete: function() {
-						$button.prop('disabled', false);
-						$button.removeClass('is-loading');
-					}
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 }

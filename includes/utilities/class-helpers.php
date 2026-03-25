@@ -191,7 +191,7 @@ class Lukic_Helpers {
 	 * @return bool
 	 */
 	public static function verify_nonce( $nonce, $action ) {
-		return wp_verify_nonce( $nonce, $action );
+		return wp_verify_nonce( sanitize_text_field( $nonce ), $action );
 	}
 
 	/**

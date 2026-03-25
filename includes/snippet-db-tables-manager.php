@@ -68,6 +68,63 @@ class Lukic_DB_Tables_Manager {
 				),
 			)
 		);
+
+		wp_add_inline_style( 'Lukic-admin-styles', '
+			.Lukic-wrap { max-width: 1200px; }
+			.Lukic-stats-container { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+			.Lukic-stat-box { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); flex: 1; min-width: 200px; display: flex; align-items: center; border-left: 4px solid #00E1AF; }
+			.Lukic-stat-icon { font-size: 36px; padding: 15px; background: rgba(0, 225, 175, 0.1); color: #00E1AF; border-radius: 50%; margin-right: 15px; width: 66px; height: 66px; display: flex; align-items: center; justify-content: center; }
+			.Lukic-stat-info h3 { margin: 0 0 5px 0; font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+			.Lukic-stat-value { font-size: 24px; font-weight: bold; margin: 0; color: #333; }
+			.Lukic-card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 20px; }
+			.Lukic-tabs-container { margin-bottom: 20px; }
+			.Lukic-tabs-header { display: flex; border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+			.Lukic-tab-button { background: none; border: none; padding: 10px 15px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; font-weight: 600; }
+			.Lukic-tab-button:focus { outline: none; box-shadow: none; }
+			.Lukic-tab-button.active { border-bottom-color: #00E1AF; color: #00E1AF; }
+			.Lukic-tab-content { display: none; }
+			.Lukic-tab-content.active { display: block; }
+			.Lukic-modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+			.Lukic-modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; border-radius: 5px; width: 90%; max-width: 1200px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+			.Lukic-modal-close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+			.Lukic-modal-close:hover { color: #00E1AF; }
+			.Lukic-loading { text-align: center; padding: 20px; font-style: italic; color: #666; }
+			.Lukic-data-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 15px; background: #f9f9f9; border: 1px solid #e1e1e1; border-radius: 4px; flex-wrap: wrap; gap: 15px; }
+			.Lukic-search-controls { display: flex; align-items: center; gap: 10px; }
+			.Lukic-search-controls input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; min-width: 250px; font-size: 14px; }
+			.Lukic-search-controls .button { background: var(--Lukic-primary, #00E1AF); border-color: var(--Lukic-primary, #00E1AF); color: white; border-radius: 4px; padding: 8px 16px; font-weight: 600; text-shadow: none; box-shadow: none; }
+			.Lukic-search-controls .button:hover { background: var(--Lukic-primary-dark, #00c49a); border-color: var(--Lukic-primary-dark, #00c49a); }
+			.Lukic-search-controls .clear-search { background: #666; border-color: #666; }
+			.Lukic-search-controls .clear-search:hover { background: #555; border-color: #555; }
+			.Lukic-data-pagination { display: flex; align-items: center; gap: 10px; }
+			.Lukic-data-pagination .button { background: var(--Lukic-primary, #00E1AF); border-color: var(--Lukic-primary, #00E1AF); color: white; border-radius: 4px; padding: 6px 12px; font-weight: 600; text-shadow: none; box-shadow: none; }
+			.Lukic-data-pagination .button:hover:not(:disabled) { background: var(--Lukic-primary-dark, #00c49a); border-color: var(--Lukic-primary-dark, #00c49a); }
+			.Lukic-data-pagination .button:disabled { background: #ccc; border-color: #ccc; color: #666; cursor: not-allowed; }
+			.export-table { background: var(--Lukic-primary, #00E1AF) !important; border-color: var(--Lukic-primary, #00E1AF) !important; color: white !important; border-radius: 4px !important; padding: 8px 16px !important; font-weight: 600 !important; text-shadow: none !important; box-shadow: none !important; }
+			.export-table:hover { background: var(--Lukic-primary-dark, #00c49a) !important; border-color: var(--Lukic-primary-dark, #00c49a) !important; }
+			.dataTables_length select { min-width: 80px !important; padding: 4px 25px 4px 8px !important; margin: 0 5px !important; border: 1px solid #ddd !important; border-radius: 4px !important; background: white !important; }
+			.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter { margin-bottom: 15px; }
+			.view-table { background: var(--Lukic-primary, #00E1AF) !important; border-color: var(--Lukic-primary, #00E1AF) !important; color: white !important; border-radius: 4px !important; padding: 6px; font-weight: 600 !important; text-shadow: none !important; box-shadow: none !important; }
+			.view-table:hover { background: var(--Lukic-primary-dark, #00c49a) !important; border-color: var(--Lukic-primary-dark, #00c49a) !important; }
+			.Lukic-data-table { width: 100%; border-collapse: collapse; }
+			.Lukic-data-table th { background-color: #f5f5f5; font-weight: 600; }
+			.Lukic-data-table th, .Lukic-data-table td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
+			.Lukic-data-table tr:hover { background-color: #f9f9f9; }
+			.Lukic-edit-actions { margin-top: 20px; text-align: right; }
+			.Lukic-edit-actions .button { margin-left: 10px; }
+			#edit-form-fields { max-height: 400px; overflow-y: auto; }
+			.Lukic-field-group { margin-bottom: 15px; }
+			.Lukic-field-group label { display: block; font-weight: 600; margin-bottom: 5px; }
+			.Lukic-field-group input, .Lukic-field-group textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+			.Lukic-field-group textarea { min-height: 60px; resize: vertical; }
+			.Lukic-edit-btn { background: #1e3a8a !important; border-color: #1e3a8a !important; color: white !important; border-radius: 4px !important; padding: 4px 10px !important; font-size: 12px !important; font-weight: 600 !important; text-shadow: none !important; box-shadow: none !important; margin-left: 5px; }
+			.Lukic-edit-btn:hover { background: #1e40af !important; border-color: #1e40af !important; }
+			.Lukic-edit-actions .button-primary { background: var(--Lukic-primary, #00E1AF) !important; border-color: var(--Lukic-primary, #00E1AF) !important; color: white !important; border-radius: 4px !important; padding: 8px 16px !important; font-weight: 600 !important; text-shadow: none !important; box-shadow: none !important; }
+			.Lukic-edit-actions .button-primary:hover { background: var(--Lukic-primary-dark, #00c49a) !important; border-color: var(--Lukic-primary-dark, #00c49a) !important; }
+			.Lukic-edit-cancel { background: #666 !important; border-color: #666 !important; color: white !important; border-radius: 4px !important; padding: 8px 16px !important; font-weight: 600 !important; text-shadow: none !important; box-shadow: none !important; }
+			.Lukic-edit-cancel:hover { background: #555 !important; border-color: #555 !important; }
+			mark { background-color: #ffeb3b; padding: 1px 2px; border-radius: 2px; }
+		' );
 	}
 
 	/**
@@ -181,334 +238,6 @@ class Lukic_DB_Tables_Manager {
 				</div>
 			</div>
 		</div>
-		<style>
-			.Lukic-tab-container {
-				margin-top: 20px;
-			}
-			
-			.Lukic-tab-nav {
-				display: flex;
-				border-bottom: 1px solid #ccc;
-				margin-bottom: 20px;
-			}
-			
-			.Lukic-tab-button {
-				background: none;
-				border: none;
-				padding: 10px 15px;
-				cursor: pointer;
-				border-bottom: 3px solid transparent;
-				margin-bottom: -1px;
-				font-weight: 600;
-			}
-			
-			.Lukic-tab-button:focus {
-				outline: none;
-				box-shadow: none;
-			}
-			
-			.Lukic-tab-button.active {
-				border-bottom-color: #00E1AF;
-				color: #00E1AF;
-			}
-			
-			.Lukic-tab-content {
-				display: none;
-			}
-			
-			.Lukic-tab-content.active {
-				display: block;
-			}
-			
-			.Lukic-modal {
-				display: none;
-				position: fixed;
-				z-index: 9999;
-				left: 0;
-				top: 0;
-				width: 100%;
-				height: 100%;
-				overflow: auto;
-				background-color: rgba(0,0,0,0.4);
-			}
-			
-			.Lukic-modal-content {
-				background-color: #fefefe;
-				margin: 5% auto;
-				padding: 20px;
-				border: 1px solid #888;
-				border-radius: 5px;
-				width: 90%;
-				max-width: 1200px;
-				box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-			}
-			
-			.Lukic-modal-close {
-				color: #aaa;
-				float: right;
-				font-size: 28px;
-				font-weight: bold;
-				cursor: pointer;
-			}
-			
-			.Lukic-modal-close:hover {
-				color: #00E1AF;
-			}
-			
-			.Lukic-loading {
-				text-align: center;
-				padding: 20px;
-				font-style: italic;
-				color: #666;
-			}
-			
-			.Lukic-data-controls {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 20px;
-				padding: 15px;
-				background: #f9f9f9;
-				border: 1px solid #e1e1e1;
-				border-radius: 4px;
-				flex-wrap: wrap;
-				gap: 15px;
-			}
-			
-			.Lukic-search-controls {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-			}
-			
-			.Lukic-search-controls input {
-				padding: 8px 12px;
-				border: 1px solid #ddd;
-				border-radius: 4px;
-				min-width: 250px;
-				font-size: 14px;
-			}
-			
-			.Lukic-search-controls .button {
-				background: var(--Lukic-primary, #00E1AF);
-				border-color: var(--Lukic-primary, #00E1AF);
-				color: white;
-				border-radius: 4px;
-				padding: 8px 16px;
-				font-weight: 600;
-				text-shadow: none;
-				box-shadow: none;
-			}
-			
-			.Lukic-search-controls .button:hover {
-				background: var(--Lukic-primary-dark, #00c49a);
-				border-color: var(--Lukic-primary-dark, #00c49a);
-			}
-			
-			.Lukic-search-controls .clear-search {
-				background: #666;
-				border-color: #666;
-			}
-			
-			.Lukic-search-controls .clear-search:hover {
-				background: #555;
-				border-color: #555;
-			}
-			
-			.Lukic-data-pagination {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-			}
-			
-			.Lukic-data-pagination .button {
-				background: var(--Lukic-primary, #00E1AF);
-				border-color: var(--Lukic-primary, #00E1AF);
-				color: white;
-				border-radius: 4px;
-				padding: 6px 12px;
-				font-weight: 600;
-				text-shadow: none;
-				box-shadow: none;
-			}
-			
-			.Lukic-data-pagination .button:hover:not(:disabled) {
-				background: var(--Lukic-primary-dark, #00c49a);
-				border-color: var(--Lukic-primary-dark, #00c49a);
-			}
-			
-			.Lukic-data-pagination .button:disabled {
-				background: #ccc;
-				border-color: #ccc;
-				color: #666;
-				cursor: not-allowed;
-			}
-			
-			.export-table {
-				background: var(--Lukic-primary, #00E1AF) !important;
-				border-color: var(--Lukic-primary, #00E1AF) !important;
-				color: white !important;
-				border-radius: 4px !important;
-				padding: 8px 16px !important;
-				font-weight: 600 !important;
-				text-shadow: none !important;
-				box-shadow: none !important;
-			}
-			
-			.export-table:hover {
-				background: var(--Lukic-primary-dark, #00c49a) !important;
-				border-color: var(--Lukic-primary-dark, #00c49a) !important;
-			}
-			
-			/* Fix DataTables select dropdown */
-			.dataTables_length select {
-				min-width: 80px !important;
-				padding: 4px 25px 4px 8px !important;
-				margin: 0 5px !important;
-				border: 1px solid #ddd !important;
-				border-radius: 4px !important;
-				background: white !important;
-			}
-			
-			/* Fix DataTables controls spacing */
-			.dataTables_wrapper .dataTables_length,
-			.dataTables_wrapper .dataTables_filter {
-				margin-bottom: 15px;
-			}
-			
-			/* Style View Details buttons in main table */
-			.view-table {
-				background: var(--Lukic-primary, #00E1AF) !important;
-				border-color: var(--Lukic-primary, #00E1AF) !important;
-				color: white !important;
-				border-radius: 4px !important;
-				padding: 6px;
-				font-weight: 600 !important;
-				text-shadow: none !important;
-				box-shadow: none !important;
-			}
-			
-			.view-table:hover {
-				background: var(--Lukic-primary-dark, #00c49a) !important;
-				border-color: var(--Lukic-primary-dark, #00c49a) !important;
-			}
-			
-			.Lukic-data-table {
-				width: 100%;
-				border-collapse: collapse;
-			}
-			
-			.Lukic-data-table th {
-				background-color: #f5f5f5;
-				font-weight: 600;
-			}
-			
-			.Lukic-data-table th, 
-			.Lukic-data-table td {
-				padding: 8px;
-				text-align: left;
-				border-bottom: 1px solid #ddd;
-			}
-			
-			.Lukic-data-table tr:hover {
-				background-color: #f9f9f9;
-			}
-			
-			.Lukic-edit-actions {
-				margin-top: 20px;
-				text-align: right;
-			}
-			
-			.Lukic-edit-actions .button {
-				margin-left: 10px;
-			}
-			
-			#edit-form-fields {
-				max-height: 400px;
-				overflow-y: auto;
-			}
-			
-			.Lukic-field-group {
-				margin-bottom: 15px;
-			}
-			
-			.Lukic-field-group label {
-				display: block;
-				font-weight: 600;
-				margin-bottom: 5px;
-			}
-			
-			.Lukic-field-group input,
-			.Lukic-field-group textarea {
-				width: 100%;
-				padding: 8px;
-				border: 1px solid #ddd;
-				border-radius: 4px;
-			}
-			
-			.Lukic-field-group textarea {
-				min-height: 60px;
-				resize: vertical;
-			}
-			
-			.Lukic-edit-btn {
-				background: #1e3a8a !important;
-				border-color: #1e3a8a !important;
-				color: white !important;
-				border-radius: 4px !important;
-				padding: 4px 10px !important;
-				font-size: 12px !important;
-				font-weight: 600 !important;
-				text-shadow: none !important;
-				box-shadow: none !important;
-				margin-left: 5px;
-			}
-			
-			.Lukic-edit-btn:hover {
-				background: #1e40af !important;
-				border-color: #1e40af !important;
-			}
-			
-			/* Style modal buttons */
-			.Lukic-edit-actions .button-primary {
-				background: var(--Lukic-primary, #00E1AF) !important;
-				border-color: var(--Lukic-primary, #00E1AF) !important;
-				color: white !important;
-				border-radius: 4px !important;
-				padding: 8px 16px !important;
-				font-weight: 600 !important;
-				text-shadow: none !important;
-				box-shadow: none !important;
-			}
-			
-			.Lukic-edit-actions .button-primary:hover {
-				background: var(--Lukic-primary-dark, #00c49a) !important;
-				border-color: var(--Lukic-primary-dark, #00c49a) !important;
-			}
-			
-			.Lukic-edit-cancel {
-				background: #666 !important;
-				border-color: #666 !important;
-				color: white !important;
-				border-radius: 4px !important;
-				padding: 8px 16px !important;
-				font-weight: 600 !important;
-				text-shadow: none !important;
-				box-shadow: none !important;
-			}
-			
-			.Lukic-edit-cancel:hover {
-				background: #555 !important;
-				border-color: #555 !important;
-			}
-			
-			/* Search highlighting */
-			mark {
-				background-color: #ffeb3b;
-				padding: 1px 2px;
-				border-radius: 2px;
-			}
-		</style>
 		<?php
 	}
 

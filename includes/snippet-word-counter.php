@@ -20,6 +20,9 @@ class Lukic_Word_Counter {
 		// Add submenu page
 		add_action( 'admin_menu', array( $this, 'add_submenu_page' ) );
 
+		// Enqueue scripts
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
 		// Register AJAX handlers
 		add_action( 'wp_ajax_Lukic_analyze_text', array( $this, 'ajax_analyze_text' ) );
 	}
@@ -36,6 +39,73 @@ class Lukic_Word_Counter {
 			'lukic-word-counter',
 			array( $this, 'display_settings_page' )
 		);
+	}
+
+	/**
+	 * Enqueue scripts
+	 */
+	public function enqueue_scripts( $hook ) {
+		if ( strpos( $hook, 'lukic-word-counter' ) === false ) {
+			return;
+		}
+
+		wp_register_style( 'Lukic-word-counter-styles', false );
+		wp_enqueue_style( 'Lukic-word-counter-styles' );
+		wp_add_inline_style( 'Lukic-word-counter-styles', '
+			.Lukic-word-counter-container { margin-top: 20px; }
+			.Lukic-stats-container { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+			.Lukic-stat-box { padding: 15px 25px; border-radius: 8px; text-align: center; flex: 1; min-width: 150px; }
+			.Lukic-stat-box .stat-value { display: block; font-size: 24px; font-weight: bold; margin-bottom: 5px; }
+			.Lukic-stat-box .stat-label { font-size: 14px; }
+			.Lukic-stat-box.blue { background-color: #4285f4; color: white; }
+			.Lukic-stat-box.light-blue { background-color: #45b6fe; color: white; }
+			.Lukic-stat-box.green { background-color: #e8f5e9; color: #2e7d32; }
+			.Lukic-stat-box.pink { background-color: #fce4ec; color: #c2185b; }
+			.Lukic-stat-box.yellow { background-color: #fff3e0; color: #f57c00; }
+			.Lukic-textarea-container { margin-top: 20px; }
+			#Lukic-text-input { width: 100%; min-height: 300px; padding: 15px; font-size: 16px; border: 1px solid #ddd; border-radius: 8px; resize: vertical; }
+		' );
+
+		wp_enqueue_script( 'jquery' );
+		wp_localize_script( 'jquery', 'LukicWordCounter', array(
+			'nonce' => wp_create_nonce( 'Lukic_word_counter_nonce' ),
+		) );
+
+		wp_add_inline_script( 'jquery', '
+			jQuery(document).ready(function($) {
+				var typingTimer;
+				var doneTypingInterval = 500;
+
+				$("#Lukic-text-input").on("input", function() {
+					clearTimeout(typingTimer);
+					typingTimer = setTimeout(analyzeText, doneTypingInterval);
+				});
+
+				function analyzeText() {
+					var text = $("#Lukic-text-input").val();
+
+					$.ajax({
+						url: ajaxurl,
+						type: "POST",
+						data: {
+							action: "Lukic_analyze_text",
+							text: text,
+							nonce: LukicWordCounter.nonce
+						},
+						success: function(response) {
+							if (response.success) {
+								var data = response.data;
+								$("#char-no-spaces").text(data.chars_no_spaces);
+								$("#char-with-spaces").text(data.chars_with_spaces);
+								$("#word-count").text(data.words);
+								$("#sentence-count").text(data.sentences);
+								$("#paragraph-count").text(data.paragraphs);
+							}
+						}
+					});
+				}
+			});
+		' );
 	}
 
 	/**
@@ -97,87 +167,7 @@ class Lukic_Word_Counter {
 					<textarea id="Lukic-text-input" placeholder="<?php echo esc_attr__( 'Type or paste your text here...', 'lukic-code-snippets' ); ?>"></textarea>
 				</div>
 			</div>
-			
-			<style>
-				.Lukic-word-counter-container {
-					margin-top: 20px;
-				}
-				.Lukic-stats-container {
-					display: flex;
-					gap: 20px;
-					margin-bottom: 20px;
-					flex-wrap: wrap;
-				}
-				.Lukic-stat-box {
-					padding: 15px 25px;
-					border-radius: 8px;
-					text-align: center;
-					flex: 1;
-					min-width: 150px;
-				}
-				.Lukic-stat-box .stat-value {
-					display: block;
-					font-size: 24px;
-					font-weight: bold;
-					margin-bottom: 5px;
-				}
-				.Lukic-stat-box .stat-label {
-					font-size: 14px;
-				}
-				.Lukic-stat-box.blue { background-color: #4285f4; color: white; }
-				.Lukic-stat-box.light-blue { background-color: #45b6fe; color: white; }
-				.Lukic-stat-box.green { background-color: #e8f5e9; color: #2e7d32; }
-				.Lukic-stat-box.pink { background-color: #fce4ec; color: #c2185b; }
-				.Lukic-stat-box.yellow { background-color: #fff3e0; color: #f57c00; }
-				.Lukic-textarea-container {
-					margin-top: 20px;
-				}
-				#Lukic-text-input {
-					width: 100%;
-					min-height: 300px;
-					padding: 15px;
-					font-size: 16px;
-					border: 1px solid #ddd;
-					border-radius: 8px;
-					resize: vertical;
-				}
-			</style>
-			
-			<script>
-			jQuery(document).ready(function($) {
-				let typingTimer;
-				const doneTypingInterval = 500;
-				
-				$('#Lukic-text-input').on('input', function() {
-					clearTimeout(typingTimer);
-					typingTimer = setTimeout(analyzeText, doneTypingInterval);
-				});
-				
-				function analyzeText() {
-					const text = $('#Lukic-text-input').val();
-					
-					$.ajax({
-						url: ajaxurl,
-						type: 'POST',
-						data: {
-							action: 'Lukic_analyze_text',
-							text: text,
-							nonce: '<?php echo esc_js( wp_create_nonce( 'Lukic_word_counter_nonce' ) ); ?>'
-						},
-						success: function(response) {
-							if (response.success) {
-								const data = response.data;
-								$('#char-no-spaces').text(data.chars_no_spaces);
-								$('#char-with-spaces').text(data.chars_with_spaces);
-								$('#word-count').text(data.words);
-								$('#sentence-count').text(data.sentences);
-								$('#paragraph-count').text(data.paragraphs);
-							}
-						}
-					});
-				}
-			});
-			</script>
+			</div>
 		</div>
 		<?php
 	}

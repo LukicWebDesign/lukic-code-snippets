@@ -57,7 +57,7 @@ class Lukic_Debug_Mode {
         if ( current_user_can( 'manage_options' ) ) {
             wp_add_dashboard_widget(
                 'lukic_debug_log_widget',
-                __( 'Debug Log Viewer (Lukic Snippets)', 'lukic-code-snippets' ),
+                __( 'Debug Log Viewer (Lukic Code Snippets)', 'lukic-code-snippets' ),
                 array( $this, 'render_dashboard_widget' )
             );
         }
@@ -85,7 +85,7 @@ class Lukic_Debug_Mode {
         $lines = $this->tail_file( $log_file, 50 );
 
         echo '<div style="margin-bottom: 10px;">';
-        echo '<strong>' . esc_html__( 'File size:', 'lukic-code-snippets' ) . '</strong> ' . size_format( $file_size );
+        echo '<strong>' . esc_html__( 'File size:', 'lukic-code-snippets' ) . '</strong> ' . esc_html( size_format( $file_size ) );
         echo '</div>';
         
         echo '<div style="background: #111; color: #0f0; padding: 10px; height: 300px; overflow-y: scroll; font-family: monospace; font-size: 12px; white-space: pre-wrap; word-break: break-all;">';
@@ -100,45 +100,38 @@ class Lukic_Debug_Mode {
     }
 
     /**
-     * Helper to tail a file effectively
+     * Helper to tail a file effectively using WP_Filesystem
      */
     private function tail_file( $filepath, $lines = 50 ) {
-        $f = @fopen( $filepath, "rb" );
-        if ( $f === false ) {
-			return false;
-		}
-        
-        $cursor = -1;
-        fseek( $f, $cursor, SEEK_END );
-        $char = fgetc( $f );
-        
-        // Trim trailing newline chars
-        while ( $char === "\n" || $char === "\r" ) {
-            fseek( $f, $cursor--, SEEK_END );
-            $char = fgetc( $f );
+        global $wp_filesystem;
+
+        if ( empty( $wp_filesystem ) ) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            WP_Filesystem();
         }
-        
-        $line = '';
+
+        if ( ! $wp_filesystem->exists( $filepath ) ) {
+            return false;
+        }
+
+        $content = $wp_filesystem->get_contents( $filepath );
+        if ( $content === false ) {
+            return false;
+        }
+
+        $all_lines = explode( "\n", $content );
+        // Remove trailing empty lines
+        while ( ! empty( $all_lines ) && trim( end( $all_lines ) ) === '' ) {
+            array_pop( $all_lines );
+        }
+
+        $total = count( $all_lines );
+        $start = max( 0, $total - $lines );
         $output = array();
-        
-        while ( fseek( $f, $cursor--, SEEK_END ) !== -1 ) {
-            $char = fgetc( $f );
-            if ( $char === "\n" || $char === "\r" ) {
-                array_unshift( $output, $line . "\n" );
-                $line = '';
-                if ( count( $output ) >= $lines ) {
-                    break;
-                }
-            } else {
-                $line = $char . $line;
-            }
+        for ( $i = $start; $i < $total; $i++ ) {
+            $output[] = $all_lines[ $i ] . "\n";
         }
-        
-        if ( $line !== '' ) {
-            array_unshift( $output, $line . "\n" );
-        }
-        
-        fclose( $f );
+
         return $output;
     }
 
@@ -148,7 +141,7 @@ class Lukic_Debug_Mode {
     private static function modify_wp_config( $enable ) {
         $config_file = ABSPATH . 'wp-config.php';
         
-        if ( ! is_writable( $config_file ) ) {
+        if ( ! wp_is_writable( $config_file ) ) {
             error_log( 'Lukic Code Snippets: wp-config.php is not writable.' );
             return false;
         }

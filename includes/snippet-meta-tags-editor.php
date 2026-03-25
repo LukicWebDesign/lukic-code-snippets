@@ -339,8 +339,7 @@ function Lukic_meta_tags_editor_page() {
  */
 function Lukic_update_meta_tag() {
 	// Check nonce for security
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_meta_tags_editor_nonce' ) ) {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_meta_tags_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 	}
 
@@ -442,8 +441,7 @@ add_action( 'wp_ajax_Lukic_update_meta_tag', 'Lukic_update_meta_tag' );
  */
 function Lukic_export_meta_tags_csv() {
 	// Check nonce for security
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_meta_tags_editor_nonce' ) ) {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_meta_tags_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 	}
 
@@ -491,8 +489,7 @@ add_action( 'wp_ajax_Lukic_export_meta_tags_csv', 'Lukic_export_meta_tags_csv' )
  */
 function Lukic_import_meta_tags_csv() {
 	// Check nonce for security
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['nonce'] ), 'Lukic_meta_tags_editor_nonce' ) ) {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'Lukic_meta_tags_editor_nonce' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Security check failed', 'lukic-code-snippets' ) ) );
 	}
 

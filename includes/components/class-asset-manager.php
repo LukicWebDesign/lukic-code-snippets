@@ -82,15 +82,10 @@ class Lukic_Asset_Manager {
 				'deps'        => array(),
 				'description' => 'DataTables core styles',
 			),
-			'Lukic-magnific-popup-css'   => array(
-				'src'         => 'assets/css/magnific-popup.min.css',
-				'deps'        => array(),
-				'description' => 'Magnific Popup styles',
-			),
 			// Feature-specific styles
 				'Lukic-image-attributes' => array(
 					'src'         => 'assets/css/image-attributes-editor.css',
-					'deps'        => array( 'Lukic-framework', 'Lukic-datatables-css', 'Lukic-magnific-popup-css' ),
+					'deps'        => array( 'Lukic-framework', 'Lukic-datatables-css', 'thickbox' ),
 					'description' => 'Image Attributes Editor',
 				),
 			'Lukic-maintenance-mode'     => array(
@@ -145,7 +140,7 @@ class Lukic_Asset_Manager {
 			),
 			'Lukic-image-attributes' => array(
 				'src'         => 'assets/js/image-attributes-editor.js',
-				'deps'        => array( 'jquery', 'Lukic-datatables', 'Lukic-magnific-popup' ),
+				'deps'        => array( 'jquery', 'Lukic-datatables', 'thickbox' ),
 				'in_footer'   => true,
 				'description' => 'Image Attributes Editor',
 			),
@@ -178,12 +173,6 @@ class Lukic_Asset_Manager {
 				'deps'        => array( 'jquery' ),
 				'in_footer'   => true,
 				'description' => 'DataTables library',
-			),
-			'Lukic-magnific-popup'   => array(
-				'src'         => 'assets/js/jquery.magnific-popup.min.js',
-				'deps'        => array( 'jquery' ),
-				'in_footer'   => true,
-				'description' => 'Magnific Popup plugin',
 			),
 			'Lukic-auto-save'        => array(
 				'src'         => 'assets/js/auto-save.js',
