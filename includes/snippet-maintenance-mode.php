@@ -489,86 +489,21 @@ class Lukic_Maintenance_Mode {
 			<meta charset="<?php bloginfo( 'charset' ); ?>">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title><?php echo esc_html( $options['title'] ); ?> - <?php bloginfo( 'name' ); ?></title>
+			<link rel="stylesheet" href="<?php echo esc_url( Lukic_SNIPPET_CODES_PLUGIN_URL . 'assets/css/maintenance-public.css' ); ?>">
 			<style>
-				html, body {
-					margin: 0;
-					padding: 0;
-					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-					line-height: 1.5;
-					height: 100%;
-					width: 100%;
-				}
-				
-				.Lukic-maintenance-mode {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					justify-content: center;
-					height: 100%;
-					width: 100%;
-					position: relative;
-					overflow: hidden;
-					text-align: center;
-					background-image: url('<?php echo esc_url( $options['background_image'] ); ?>');
-					background-size: cover;
-					background-position: center;
-					background-repeat: no-repeat;
-				}
-				
-				.Lukic-overlay {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					background-color: <?php echo esc_attr( $options['overlay_color'] ); ?>;
-					z-index: 1;
-				}
-				
-				.Lukic-content {
-					position: relative;
-					z-index: 2;
-					max-width: 800px;
-					padding: 30px;
-				}
-				
-				.Lukic-title {
-					font-size: <?php echo esc_attr( $options['title_font_size'] ); ?>;
-					color: <?php echo esc_attr( $options['title_color'] ); ?>;
-					margin: 0 0 20px;
-				}
-				
-				.Lukic-subtitle {
-					font-size: <?php echo esc_attr( $options['subtitle_font_size'] ); ?>;
-					color: <?php echo esc_attr( $options['subtitle_color'] ); ?>;
-					margin: 0 0 30px;
-					font-weight: normal;
-				}
-				
-				.Lukic-message {
-					font-size: <?php echo esc_attr( $options['message_font_size'] ); ?>;
-					color: <?php echo esc_attr( $options['message_color'] ); ?>;
-					margin: 0;
-				}
-				
-				/* Responsive adjustments */
-				@media (max-width: 768px) {
-					.Lukic-title {
-						font-size: calc(<?php echo esc_attr( str_replace( 'px', '', $options['title_font_size'] ) ); ?>px * 0.8);
-					}
-					
-					.Lukic-subtitle {
-						font-size: calc(<?php echo esc_attr( str_replace( 'px', '', $options['subtitle_font_size'] ) ); ?>px * 0.8);
-					}
-					
-					.Lukic-message {
-						font-size: calc(<?php echo esc_attr( str_replace( 'px', '', $options['message_font_size'] ) ); ?>px * 0.8);
-					}
+				:root {
+					--title-font-size: <?php echo esc_attr( $options['title_font_size'] ); ?>;
+					--subtitle-font-size: <?php echo esc_attr( $options['subtitle_font_size'] ); ?>;
+					--message-font-size: <?php echo esc_attr( $options['message_font_size'] ); ?>;
+					--title-color: <?php echo esc_attr( $options['title_color'] ); ?>;
+					--subtitle-color: <?php echo esc_attr( $options['subtitle_color'] ); ?>;
+					--message-color: <?php echo esc_attr( $options['message_color'] ); ?>;
+					--overlay-color: <?php echo esc_attr( $options['overlay_color'] ); ?>;
 				}
 			</style>
 		</head>
 		<body>
-			<div class="Lukic-maintenance-mode">
+			<div class="Lukic-maintenance-mode" style="background-image: url('<?php echo esc_url( $options['background_image'] ); ?>');">
 				<div class="Lukic-overlay"></div>
 				<div class="Lukic-content">
 					<h1 class="Lukic-title"><?php echo esc_html( $options['title'] ); ?></h1>
