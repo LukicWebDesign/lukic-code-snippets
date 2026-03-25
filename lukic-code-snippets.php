@@ -3,7 +3,7 @@
  * Plugin Name: Lukic Code Snippets
  * Plugin URI: https://wplukic.com/lukic-code-snippets
  * Description: A collection of useful code snippets for WordPress
- * Version: 2.9.1
+ * Version: 2.9.2
  * Author: Miloš Lukić
  * Author URI: https://wplukic.com
  * License: GPL-2.0+
@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'Lukic_SNIPPET_CODES_VERSION', '2.9.1' );
+define( 'Lukic_SNIPPET_CODES_VERSION', '2.9.2' );
 define( 'Lukic_SNIPPET_CODES_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'Lukic_SNIPPET_CODES_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 /**

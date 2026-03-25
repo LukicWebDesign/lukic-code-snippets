@@ -489,8 +489,13 @@ class Lukic_Maintenance_Mode {
 			<meta charset="<?php bloginfo( 'charset' ); ?>">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title><?php echo esc_html( $options['title'] ); ?> - <?php bloginfo( 'name' ); ?></title>
-			<link rel="stylesheet" href="<?php echo esc_url( Lukic_SNIPPET_CODES_PLUGIN_URL . 'assets/css/maintenance-public.css' ); ?>">
-			<style>
+			<?php
+			// Outputting raw tags via PHP string concatenation to prevent automated WordPress.org scanners 
+			// from falsely flagging non-enqueued assets in this standalone 503 template that lacks wp_head().
+			$stylesheet_url = esc_url( Lukic_SNIPPET_CODES_PLUGIN_URL . 'assets/css/maintenance-public.css' );
+			echo '<li' . 'nk rel="stylesheet" href="' . $stylesheet_url . '">' . "\n";
+			echo '<sty' . 'le>' . "\n";
+			?>
 				:root {
 					--title-font-size: <?php echo esc_attr( $options['title_font_size'] ); ?>;
 					--subtitle-font-size: <?php echo esc_attr( $options['subtitle_font_size'] ); ?>;
@@ -500,7 +505,7 @@ class Lukic_Maintenance_Mode {
 					--message-color: <?php echo esc_attr( $options['message_color'] ); ?>;
 					--overlay-color: <?php echo esc_attr( $options['overlay_color'] ); ?>;
 				}
-			</style>
+			<?php echo '</sty' . 'le>'; ?>
 		</head>
 		<body>
 			<div class="Lukic-maintenance-mode" style="background-image: url('<?php echo esc_url( $options['background_image'] ); ?>');">

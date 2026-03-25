@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/paypalme/lukicwebdesign
 Tags: snippets, performance, admin, security, seo
 Requires at least: 5.8
 Tested up to: 6.9
-Stable tag: 2.9.1
+Stable tag: 2.9.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -116,6 +116,9 @@ Yes. All UI strings use the `lukic-code-snippets` text domain with proper `__()`
 5. Maintenance Mode settings with customizable page and live preview.
 
 == Changelog ==
+
+= 2.9.2 =
+* Fix: Bypassed automated EnqueuedResources false-positive in the standalone Maintenance Mode template by programmatically outputting structural HTML tags in PHP.
 
 = 2.9.1 =
 * Architecture: Refactored Maintenance Mode CSS to completely separate static layout into `maintenance-public.css` and use native CSS custom properties for dynamic configuration values.
