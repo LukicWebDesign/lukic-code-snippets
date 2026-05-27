@@ -40,6 +40,78 @@ function lukic_user_profile_image_enqueue( $hook ) {
 add_action( 'admin_enqueue_scripts', 'lukic_user_profile_image_enqueue' );
 
 /**
+ * Resolve a user ID from the values accepted by get_avatar().
+ *
+ * @param mixed $id_or_email User object, ID, email address, or comment object.
+ * @return int User ID, or 0 when unavailable.
+ */
+function lukic_get_avatar_user_id( $id_or_email ) {
+	if ( is_numeric( $id_or_email ) ) {
+		return (int) $id_or_email;
+	}
+
+	if ( $id_or_email instanceof WP_User ) {
+		return (int) $id_or_email->ID;
+	}
+
+	if ( is_string( $id_or_email ) && ( $user = get_user_by( 'email', $id_or_email ) ) ) {
+		return (int) $user->ID;
+	}
+
+	if ( is_object( $id_or_email ) && ! empty( $id_or_email->user_id ) ) {
+		return (int) $id_or_email->user_id;
+	}
+
+	if ( is_object( $id_or_email ) && ! empty( $id_or_email->comment_author_email ) && ( $user = get_user_by( 'email', $id_or_email->comment_author_email ) ) ) {
+		return (int) $user->ID;
+	}
+
+	return 0;
+}
+
+/**
+ * Get a usable avatar attachment URL, including SVG attachments.
+ *
+ * @param int          $attachment_id Avatar attachment ID.
+ * @param string|array $size          Requested image size.
+ * @return string Avatar URL, or empty string.
+ */
+function lukic_get_profile_avatar_url( $attachment_id, $size = 'thumbnail' ) {
+	$image = wp_get_attachment_image_src( $attachment_id, $size );
+
+	if ( $image && ! empty( $image[0] ) ) {
+		return $image[0];
+	}
+
+	if ( 'image/svg+xml' === get_post_mime_type( $attachment_id ) ) {
+		$url = wp_get_attachment_url( $attachment_id );
+		return $url ? $url : '';
+	}
+
+	return '';
+}
+
+/**
+ * Build the avatar class string while preserving classes passed to get_avatar().
+ *
+ * @param int   $size Avatar size.
+ * @param array $args get_avatar() arguments.
+ * @return string Avatar classes.
+ */
+function lukic_get_profile_avatar_classes( $size, $args = array() ) {
+	$classes = array( 'avatar', 'avatar-' . absint( $size ), 'photo' );
+
+	if ( ! empty( $args['class'] ) ) {
+		$extra_classes = is_array( $args['class'] ) ? $args['class'] : preg_split( '/\s+/', (string) $args['class'] );
+		$classes       = array_merge( $classes, $extra_classes );
+	}
+
+	$classes = array_filter( array_map( 'sanitize_html_class', $classes ) );
+
+	return implode( ' ', array_unique( $classes ) );
+}
+
+/**
  * Add avatar field to user profile
  *
  * @param WP_User $user User object.
@@ -48,10 +120,7 @@ function lukic_user_profile_image_field( $user ) {
 	$avatar_id = get_user_meta( $user->ID, 'lukic_user_avatar', true );
 	$image_url = '';
 	if ( $avatar_id ) {
-		$image = wp_get_attachment_image_src( $avatar_id, 'thumbnail' );
-		if ( $image ) {
-			$image_url = $image[0];
-		}
+		$image_url = lukic_get_profile_avatar_url( (int) $avatar_id, 'thumbnail' );
 	}
 	?>
 	<h3><?php esc_html_e( 'User Profile Image', 'lukic-code-snippets' ); ?></h3>
@@ -84,10 +153,8 @@ function lukic_save_user_profile_image( $user_id ) {
 		return;
 	}
 	
-	// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	if ( isset( $_POST['lukic_user_avatar'] ) ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		update_user_meta( $user_id, 'lukic_user_avatar', sanitize_text_field( wp_unslash( $_POST['lukic_user_avatar'] ) ) );
+		update_user_meta( $user_id, 'lukic_user_avatar', sanitize_text_field( $_POST['lukic_user_avatar'] ) );
 	}
 }
 add_action( 'personal_options_update', 'lukic_save_user_profile_image' );
@@ -101,34 +168,54 @@ add_action( 'edit_user_profile_update', 'lukic_save_user_profile_image' );
  * @param int    $size        Square avatar width and height in pixels.
  * @param string $default     URL for the default image or a default type.
  * @param string $alt         Alternative text to use in the avatar image tag.
+ * @param array  $args        Arguments passed to get_avatar().
  * @return string Filtered avatar.
  */
-function lukic_filter_get_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
-	$user_id = 0;
-
-	if ( is_numeric( $id_or_email ) ) {
-		$user_id = (int) $id_or_email;
-	} elseif ( is_string( $id_or_email ) && ( $user = get_user_by( 'email', $id_or_email ) ) ) {
-		$user_id = $user->ID;
-	} elseif ( is_object( $id_or_email ) && ! empty( $id_or_email->user_id ) ) {
-		$user_id = (int) $id_or_email->user_id;
-	} elseif ( $id_or_email instanceof WP_User ) {
-		$user_id = $id_or_email->ID;
-	}
+function lukic_filter_get_avatar( $avatar, $id_or_email, $size, $default, $alt, $args = array() ) {
+	$user_id = lukic_get_avatar_user_id( $id_or_email );
 
 	if ( $user_id ) {
 		$custom_avatar_id = get_user_meta( $user_id, 'lukic_user_avatar', true );
 		if ( $custom_avatar_id ) {
-			$custom_avatar = wp_get_attachment_image( $custom_avatar_id, array( $size, $size ), false, array( 'alt' => $alt, 'class' => 'avatar avatar-' . $size . ' photo' ) );
+			$avatar_classes = lukic_get_profile_avatar_classes( $size, $args );
+
+			if ( 'image/svg+xml' === get_post_mime_type( $custom_avatar_id ) ) {
+				$custom_avatar_url = lukic_get_profile_avatar_url( (int) $custom_avatar_id, array( $size, $size ) );
+
+				if ( $custom_avatar_url ) {
+					return sprintf(
+						'<img alt="%1$s" src="%2$s" class="%3$s" height="%4$d" width="%4$d" loading="lazy" decoding="async" />',
+						esc_attr( $alt ),
+						esc_url( $custom_avatar_url ),
+						esc_attr( $avatar_classes ),
+						absint( $size )
+					);
+				}
+			}
+
+			$custom_avatar  = wp_get_attachment_image( $custom_avatar_id, array( $size, $size ), false, array( 'alt' => $alt, 'class' => $avatar_classes ) );
+
 			if ( $custom_avatar ) {
 				return $custom_avatar;
+			}
+
+			$custom_avatar_url = lukic_get_profile_avatar_url( (int) $custom_avatar_id, array( $size, $size ) );
+
+			if ( $custom_avatar_url ) {
+				return sprintf(
+					'<img alt="%1$s" src="%2$s" class="%3$s" height="%4$d" width="%4$d" loading="lazy" decoding="async" />',
+					esc_attr( $alt ),
+					esc_url( $custom_avatar_url ),
+					esc_attr( $avatar_classes ),
+					absint( $size )
+				);
 			}
 		}
 	}
 
 	return $avatar;
 }
-add_filter( 'get_avatar', 'lukic_filter_get_avatar', 99, 5 );
+add_filter( 'get_avatar', 'lukic_filter_get_avatar', 99, 6 );
 
 /**
  * Filter get_avatar_url to return custom image URL
@@ -139,24 +226,16 @@ add_filter( 'get_avatar', 'lukic_filter_get_avatar', 99, 5 );
  * @return string Filtered avatar URL.
  */
 function lukic_filter_get_avatar_url( $url, $id_or_email, $args ) {
-	$user_id = 0;
-
-	if ( is_numeric( $id_or_email ) ) {
-		$user_id = (int) $id_or_email;
-	} elseif ( is_string( $id_or_email ) && ( $user = get_user_by( 'email', $id_or_email ) ) ) {
-		$user_id = $user->ID;
-	} elseif ( is_object( $id_or_email ) && ! empty( $id_or_email->user_id ) ) {
-		$user_id = (int) $id_or_email->user_id;
-	} elseif ( $id_or_email instanceof WP_User ) {
-		$user_id = $id_or_email->ID;
-	}
+	$user_id = lukic_get_avatar_user_id( $id_or_email );
 
 	if ( $user_id ) {
 		$custom_avatar_id = get_user_meta( $user_id, 'lukic_user_avatar', true );
 		if ( $custom_avatar_id ) {
-			$image = wp_get_attachment_image_src( $custom_avatar_id, 'thumbnail' );
-			if ( $image ) {
-				return $image[0];
+			$size             = isset( $args['size'] ) ? array( absint( $args['size'] ), absint( $args['size'] ) ) : 'thumbnail';
+			$custom_avatar_url = lukic_get_profile_avatar_url( (int) $custom_avatar_id, $size );
+
+			if ( $custom_avatar_url ) {
+				return $custom_avatar_url;
 			}
 		}
 	}
